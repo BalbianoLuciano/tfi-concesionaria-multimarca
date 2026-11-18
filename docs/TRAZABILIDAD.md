@@ -1,0 +1,45 @@
+# Trazabilidad
+
+Cada requisito del [enunciado](ENUNCIADO.md) y dónde se cumple. Las rutas de clases son
+relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la columna
+"Prueba" apunta al grupo que lo verifica.
+
+## Requisitos del enunciado
+
+| # | Requisito | Dónde se cumple | Prueba |
+|---|---|---|---|
+| 1 | Dominio del problema, abstracción, modelado, tipos de datos | `modelo/`: `Vehiculo` y subclases, `Marca`, `Venta`, `Usuario`. [MODELO.md](MODELO.md) | PR-COLECCION |
+| 2 | Diseño vs. Negocio | Paquetes `presentacion` / `negocio` / `datos` con dependencias en un solo sentido. [ARQUITECTURA.md §1–2](ARQUITECTURA.md#1-vista-general-diseño-vs-negocio) | — (revisión de imports) |
+| 3 | Remarks y JavaDoc | JavaDoc en todas las clases y métodos públicos; comentarios que explican el porqué. `./build.sh docs` | — |
+| 4 | Clases abstractas, herencia, polimorfismo | `Vehiculo` abstracta; `Automovil`, `Camioneta`, `Motocicleta`; template method `calcularPrecioFinal()` y `getDetalleTipo()` | PR-PRECIO |
+| 5 | JavaBean y POJO | Entidades con constructor vacío, getters/setters y `Serializable`. `DesglosePrecio` y `Comprador` como POJOs inmutables | PR-COLECCION, PR-PERSIST |
+| 6 | Interfaces, transmisión del comportamiento | `Vendible`, `Identificable<K>`, `Comparable<Vehiculo>`, `Repositorio<T,K>` y sus implementaciones | PR-VENTA |
+| 7 | Excepciones, incluyendo propias | Jerarquía `ConcesionariaException` en `excepciones/`; `catch` escalonado en la consola. [MODELO.md §4](MODELO.md#4-excepciones-propias) | PR-VALID, PR-VENTA, PR-PERMISO |
+| 8 | Tipos enumerativos | `TipoVehiculo`, `Estado`, `Situacion`, `Color`, `CarroceriaAutomovil`, `CarroceriaCamioneta`, `TipoMotocicleta`, `Rol`, `Permiso` | PR-VALID |
+| 9 | Interacción con el usuario | `presentacion/consola/` (Lector con reintentos, Tabla, Terminal) y `presentacion/pantallas/`. [SPEC §3 y §5](SPEC.md#5-la-consola) | Plan manual |
+| 10 | Wrappers | `Integer`/`Boolean` en el modelo (null = sin cargar), `parseInt` en el Lector, autoboxing en mapas de reportes | PR-VALID |
+| 11 | Colección, sobrescritura de métodos esenciales | `HashMap`, `TreeMap`, `ArrayList` en `datos/`; `equals`, `hashCode`, `toString`, `compareTo` en las entidades | PR-COLECCION |
+
+## Lo que agrega la infografía
+
+| Punto | Dónde se cumple |
+|---|---|
+| Vehículos multimarca en un único sistema | `Vehiculo` + catálogo `Marca` |
+| Clasificación por estado (0 km / usado con km) | Enum `Estado` y la regla de `setKilometraje()`. [MODELO.md §3](MODELO.md#nuevo-y-usado) |
+| Atributos obligatorios: marca, modelo, año, color, carrocería | Atributos de `Vehiculo` y subclases, validados en los setters |
+| Esquema en capas: interfaz, negocio, datos | Requisito 2 |
+| Control y colecciones: excepciones, colecciones, wrappers, JavaDoc | Requisitos 3, 7, 10 y 11 |
+
+## Casos de uso → clases
+
+| Caso de uso | Pantalla | Servicio |
+|---|---|---|
+| CU-01 Primer arranque | `PantallaBienvenida` | `ServicioAutenticacion`, `DatosDemo` |
+| CU-02 Sesión | `PantallaLogin` | `ServicioAutenticacion` |
+| CU-03 a CU-09 Vehículos | `PantallaVehiculos` | `ServicioVehiculos` |
+| CU-10, CU-11 Ventas | `PantallaVentas` | `ServicioVentas` |
+| CU-12 Marcas | `PantallaMarcas` | `ServicioMarcas` |
+| CU-13, CU-16 Usuarios | `PantallaUsuarios` | `ServicioAutenticacion` |
+| CU-14 Reportes | `PantallaReportes` | `ServicioReportes` |
+| CU-15 CSV | `PantallaDatos` | `ServicioVehiculos` + `datos/Csv*` |
+| CU-17 Salir | `App` (shutdown hook) | `AlmacenArchivo` |
