@@ -285,7 +285,7 @@ completa. Cada ítem tiene un comentario en el código que remite acá.
 |---|---|---|
 | `BigDecimal` | Precios | `double` no representa bien los decimales (0,1 + 0,2 ≠ 0,3). Con plata no se aproxima |
 | `java.time.LocalDate` y `Clock` | Ventas, antigüedad | Fechas sin hora ni zona. `Clock` permite fijar "hoy" en las pruebas |
-| `MessageDigest` (SHA-256) + `SecureRandom` | Usuarios | Guardar un hash con sal en lugar de la clave |
+| `MessageDigest` (SHA-256) + `SecureRandom` + `HexFormat` | Usuarios (`Claves`) | Guardar un hash con sal en lugar de la clave; `HexFormat` pasa los bytes a texto para guardarlos |
 | Códigos de escape ANSI | Consola | Color, negrita y limpieza de pantalla sin librerías |
 | `Files.move(..., ATOMIC_MOVE)` | Persistencia | Que un corte a mitad del guardado no deje el archivo corrupto |
 | `Runtime.addShutdownHook` | Salida | Guardar si el usuario cierra con Ctrl+C |

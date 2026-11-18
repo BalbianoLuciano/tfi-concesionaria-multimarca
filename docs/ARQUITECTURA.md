@@ -79,7 +79,8 @@ ar.edu.utn.frre.concesionaria
 ├── presentacion           todo lo que imprime o lee del teclado
 │   ├── consola            Terminal, Estilo (ANSI), Tabla, GraficoBarras, Lector
 │   └── pantallas          Login, MenuPrincipal, Vehiculos, Ventas, Marcas, Usuarios, Reportes
-├── negocio                servicios, Sesion, Validaciones, GeneradorCodigos
+├── negocio                servicios (Autenticacion, Vehiculos, Ventas, Marcas, Reportes,
+│                          Archivos), Sesion, Claves, FiltroVehiculos, OrdenVehiculos
 ├── datos                  interfaces Repositorio*, Persistencia, ArchivosExportacion,
 │                          CargadorDemo; implementaciones en memoria, AlmacenArchivo,
 │                          MigradorAlmacen, ArchivosCsv, DatosDemo, RegistroErrores

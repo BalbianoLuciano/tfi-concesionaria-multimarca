@@ -27,7 +27,10 @@ public final class PruebasRunner {
                 new PruebasColecciones(),
                 new PruebasPatente(),
                 new PruebasPersistencia(),
-                new PruebasCsv());
+                new PruebasCsv(),
+                new PruebasVenta(),
+                new PruebasMarca(),
+                new PruebasPermisos());
     }
 
     /**
