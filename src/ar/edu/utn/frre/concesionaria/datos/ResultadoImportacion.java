@@ -50,15 +50,26 @@ public final class ResultadoImportacion {
     }
 
     private final List<Vehiculo> vehiculos = new ArrayList<>();
+    private final List<Integer> lineas = new ArrayList<>();
     private final List<Error> errores = new ArrayList<>();
 
     /**
      * Agrega un vehículo válido, con la línea de donde vino.
      *
      * @param vehiculo el vehículo
+     * @param linea    la línea del archivo
      */
-    public void agregar(Vehiculo vehiculo) {
+    public void agregar(Vehiculo vehiculo, int linea) {
         vehiculos.add(vehiculo);
+        lineas.add(linea);
+    }
+
+    /**
+     * @param indice posición en {@link #getVehiculos()}
+     * @return la línea del archivo de ese vehículo
+     */
+    public int getLinea(int indice) {
+        return lineas.get(indice);
     }
 
     /**

@@ -243,7 +243,7 @@ public class ArchivosCsv implements ArchivosExportacion {
             }
             Fila fila = new Fila(separar(lineas.get(n)), columnas);
             try {
-                resultado.agregar(armarVehiculo(fila, marcas));
+                resultado.agregar(armarVehiculo(fila, marcas), n + 1);
             } catch (DatoInvalidoException e) {
                 resultado.agregarError(n + 1, e.getCampo(), e.getMessage());
             }
