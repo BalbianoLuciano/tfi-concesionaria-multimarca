@@ -21,7 +21,11 @@ public final class PruebasRunner {
     /** Lista de todos los grupos. Agregar un grupo nuevo es sumar una línea acá. */
     private static List<GrupoPruebas> grupos() {
         return List.of(
-                new PruebasComun());
+                new PruebasComun(),
+                new PruebasPrecio(),
+                new PruebasValidaciones(),
+                new PruebasColecciones(),
+                new PruebasPatente());
     }
 
     /**

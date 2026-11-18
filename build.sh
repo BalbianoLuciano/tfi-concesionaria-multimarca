@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # Compila, prueba y empaqueta la concesionaria sin Maven ni Gradle: solo javac, jar y javadoc.
+# -Xlint:-this-escape: los constructores de los JavaBeans llaman a sus setters a propósito,
+# para validar con una sola regla (MODELO §2).
 #
 #   ./build.sh                 compila y arma dist/concesionaria.jar
 #   ./build.sh run [args]      compila y ejecuta (los args van al programa, por ej. --sin-color)
@@ -21,7 +23,7 @@ compilar_fuentes() {
   rm -rf "$OUT/classes"
   mkdir -p "$OUT/classes"
   find src -name '*.java' > "$OUT/fuentes.txt"
-  javac --release "$RELEASE" -encoding UTF-8 -Xlint:all -Xlint:-serial \
+  javac --release "$RELEASE" -encoding UTF-8 -Xlint:all -Xlint:-serial -Xlint:-this-escape \
     -d "$OUT/classes" @"$OUT/fuentes.txt"
 }
 
@@ -30,7 +32,7 @@ compilar_pruebas() {
   rm -rf "$OUT/test-classes"
   mkdir -p "$OUT/test-classes"
   find test -name '*.java' > "$OUT/pruebas.txt"
-  javac --release "$RELEASE" -encoding UTF-8 -Xlint:all -Xlint:-serial \
+  javac --release "$RELEASE" -encoding UTF-8 -Xlint:all -Xlint:-serial -Xlint:-this-escape \
     -cp "$OUT/classes" -d "$OUT/test-classes" @"$OUT/pruebas.txt"
 }
 

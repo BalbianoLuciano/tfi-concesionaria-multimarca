@@ -195,6 +195,7 @@ classDiagram
         GESTIONAR_STOCK
         VENDER
         VER_VENTAS
+        VER_VENTAS_PROPIAS
         VER_REPORTES
         GESTIONAR_MARCAS
         GESTIONAR_USUARIOS
@@ -206,7 +207,12 @@ classDiagram
 Cada enum tiene un campo `etiqueta` para mostrar ("Doble cabina", "Pick-up cabina simple")
 y un método estático `desdeTexto(String)` que tolera mayúsculas y acentos. `TipoVehiculo`
 además sabe su prefijo de código (A, C, M) y `Rol` sabe sus permisos: la matriz de la spec
-está escrita una sola vez, en el enum.
+está escrita una sola vez, en el enum. `VER_VENTAS_PROPIAS` cubre la fila "Historial de ventas:
+solo las propias" del vendedor; `VER_VENTAS` deja ver las de todos.
+
+Todos los enums implementan la interfaz `ConEtiqueta`, que da la etiqueta y un único
+`ConEtiqueta.desdeTexto(Class, campo, texto)` para la consola y el CSV. Los formatos de patente
+están en la clase utilitaria `Patentes` (los comparten automóvil y camioneta).
 
 ---
 
@@ -242,7 +248,10 @@ Las entidades (`Vehiculo` y subclases, `Marca`, `Venta`, `Usuario`, `Comprador`)
 - atributos `private` con getters y setters;
 - `Serializable`.
 
-Además tienen constructores con argumentos encadenados con `this(...)` y `super(...)`.
+Además tienen constructores con argumentos encadenados con `this(...)` y `super(...)`, y un
+**constructor de copia** (`Automovil(Automovil otro)` → `super(otro)`) que usa `copia()`: la
+modificación (CU-07) trabaja sobre una copia y solo reemplaza el original cuando el usuario
+confirma y el negocio la acepta.
 
 Los setters **validan** y lanzan `DatoInvalidoException`. Así un objeto del modelo nunca queda
 en un estado inválido, venga el dato de la consola, del CSV o de una prueba. Los objetos de
