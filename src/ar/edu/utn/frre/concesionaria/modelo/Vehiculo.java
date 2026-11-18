@@ -50,7 +50,8 @@ public abstract class Vehiculo
     private static final Comparator<Vehiculo> ORDEN_NATURAL = Comparator
             .comparing(Vehiculo::getTipo)
             .thenComparing(v -> v.getMarca() == null ? "" : v.getMarca().getClave())
-            .thenComparing(v -> Textos.clave(v.getModelo()))
+            .thenComparing(v -> v.getModelo() == null ? "" : v.getModelo(),
+                    String.CASE_INSENSITIVE_ORDER)
             .thenComparing(v -> v.getCodigo() == null ? "" : v.getCodigo());
 
     private String codigo;

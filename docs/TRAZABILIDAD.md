@@ -43,3 +43,10 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 | CU-14 Reportes | `PantallaReportes` | `ServicioReportes` (calcula) + `ServicioArchivos` (exporta a .txt) |
 | CU-15 CSV | `PantallaDatos` | `ServicioArchivos` + `datos/ArchivosCsv` |
 | CU-17 Salir | `App` (shutdown hook) | `Persistencia` → `AlmacenArchivo` |
+
+## Requisitos no funcionales → clases
+
+| Requisito | Dónde se cumple | Verificación |
+|---|---|---|
+| Rendimiento (ARQUITECTURA §7) | Índices en `RepositorioVehiculosMemoria` y `RepositorioMarcasMemoria`; clave cacheada en `Marca` | `rendimiento/MedicionRendimiento` (`./build.sh bench`) |
+| Consola trabajada (SPEC §5) | `presentacion/consola/` y `presentacion/pantallas/` | Plan manual PM-01 a PM-16 (SPEC §8) |

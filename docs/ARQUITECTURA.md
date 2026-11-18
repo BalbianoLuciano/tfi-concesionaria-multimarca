@@ -329,7 +329,7 @@ curso (`run.sh`).
 
 Nota sobre el guardado: guardar todo en cada cambio es O(n). Una concesionaria tiene cientos
 o miles de unidades, no millones, así que lo simple alcanza de sobra. Las mediciones de abajo
-lo confirman o lo desmienten con números. Si no alcanzara, el siguiente paso sería un
+lo confirman con números. Si no alcanzara, el siguiente paso sería un
 guardado incremental o una base de datos.
 
 ### Objetivos
@@ -351,8 +351,47 @@ guardado incremental o una base de datos.
 - compara `HashMap` contra `ArrayList` para la búsqueda por código con 1.000, 10.000 y
   100.000 vehículos, que es la demostración de por qué se eligió cada estructura.
 
-Los resultados se pegan acá (tabla y gráfico) con la máquina y la versión de Java en que se
-midió. No se inventan números antes de medir.
+### Resultados
+
+Medido el 18/11/2026 en una Apple M4 (10 núcleos, macOS), JVM 27 ejecutando bytecode
+compilado con `--release 25`. Mediana de 20 repeticiones tras 5 de calentamiento.
+
+| Escenario | Medido | Objetivo |
+|---|---:|---:|
+| Guardar con 10.000 vehículos (archivo de 1.439 KB) | 12,6 ms | < 500 ms |
+| Arranque (leer el archivo y armar índices) con 10.000 | 13,4 ms | < 1 s |
+| Listar 10.000, filtrar camionetas y ordenar por precio | 2,6 ms | < 100 ms |
+| Listar 10.000 sin filtro, orden natural | 7,1 ms | < 100 ms |
+| Búsqueda de texto libre en 10.000 | 10,5 ms | — |
+
+Buscar por código, 1.000 búsquedas al azar:
+
+| Vehículos | `HashMap` | `ArrayList` | Relación |
+|---:|---:|---:|---:|
+| 1.000 | 0,040 ms | 0,778 ms | ×19 |
+| 10.000 | 0,049 ms | 10,091 ms | ×206 |
+| 100.000 | 0,037 ms | 155,813 ms | ×4.211 |
+
+```text
+ArrayList  1.000   ▏ 0,8 ms
+          10.000   █ 10,1 ms
+         100.000   ███████████████ 155,8 ms
+HashMap   (las tres)  ▏ 0,04 ms: no cambia con la cantidad
+```
+
+El `HashMap` tarda lo mismo con 1.000 que con 100.000 (O(1)); el `ArrayList` crece en
+proporción a la cantidad (O(n)). Con 100.000 vehículos, una búsqueda en el `HashMap` tarda
+unos 37 nanosegundos: muy por debajo del objetivo de 1 ms.
+
+**Lo que encontró la medición.** La primera corrida dio 89 ms para el listado en orden
+natural, al borde del objetivo. El comparador normalizaba el nombre de la marca (quitar
+acentos con `Normalizer` y una expresión regular) en cada una de las ~130.000 comparaciones
+del ordenamiento. Se guardó la clave normalizada en un campo `transient` de `Marca`
+(calculada una sola vez) y el modelo pasó a compararse con `String.CASE_INSENSITIVE_ORDER`:
+el listado bajó a 7 ms, más de diez veces más rápido.
+
+Conclusión: guardar todo el almacén en cada cambio (O(n)) cuesta 13 ms con 10.000 unidades,
+así que la decisión de la sección 4 se sostiene con margen.
 
 Limitación conocida: es una medición casera. La herramienta profesional es JMH, que es una
 librería externa y queda fuera del alcance.

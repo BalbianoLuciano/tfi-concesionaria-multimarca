@@ -10,6 +10,7 @@ import ar.edu.utn.frre.concesionaria.excepciones.VehiculoNoEncontradoException;
 import ar.edu.utn.frre.concesionaria.modelo.Comprador;
 import ar.edu.utn.frre.concesionaria.modelo.DesglosePrecio;
 import ar.edu.utn.frre.concesionaria.modelo.Permiso;
+import ar.edu.utn.frre.concesionaria.modelo.TipoVehiculo;
 import ar.edu.utn.frre.concesionaria.modelo.Vehiculo;
 import ar.edu.utn.frre.concesionaria.modelo.Vendible;
 import ar.edu.utn.frre.concesionaria.modelo.Venta;
@@ -65,7 +66,7 @@ public class ServicioVentas extends ServicioBase {
      * transmisión del comportamiento que pide el enunciado.
      */
     private Venta vender(Sesion sesion, Vendible vendible,
-            ar.edu.utn.frre.concesionaria.modelo.TipoVehiculo tipo, String marca,
+            TipoVehiculo tipo, String marca,
             Comprador comprador) throws ConcesionariaException {
         LocalDate hoy = Reloj.hoy();
         DesglosePrecio precioCongelado = vendible.desglosarPrecio(hoy);

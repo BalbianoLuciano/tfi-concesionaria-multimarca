@@ -315,3 +315,31 @@ Runner propio (`PruebasRunner`), sin JUnit: cada prueba es un método que lanza
 
 Más un **plan manual** (lista de pasos en la consola) para lo que no se automatiza: el
 aspecto visual, `NO_COLOR`, Ctrl+C y la terminal angosta.
+
+### Plan manual
+
+Se corre en una terminal real con una carpeta de datos descartable:
+
+```
+./build.sh
+java -Dconcesionaria.dir=/tmp/demo -jar dist/concesionaria.jar
+```
+
+| N.º | Pasos | Resultado esperado |
+|---|---|---|
+| PM-01 | Arrancar con `/tmp/demo` vacía. Crear `admin`, aceptar los datos de demostración. | Pide usuario, nombre y clave dos veces sin mostrarla; avisa con ✓ en verde y entra al menú. |
+| PM-02 | En la clave, escribir `corta`. | ✗ en rojo con la regla (8 o más, letras y números) y "Te quedan 2 intentos". |
+| PM-03 | Vehículos › Listar stock. | Encabezado con usuario, rol y fecha; tabla alineada, números a la derecha con puntos de miles; "0 km" en verde. |
+| PM-04 | En el listado: F › Tipo › Camioneta; O › Precio de mayor a menor; L. | El filtro activo se describe arriba; L vuelve a "Disponibles". |
+| PM-05 | Registrar una moto usada con año `dos mil`, luego `1989`, luego `2022`; patente `AB123CD`, luego `123ABC`. | Cada error dice qué se esperaba con un ejemplo; al tercer error del mismo campo se cancela el registro. |
+| PM-06 | En cualquier campo del registro, escribir `:q`. | "Se canceló el registro." y vuelve al menú sin guardar nada. |
+| PM-07 | Ventas › Vender › `corolla`, comprador válido, confirmar. | Desglose antes de confirmar; comprobante con número, fecha, vendedor y precio final. |
+| PM-08 | Intentar vender otra vez el mismo vehículo. | No aparece entre los disponibles; con su código, el error explica que ya está vendido. |
+| PM-09 | Reportes › Stock por tipo y estado › E. | Gráfico de barras con █ y ░; se crea el `.txt` en `/tmp/demo` sin códigos de color. |
+| PM-10 | Usuarios › Nuevo usuario con rol Vendedor. Cerrar sesión (C) y entrar con él. | El menú solo muestra Vehículos, Ventas y Cambiar mi clave. |
+| PM-11 | En el login, clave incorrecta tres veces. | "Te quedan N intentos" y, al tercero, vuelve al inicio sin entrar. |
+| PM-12 | `NO_COLOR=1 java -jar dist/concesionaria.jar` y también con `--sin-color`. | Ningún código ANSI; los símbolos ✓ ✗ ! siguen indicando el significado. |
+| PM-13 | `COLUMNS=60` antes de arrancar. | El ancho se fija en el mínimo de 80 y las columnas largas se recortan con "…" sin romper la tabla. |
+| PM-14 | Registrar un vehículo y, sin salir, cerrar con Ctrl+C. Volver a abrir. | El vehículo sigue ahí (se guardó al confirmar; el shutdown hook cubre lo pendiente). |
+| PM-15 | Con el programa cerrado, truncar `/tmp/demo/datos.ser` (`: > /tmp/demo/datos.ser`) y abrir. | Aviso en amarillo: se recuperó la copia anterior; queda `datos.ser.corrupto`. |
+| PM-16 | `java -jar dist/concesionaria.jar < /dev/null`. | Sale con "Hasta luego." sin excepciones (fin de entrada). |
