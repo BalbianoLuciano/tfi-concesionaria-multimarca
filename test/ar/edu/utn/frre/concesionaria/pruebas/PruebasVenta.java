@@ -1,6 +1,6 @@
 package ar.edu.utn.frre.concesionaria.pruebas;
 
-import ar.edu.utn.frre.concesionaria.datos.ResultadoImportacion;
+import ar.edu.utn.frre.concesionaria.modelo.ResultadoImportacion;
 import ar.edu.utn.frre.concesionaria.excepciones.DatoInvalidoException;
 import ar.edu.utn.frre.concesionaria.excepciones.PatenteDuplicadaException;
 import ar.edu.utn.frre.concesionaria.excepciones.PersistenciaException;

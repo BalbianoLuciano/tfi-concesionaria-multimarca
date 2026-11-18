@@ -2,6 +2,7 @@ package ar.edu.utn.frre.concesionaria.datos;
 
 import ar.edu.utn.frre.concesionaria.excepciones.PersistenciaException;
 import ar.edu.utn.frre.concesionaria.modelo.Marca;
+import ar.edu.utn.frre.concesionaria.modelo.ResultadoImportacion;
 import ar.edu.utn.frre.concesionaria.modelo.Vehiculo;
 import ar.edu.utn.frre.concesionaria.modelo.Venta;
 import java.util.List;

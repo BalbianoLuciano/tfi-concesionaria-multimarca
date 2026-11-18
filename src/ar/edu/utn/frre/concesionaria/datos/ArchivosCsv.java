@@ -12,6 +12,7 @@ import ar.edu.utn.frre.concesionaria.modelo.Color;
 import ar.edu.utn.frre.concesionaria.modelo.ConEtiqueta;
 import ar.edu.utn.frre.concesionaria.modelo.Estado;
 import ar.edu.utn.frre.concesionaria.modelo.Marca;
+import ar.edu.utn.frre.concesionaria.modelo.ResultadoImportacion;
 import ar.edu.utn.frre.concesionaria.modelo.Motocicleta;
 import ar.edu.utn.frre.concesionaria.modelo.TipoMotocicleta;
 import ar.edu.utn.frre.concesionaria.modelo.TipoVehiculo;

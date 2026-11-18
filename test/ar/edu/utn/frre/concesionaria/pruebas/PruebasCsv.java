@@ -6,7 +6,7 @@ import ar.edu.utn.frre.concesionaria.datos.ArchivosCsv;
 import ar.edu.utn.frre.concesionaria.datos.DatosDemo;
 import ar.edu.utn.frre.concesionaria.datos.RepositorioMarcasMemoria;
 import ar.edu.utn.frre.concesionaria.datos.RepositorioVehiculosMemoria;
-import ar.edu.utn.frre.concesionaria.datos.ResultadoImportacion;
+import ar.edu.utn.frre.concesionaria.modelo.ResultadoImportacion;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;

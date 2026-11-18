@@ -77,8 +77,10 @@ framework.
 ar.edu.utn.frre.concesionaria
 ├── App                    main: arma las dependencias y arranca la consola
 ├── presentacion           todo lo que imprime o lee del teclado
-│   ├── consola            Terminal, Estilo (ANSI), Tabla, GraficoBarras, Lector
-│   └── pantallas          Login, MenuPrincipal, Vehiculos, Ventas, Marcas, Usuarios, Reportes
+│   ├── consola            Terminal, Estilo (ANSI), Tabla, GraficoBarras, Lector,
+│   │                      OperacionCancelada, FinDeEntrada
+│   └── pantallas          Entorno, Pantalla (base), Vistas, PantallaInicio, MenuPrincipal,
+│                          Vehiculos, Ventas, Marcas, Usuarios, Reportes, Datos
 ├── negocio                servicios (Autenticacion, Vehiculos, Ventas, Marcas, Reportes,
 │                          Archivos), Sesion, Claves, FiltroVehiculos, OrdenVehiculos
 ├── datos                  interfaces Repositorio*, Persistencia, ArchivosExportacion,
@@ -220,6 +222,9 @@ classDiagram
         -int ultimaMarca
     }
 ```
+
+`ResultadoImportacion` (vehículos leídos y errores por línea) vive en `modelo` porque lo
+recorren las tres capas: lo arma `datos`, lo completa el negocio y lo muestra la consola.
 
 ¿Por qué un archivo y no uno por colección? Porque una venta modifica dos colecciones a la
 vez (vehículos y ventas). Con un solo archivo, guardar es una operación única: o queda todo o
