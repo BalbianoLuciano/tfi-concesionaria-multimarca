@@ -54,6 +54,27 @@ se tomó la opción recomendada.
 | Estilo | Lambdas, streams, `Comparator` y referencias a métodos donde aclaren. Sin records, sealed ni pattern matching |
 | Diagramas | Mermaid: capas, clases, secuencias, estados, persistencia, despliegue y rendimiento |
 
+### Decisiones de implementación (2026-11-18)
+
+| Tema | Decisión |
+|---|---|
+| Orden de trabajo | build.sh + runner → modelo/excepciones/comun → datos → negocio → presentación → docs y bench, un commit por etapa |
+| Lint | `-Xlint:all` salvo `serial` y `this-escape` (los constructores JavaBean llaman a setters que validan; está comentado en `build.sh`) |
+| Fecha | `Reloj` con un `Clock` estático; las pruebas lo fijan en 15/06/2026 |
+| `ResultadoImportacion` | En `modelo`, no en `datos`: lo recorren las tres capas y la consola no puede importar `datos` |
+| `Marca.clave` | Campo `transient` cacheado: el bench mostró 89 ms al ordenar 10.000 y bajó a 7 ms |
+| Clave nueva | `Pantalla.leerClaveNueva()` la comparten el primer arranque, el alta de usuarios y el cambio de clave |
+| Interactividad | `Lector` recibe `interactivo` explícito: con entrada redirigida hace eco de lo leído y no usa `readPassword` |
+
+## Estado actual
+
+- Implementación completa: los CU-01 a CU-17 funcionan en la consola.
+- `./build.sh test`: 87 pruebas automáticas en verde. Plan manual PM-01 a PM-16 en SPEC §8.
+- `./build.sh bench`: resultados reales en ARQUITECTURA §7 (Apple M4, JVM 27).
+- `./build.sh docs`: JavaDoc sin errores.
+- Pendiente: correr el plan manual en una terminal real, carátula e informe de entrega,
+  release del `.jar` en GitHub.
+
 ## Antecedentes en el curso
 
 En `CursoDeJava/src/` hay referencia de estilo y de lo que se dio:

@@ -21,7 +21,7 @@ Antes de escribir código, leé en este orden:
 Metodología **SDD**: si algo no está en la spec, primero se agrega a la spec y después se
 codifica. Toda clase nueva queda trazada en `TRAZABILIDAD.md`.
 
-## Comandos (previstos en la spec; `build.sh` todavía no existe)
+## Comandos
 
 ```
 ./build.sh               # javac --release 25 + jar → dist/concesionaria.jar
