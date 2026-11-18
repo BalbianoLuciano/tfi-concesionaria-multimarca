@@ -49,6 +49,11 @@ flowchart TB
     P & N & D --> X
 ```
 
+El negocio usa cuatro interfaces de `datos`: los `Repositorio*`, `Persistencia` (guardar y
+saber si hay cambios pendientes), `ArchivosExportacion` (CSV y TXT por nombre, sin rutas ni
+`java.io`) y `CargadorDemo`. `RegistroErrores` llega a la consola como un
+`Consumer<Throwable>` que arma `App`, así la consola no importa `datos`.
+
 **La regla de dependencias:** las flechas van en un solo sentido. La consola conoce al negocio;
 el negocio conoce solo las **interfaces** de los repositorios, nunca el archivo. Nada del
 negocio importa `java.io` ni imprime en pantalla.
@@ -75,8 +80,9 @@ ar.edu.utn.frre.concesionaria
 │   ├── consola            Terminal, Estilo (ANSI), Tabla, GraficoBarras, Lector
 │   └── pantallas          Login, MenuPrincipal, Vehiculos, Ventas, Marcas, Usuarios, Reportes
 ├── negocio                servicios, Sesion, Validaciones, GeneradorCodigos
-├── datos                  interfaces Repositorio*, implementaciones en memoria,
-│                          AlmacenArchivo, Csv*, DatosDemo
+├── datos                  interfaces Repositorio*, Persistencia, ArchivosExportacion,
+│                          CargadorDemo; implementaciones en memoria, AlmacenArchivo,
+│                          MigradorAlmacen, ArchivosCsv, DatosDemo, RegistroErrores
 ├── modelo                 Vehiculo y subclases, Marca, Venta, Usuario, enums
 ├── excepciones            jerarquía ConcesionariaException
 └── comun                  Textos (normalizar, sin acentos), Formatos (moneda, km, fecha)
@@ -210,6 +216,7 @@ classDiagram
         -Map~String,Usuario~ usuarios
         -Map~TipoVehiculo,Integer~ ultimosCodigos
         -int ultimaVenta
+        -int ultimaMarca
     }
 ```
 
@@ -224,11 +231,13 @@ inconsistentes.
 flowchart LR
     A[Serializar el Almacen<br/>en datos.ser.tmp] --> B{¿Se escribió<br/>completo?}
     B -- no --> E[Borrar .tmp<br/>PersistenciaException<br/>datos.ser intacto]
-    B -- sí --> C[datos.ser → datos.ser.bak]
+    B -- sí --> C[copia datos.ser → datos.ser.bak]
     C --> D[datos.ser.tmp → datos.ser<br/>Files.move ATOMIC_MOVE]
     D --> OK[Guardado]
 ```
 
+El `.tmp` se fuerza al disco (`FileDescriptor.sync()`) antes de moverlo. Si el sistema de
+archivos no soporta el movimiento atómico, se reemplaza igual y el `.bak` cubre el hueco.
 En ningún momento el archivo principal está a medio escribir. Si la luz se corta en
 cualquier paso, queda la versión anterior completa en `datos.ser` o en `datos.ser.bak`.
 
