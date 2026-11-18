@@ -302,6 +302,7 @@ Runner propio (`PruebasRunner`), sin JUnit: cada prueba es un método que lanza
 
 | Grupo | Qué cubre |
 |---|---|
+| PR-COMUN | Utilidades de `comun`: limpieza y normalización de texto, formatos argentinos de moneda, km y fecha, lectura de números con puntos de miles |
 | PR-PRECIO | Los dos ejemplos de §4, topes de depreciación, 0 km sin depreciación, mínimo de patentamiento |
 | PR-VALID | Cada fila de la tabla de §3: el límite válido, el inválido y el formato |
 | PR-PATENTE | Formatos de auto y de moto, unicidad entre vehículos vendidos y dados de baja |
