@@ -25,6 +25,11 @@ public class Marca implements Identificable<Integer>, Serializable, Comparable<M
     private String paisOrigen;
     private Set<TipoVehiculo> tiposQueFabrica = EnumSet.noneOf(TipoVehiculo.class);
     private Boolean activa = Boolean.TRUE;
+    /**
+     * Clave normalizada del nombre, calculada una vez. Es {@code transient}: no se guarda, se
+     * recalcula al leer. Ordenar el stock la consulta miles de veces (ARQUITECTURA §7).
+     */
+    private transient String clave;
 
     /** Constructor vacío de JavaBean (lo usan la serialización y el importador). */
     public Marca() {
@@ -62,7 +67,10 @@ public class Marca implements Identificable<Integer>, Serializable, Comparable<M
      * @return la clave de comparación del nombre (sin acentos, en minúsculas)
      */
     public String getClave() {
-        return Textos.clave(nombre);
+        if (clave == null) {
+            clave = Textos.clave(nombre);
+        }
+        return clave;
     }
 
     @Override
@@ -94,6 +102,7 @@ public class Marca implements Identificable<Integer>, Serializable, Comparable<M
                             + " guiones y puntos.");
         }
         this.nombre = limpio;
+        this.clave = null;
     }
 
     /** @return el país de origen */
