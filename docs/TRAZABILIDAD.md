@@ -16,7 +16,7 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 | 6 | Interfaces, transmisión del comportamiento | `Vendible`, `Identificable<K>`, `Comparable<Vehiculo>`, `Repositorio<T,K>` y sus implementaciones | PR-VENTA |
 | 7 | Excepciones, incluyendo propias | Jerarquía `ConcesionariaException` en `excepciones/`; `catch` escalonado en la consola; `PersistenciaException` encadena la `IOException`. [MODELO.md §4](MODELO.md#4-excepciones-propias) | PR-VALID, PR-VENTA, PR-PERMISO, PR-PERSIST |
 | 8 | Tipos enumerativos | `TipoVehiculo`, `Estado`, `Situacion`, `Color`, `CarroceriaAutomovil`, `CarroceriaCamioneta`, `TipoMotocicleta`, `Rol`, `Permiso` | PR-VALID |
-| 9 | Interacción con el usuario | `presentacion/consola/` (Lector con reintentos, Tabla, Terminal) y `presentacion/pantallas/`. [SPEC §3 y §5](SPEC.md#5-la-consola) | Plan manual |
+| 9 | Interacción con el usuario | `presentacion/consola/` (`Lector` con reintentos, `Tabla`, `Terminal`, `Estilo`, `GraficoBarras`) y `presentacion/pantallas/` (`Pantalla` base con el `catch` escalonado, `Vistas` para ficha, desglose y comprobante). [SPEC §3 y §5](SPEC.md#5-la-consola) | Plan manual |
 | 10 | Wrappers | `Integer`/`Boolean` en el modelo (null = sin cargar), `parseInt` en el Lector, autoboxing en mapas de reportes | PR-VALID |
 | 11 | Colección, sobrescritura de métodos esenciales | `HashMap`, `TreeMap`, `ArrayList` en `datos/`; `equals`, `hashCode`, `toString`, `compareTo` en las entidades | PR-COLECCION |
 
@@ -34,12 +34,12 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 
 | Caso de uso | Pantalla | Servicio |
 |---|---|---|
-| CU-01 Primer arranque | `PantallaBienvenida` | `ServicioAutenticacion`, `DatosDemo` |
-| CU-02 Sesión | `PantallaLogin` | `ServicioAutenticacion` |
+| CU-01 Primer arranque | `PantallaInicio` | `ServicioAutenticacion`, `DatosDemo` |
+| CU-02 Sesión | `PantallaInicio`, `MenuPrincipal` (cerrar sesión) | `ServicioAutenticacion`, `Sesion` |
 | CU-03 a CU-09 Vehículos | `PantallaVehiculos` | `ServicioVehiculos`, `FiltroVehiculos`, `OrdenVehiculos`; `ServicioMarcas.paraAlta` |
-| CU-10, CU-11 Ventas | `PantallaVentas` | `ServicioVentas` |
+| CU-10, CU-11 Ventas | `PantallaVentas` (comprobante en `Vistas`) | `ServicioVentas` |
 | CU-12 Marcas | `PantallaMarcas` | `ServicioMarcas` |
 | CU-13, CU-16 Usuarios | `PantallaUsuarios` | `ServicioAutenticacion`, `Claves` |
 | CU-14 Reportes | `PantallaReportes` | `ServicioReportes` (calcula) + `ServicioArchivos` (exporta a .txt) |
 | CU-15 CSV | `PantallaDatos` | `ServicioArchivos` + `datos/ArchivosCsv` |
-| CU-17 Salir | `App` (shutdown hook) | `AlmacenArchivo` |
+| CU-17 Salir | `App` (shutdown hook) | `Persistencia` → `AlmacenArchivo` |

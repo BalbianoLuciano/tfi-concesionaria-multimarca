@@ -6,7 +6,7 @@ import ar.edu.utn.frre.concesionaria.datos.Persistencia;
 import ar.edu.utn.frre.concesionaria.datos.RepositorioMarcas;
 import ar.edu.utn.frre.concesionaria.datos.RepositorioVehiculos;
 import ar.edu.utn.frre.concesionaria.datos.RepositorioVentas;
-import ar.edu.utn.frre.concesionaria.datos.ResultadoImportacion;
+import ar.edu.utn.frre.concesionaria.modelo.ResultadoImportacion;
 import ar.edu.utn.frre.concesionaria.excepciones.ConcesionariaException;
 import ar.edu.utn.frre.concesionaria.excepciones.DatoInvalidoException;
 import ar.edu.utn.frre.concesionaria.modelo.Permiso;

@@ -1,6 +1,5 @@
-package ar.edu.utn.frre.concesionaria.datos;
+package ar.edu.utn.frre.concesionaria.modelo;
 
-import ar.edu.utn.frre.concesionaria.modelo.Vehiculo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
