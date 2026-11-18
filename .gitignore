@@ -1,0 +1,18 @@
+
+# MyJarbis — generated, per-developer state
+.myjarbis/active
+.claude/settings.local.json
+.myjarbis/memory.db
+.myjarbis/memory.db-journal
+.myjarbis/memory.db-wal
+.myjarbis/memory.db-shm
+.myjarbis/memory.db.*
+.claude/skills/myjarbis-*/
+.claude/commands/jarbis*.md
+
+# MyJarbis
+.myjarbis/context/codebase.txt
+
+# Build
+out/
+dist/
