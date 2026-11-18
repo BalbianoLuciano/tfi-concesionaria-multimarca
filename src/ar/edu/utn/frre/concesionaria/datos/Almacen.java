@@ -35,6 +35,10 @@ public class Almacen implements Serializable {
     private int ultimaVenta;
     private int ultimaMarca;
 
+    /** Crea un almacén vacío, para el primer arranque. */
+    public Almacen() {
+    }
+
     /** @return la versión de esquema con que se guardó */
     public int getVersionEsquema() {
         return versionEsquema;

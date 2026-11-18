@@ -27,7 +27,11 @@ public final class Lector {
     /** Intentos por campo. */
     public static final int INTENTOS = 3;
 
-    /** Convierte y valida un texto. */
+    /**
+     * Convierte y valida un texto.
+     *
+     * @param <T> tipo del valor que produce
+     */
     @FunctionalInterface
     public interface Conversor<T> {
         /**
