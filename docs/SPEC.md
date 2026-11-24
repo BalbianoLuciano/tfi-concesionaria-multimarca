@@ -187,10 +187,12 @@ Reglas generales:
 - Cada error dice qué estuvo mal y cómo corregirlo, y muestra los intentos que quedan.
 
 **Nada se elige sin que el usuario lo vea.** Es la regla que manda sobre toda la tolerancia
-de abajo, para marca, modelo y vehículo:
+de abajo, y vale en todo lugar donde se elige algo: listas numeradas, marca, modelo,
+vehículo y usuario.
 
-1. Solo se toma directo lo que coincide con el **nombre completo** (sin importar mayúsculas,
-   acentos ni espacios): "toyota", "COROLLA", "c-0001", la patente exacta.
+1. Solo se toma directo el número de la lista o lo que coincide con el **nombre completo**
+   (sin importar mayúsculas, acentos ni espacios): "toyota", "COROLLA", "c-0001", la patente
+   exacta.
 2. Una coincidencia **parcial única** se confirma: "t" → "¿Toyota? (S/n)". Enter o `s` la
    toma; `n` vuelve a preguntar.
 3. Varias coincidencias se muestran numeradas para elegir.
@@ -203,7 +205,7 @@ corrido, en lugar de exigir el formato exacto:
 
 | Situación | Se acepta | Se interpreta como |
 |---|---|---|
-| Elegir de una lista que está a la vista (tipo, estado, color, carrocería…) | El número, el nombre o su comienzo, sin importar mayúsculas ni acentos; "contiene" solo con 3 letras o más | "auto" → Automóvil, "usado" → Usado, "sedan" → Sedán. Como las opciones están en pantalla, el comienzo único funciona como una tecla y no se confirma |
+| Elegir de una lista numerada (tipo, estado, color, carrocería, rol, usuario, marca, modelo a quitar, filtros) | El número, el nombre o su comienzo, sin importar mayúsculas ni acentos; "contiene" solo con 3 letras o más | El número o el nombre completo ("usado", "sedan" → Sedán) eligen directo; el comienzo se confirma: "auto" → "¿Automóvil? (S/n)" |
 | El texto coincide con varias opciones | — | Error que las nombra: "«c» puede ser Coupé o Convertible." |
 | Número con su unidad | "85.000 km", "190cc", "4 puertas", "1.000 kg" | 85000, 190, 4, 1000 |
 | Monto | "$ 20.000.000", "20000000", "20.000.000,50" | el monto en pesos |

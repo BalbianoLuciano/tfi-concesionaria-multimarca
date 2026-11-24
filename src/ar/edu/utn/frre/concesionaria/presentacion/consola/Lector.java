@@ -231,35 +231,44 @@ public final class Lector {
         }
         terminal.introduccion();
         String textoActual = actual == null ? null : mostrar.apply(actual);
-        Integer elegido = leer(etiqueta, textoActual, texto -> {
-            if (texto.equals("0")) {
-                return 0;
+        while (true) {
+            // Positivo: número o nombre completo, se toma directo. Negativo: coincidencia
+            // parcial, se confirma antes de tomarla (SPEC §3, "Nada se elige sin verlo").
+            Integer elegido = leer(etiqueta, textoActual, texto -> {
+                if (texto.equals("0")) {
+                    return 0;
+                }
+                int n;
+                try {
+                    n = Integer.parseInt(texto);
+                } catch (NumberFormatException e) {
+                    n = porNombre(etiqueta, texto, opciones, mostrar);
+                }
+                if (Math.abs(n) < 1 || Math.abs(n) > opciones.size()) {
+                    throw new DatoInvalidoException(etiqueta, texto, "Elegí un número entre 1 y "
+                            + opciones.size() + ", o 0 para volver.");
+                }
+                return n;
+            });
+            if (elegido == null) {
+                return actual;
             }
-            int n;
-            try {
-                n = Integer.parseInt(texto);
-            } catch (NumberFormatException e) {
-                n = porNombre(etiqueta, texto, opciones, mostrar);
+            if (elegido == 0) {
+                throw new OperacionCancelada("Se canceló " + queSeCancela + ". No se guardó nada.");
             }
-            if (n < 1 || n > opciones.size()) {
-                throw new DatoInvalidoException(etiqueta, texto, "Elegí un número entre 1 y "
-                        + opciones.size() + ", o 0 para volver.");
+            T opcion = opciones.get(Math.abs(elegido) - 1);
+            if (elegido > 0 || confirmar("¿" + mostrar.apply(opcion).strip() + "?", true)) {
+                return opcion;
             }
-            return n;
-        });
-        if (elegido == null) {
-            return actual;
+            terminal.introduccion();
         }
-        if (elegido == 0) {
-            throw new OperacionCancelada("Se canceló " + queSeCancela + ". No se guardó nada.");
-        }
-        return opciones.get(elegido - 1);
     }
 
     /**
      * Elige una opción por su nombre o su comienzo ("auto" → Automóvil), SPEC §3.
      *
-     * @return el número de la opción (desde 1)
+     * @return el número de la opción (desde 1); negativo si la coincidencia es parcial y hay
+     *         que confirmarla
      * @throws DatoInvalidoException si no coincide ninguna, o coinciden varias
      */
     private static <T> int porNombre(String etiqueta, String texto, List<T> opciones,
@@ -267,7 +276,10 @@ public final class Lector {
         List<String> nombres = opciones.stream().map(mostrar).toList();
         List<Integer> encontradas = Textos.coincidencias(texto, nombres);
         if (encontradas.size() == 1) {
-            return encontradas.get(0) + 1;
+            int posicion = encontradas.get(0) + 1;
+            boolean completo = Textos.compacta(nombres.get(encontradas.get(0)))
+                    .equals(Textos.compacta(texto));
+            return completo ? posicion : -posicion;
         }
         if (encontradas.isEmpty()) {
             throw new DatoInvalidoException(etiqueta, texto, "\"" + texto + "\" no es ninguna"
