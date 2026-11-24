@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>TFI Programación II · Concesionaria multimarca</title>
+<!--
+  Informe de entrega del TFI. Los datos personales del alumno (DNI y legajo) NO se guardan en
+  el repositorio: este archivo tiene las marcas {{DNI}} y {{LEGAJO}}, y generar.sh las completa
+  con variables de entorno al armar el PDF en dist/entrega/.
+-->
+<style>
+  @page { size: A4; margin: 22mm 20mm 18mm 20mm;
+          @top-right { content: "Programación II · Trabajo Final Integrador";
+                       font-family: Calibri, Carlito, Arial, sans-serif; font-style: italic;
+                       font-size: 9pt; color: #5a5a5a; }
+          @bottom-right { content: counter(page); font-family: Calibri, Carlito, Arial,
+                          sans-serif; font-size: 9pt; color: #5a5a5a; } }
+  @page :first { @top-right { content: none; } @bottom-right { content: none; } }
+  :root { --azul: #1f4e8c; --azul-claro: #e8eef7; --gris: #5a5a5a; --borde: #c9d3e3; }
+  * { box-sizing: border-box; }
+  body { font-family: Calibri, Carlito, "Segoe UI", Arial, sans-serif; font-size: 10.5pt;
+         line-height: 1.45; color: #1d1d1d; margin: 0; }
+  h1 { color: var(--azul); font-size: 17pt; margin: 0 0 6pt; break-after: avoid; }
+  h2 { color: var(--azul); font-size: 13.5pt; margin: 18pt 0 6pt; break-after: avoid; }
+  h3 { color: var(--azul); font-size: 11.5pt; margin: 12pt 0 4pt; break-after: avoid; }
+  p { margin: 0 0 7pt; text-align: justify; }
+  ul, ol { margin: 0 0 7pt 0; padding-left: 18pt; }
+  li { margin-bottom: 2pt; }
+  code { font-family: Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 8.8pt;
+         background: #f2f4f7; padding: 0 2pt; border-radius: 2pt; }
+  table { border-collapse: collapse; width: 100%; margin: 4pt 0 10pt; font-size: 9.3pt;
+          break-inside: avoid; }
+  th { background: var(--azul); color: #fff; text-align: left; padding: 4pt 6pt;
+       font-weight: 600; }
+  td { border-bottom: 1px solid var(--borde); padding: 3.5pt 6pt; vertical-align: top; }
+  tr:nth-child(even) td { background: #f7f9fc; }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  .salto { break-before: page; }
+
+  /* Carátula, en la línea de la plantilla oficial TUP UTN FRRe */
+  .caratula { border: 1.2pt solid #222; padding: 0; height: 255mm; display: flex;
+              flex-direction: column; }
+  .caratula .franja { border-bottom: 1.2pt solid #222; text-align: center; font-weight: 700;
+                      font-family: Arial, sans-serif; font-size: 12pt; padding: 6pt; }
+  .caratula .cuerpo { padding: 16mm 14mm 8mm; flex: 1; display: flex; flex-direction: column; }
+  .caratula .marca { display: flex; align-items: center; gap: 12mm; }
+  .caratula .marca img { width: 52mm; }
+  .caratula .carrera { font-family: Arial, sans-serif; font-weight: 700; font-size: 17pt;
+                       line-height: 1.25; }
+  .caratula .carrera em { display: block; font-size: 13pt; font-weight: 700; margin-top: 4pt; }
+  .caratula .titulo { margin: 16mm 0 10mm; }
+  .caratula .titulo .tfi { font-family: Arial, sans-serif; font-size: 12pt; color: var(--gris);
+                           letter-spacing: .5pt; text-transform: uppercase; }
+  .caratula .titulo .nombre { font-family: Arial, sans-serif; font-size: 22pt; font-weight: 700;
+                              color: var(--azul); line-height: 1.2; margin-top: 4pt; }
+  .caratula ul { font-family: Arial, sans-serif; font-size: 11.5pt; list-style: disc;
+                 padding-left: 16pt; }
+  .caratula li { margin-bottom: 5pt; }
+  .caratula li b { text-decoration: underline; }
+  .caratula .alumno { margin-top: 8mm; font-family: Arial, sans-serif; font-size: 11pt; }
+  .caratula .alumno div { margin-bottom: 3pt; }
+  .caratula .alumno a { color: #1155cc; }
+  .caratula .pie { margin-top: auto; display: flex; align-items: center;
+                   border-top: 1px solid #ccc; padding-top: 6mm; }
+  .caratula .pie img { width: 58mm; }
+  .caratula .pie .sep { border-left: 1.2pt solid #222; height: 18mm; margin: 0 10mm; }
+  .caratula .pie .datos { font-family: Arial, sans-serif; font-size: 9pt; text-align: center;
+                          flex: 1; }
+
+  /* Capturas de la consola */
+  figure { margin: 6pt 0 12pt; break-inside: avoid; }
+  pre.consola { background: #10151c; color: #dfe6ee; font-family: Menlo, Consolas,
+                "DejaVu Sans Mono", monospace; font-size: 6.9pt; line-height: 1.32;
+                padding: 8pt 9pt; border-radius: 4pt; margin: 0; white-space: pre;
+                overflow: hidden; }
+  figcaption { font-size: 8.8pt; color: var(--gris); margin-top: 3pt; font-style: italic; }
+  .capas { display: flex; flex-direction: column; gap: 4pt; margin: 6pt 0 10pt;
+           break-inside: avoid; }
+  .capa { border: 1px solid var(--borde); background: var(--azul-claro); border-radius: 3pt;
+          padding: 5pt 8pt; }
+  .capa b { color: var(--azul); }
+  .flecha { text-align: center; color: var(--gris); font-size: 9pt; line-height: 1; }
+  .nota { border-left: 3pt solid var(--azul); background: var(--azul-claro); padding: 6pt 9pt;
+          margin: 6pt 0 10pt; font-size: 9.8pt; }
+  .indice ol { columns: 2; column-gap: 12mm; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================== CARÁTULA -->
+<section class="caratula">
+  <div class="franja">TRABAJO FINAL INTEGRADOR</div>
+  <div class="cuerpo">
+    <div class="marca">
+      <img src="../assets/caratula/logo-tup-frre.png" alt="TUP FRRe">
+      <div class="carrera">TECNICATURA UNIVERSITARIA EN PROGRAMACIÓN
+        <em>UTN – F.R. Resistencia</em></div>
+    </div>
+
+    <div class="titulo">
+      <div class="tfi">Trabajo Final Integrador</div>
+      <div class="nombre">Sistema de gestión para una concesionaria multimarca</div>
+    </div>
+
+    <ul>
+      <li><b>Asignatura:</b> Programación II</li>
+      <li><b>Año:</b> 2026</li>
+      <li><b>Entrega:</b> noviembre de 2026 · versión 1.0.0</li>
+    </ul>
+
+    <div class="alumno">
+      <div><b>Alumno:</b> Luciano Balbiano</div>
+      <div><b>DNI:</b> {{DNI}} &nbsp;·&nbsp; <b>Legajo:</b> {{LEGAJO}}</div>
+      <div><b>GitHub:</b> <a href="https://github.com/BalbianoLuciano">github.com/BalbianoLuciano</a></div>
+      <div><b>Portfolio:</b> <a href="https://balbianoluciano.github.io">balbianoluciano.github.io</a></div>
+      <div><b>Repositorio:</b> <a href="https://github.com/BalbianoLuciano/tfi-concesionaria-multimarca">github.com/BalbianoLuciano/tfi-concesionaria-multimarca</a></div>
+    </div>
+
+    <div class="pie">
+      <img src="../assets/caratula/logo-utn-frre.png" alt="UTN Facultad Regional Resistencia">
+      <div class="sep"></div>
+      <div class="datos"><a href="https://www.frre.utn.edu.ar">www.frre.utn.edu.ar</a><br>
+        <a href="https://www.frre.utn.edu.ar/tup">www.frre.utn.edu.ar/tup</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================== ÍNDICE -->
+<section class="salto indice">
+  <h1>Contenido</h1>
+  <ol>
+    <li>Introducción y alcance</li>
+    <li>Cómo ejecutarlo</li>
+    <li>Requisitos del enunciado</li>
+    <li>Modelo del dominio</li>
+    <li>Arquitectura: Diseño vs. Negocio</li>
+    <li>Interacción con el usuario</li>
+    <li>Excepciones, wrappers y colecciones</li>
+    <li>Persistencia</li>
+    <li>Pruebas y rendimiento</li>
+    <li>Contenido extra</li>
+    <li>Metodología de trabajo</li>
+    <li>Conclusiones</li>
+  </ol>
+
+  <h2>1. Introducción y alcance</h2>
+  <p>El escenario plantea una concesionaria multimarca que vende automóviles, camionetas y
+  motocicletas, nuevas (0&nbsp;km) o usadas con kilometraje, y unos directivos que quieren
+  saber marca, modelo, año, color y carrocería (o tipo de motocicleta) de cada unidad. Sobre
+  esa base, y con el libre criterio que permite la consigna, se construyó un sistema de
+  consola en <b>Java SE 25 puro</b>, sin frameworks ni librerías externas, que cubre:</p>
+  <ul>
+    <li><b>Stock</b>: alta, modificación, baja lógica, búsqueda libre, filtros, orden y ficha
+      de cada vehículo.</li>
+    <li><b>Precio final</b> calculado por reglas propias de cada tipo: depreciación por
+      antigüedad y por kilometraje, recargo 4x4 y patentamiento.</li>
+    <li><b>Ventas</b> con comprobante, que se registran todo o nada, e historial por período
+      y vendedor.</li>
+    <li><b>Reportes para directivos</b>, con gráficos de barras en la consola y exportación
+      a texto.</li>
+    <li><b>Usuarios con roles</b> (Administrador, Vendedor, Directivo), cada uno con su
+      menú y sus permisos.</li>
+    <li><b>Persistencia</b> en un archivo con escritura atómica y copia de respaldo, más
+      exportación e importación CSV.</li>
+  </ul>
+
+  <table>
+    <tr><th>El proyecto en números</th><th class="num">Cantidad</th></tr>
+    <tr><td>Clases e interfaces del sistema (<code>src/</code>)</td><td class="num">89</td></tr>
+    <tr><td>Líneas de código del sistema</td><td class="num">9.486</td></tr>
+    <tr><td>Pruebas automáticas, en 10 grupos</td><td class="num">87</td></tr>
+    <tr><td>Casos de uso especificados e implementados</td><td class="num">17</td></tr>
+    <tr><td>Pull requests revisados y mergeados en GitHub</td><td class="num">9</td></tr>
+  </table>
+
+  <h2>2. Cómo ejecutarlo</h2>
+  <p>Hace falta un JDK 25 o posterior. El <code>.jar</code> se descarga del release
+  <code>v1.0.0</code> del repositorio, o se compila con el script del proyecto:</p>
+  <table>
+    <tr><th>Comando</th><th>Qué hace</th></tr>
+    <tr><td><code>java -jar concesionaria.jar</code></td><td>Ejecuta el sistema; los datos quedan en <code>~/.concesionaria/</code></td></tr>
+    <tr><td><code>java -Dconcesionaria.dir=/tmp/demo -jar concesionaria.jar</code></td><td>Usa otra carpeta de datos (útil para probar desde cero)</td></tr>
+    <tr><td><code>java -jar concesionaria.jar --sin-color</code></td><td>Sin códigos de color (también con la variable <code>NO_COLOR</code>)</td></tr>
+    <tr><td><code>./build.sh</code> · <code>./build.sh run</code></td><td>Compila con <code>javac --release 25</code> y arma el <code>.jar</code>; <code>run</code> además lo ejecuta</td></tr>
+    <tr><td><code>./build.sh test</code></td><td>Corre las 87 pruebas automáticas</td></tr>
+    <tr><td><code>./build.sh docs</code> · <code>./build.sh bench</code></td><td>Genera el JavaDoc · mide el rendimiento</td></tr>
+  </table>
+  <p>En el primer arranque se crea el usuario administrador y se ofrece cargar datos de
+  demostración (8 marcas y 10 vehículos) para recorrer el sistema enseguida.</p>
+</section>
+
+<!-- ============================================================== REQUISITOS -->
+<section>
+  <h2>3. Requisitos del enunciado</h2>
+  <p>Cada requisito quedó trazado a las clases que lo cumplen y a las pruebas que lo
+  verifican. La tabla completa está en <code>docs/TRAZABILIDAD.md</code>.</p>
+  <table>
+    <tr><th>#</th><th>Requisito</th><th>Dónde se cumple</th></tr>
+    <tr><td>1</td><td>Dominio, abstracción, modelado, tipos de datos</td><td><code>Vehiculo</code> y subclases, <code>Marca</code>, <code>Venta</code>, <code>Comprador</code>, <code>Usuario</code>; plata con <code>BigDecimal</code>, fechas con <code>LocalDate</code></td></tr>
+    <tr><td>2</td><td>Diseño vs. Negocio</td><td>Paquetes <code>presentacion</code> → <code>negocio</code> → <code>datos</code>, con dependencias en un solo sentido (sección 5)</td></tr>
+    <tr><td>3</td><td>Remarks y JavaDoc</td><td>JavaDoc en todas las clases y métodos públicos, sin errores (<code>./build.sh docs</code>); comentarios que explican el porqué</td></tr>
+    <tr><td>4</td><td>Clases abstractas, herencia, polimorfismo</td><td><code>Vehiculo</code> abstracta; <code>Automovil</code>, <code>Camioneta</code>, <code>Motocicleta</code>; método plantilla <code>desglosarPrecio()</code></td></tr>
+    <tr><td>5</td><td>JavaBean y POJO</td><td>Entidades con constructor vacío, getters/setters que validan y <code>Serializable</code>; <code>DesglosePrecio</code> y <code>Comprador</code> como POJOs inmutables</td></tr>
+    <tr><td>6</td><td>Interfaces, transmisión del comportamiento</td><td><code>Vendible</code>, <code>Identificable&lt;K&gt;</code>, <code>Comparable</code>, <code>Repositorio&lt;T,K&gt;</code> y sus implementaciones</td></tr>
+    <tr><td>7</td><td>Excepciones, incluyendo propias</td><td>Jerarquía <code>ConcesionariaException</code> (14 clases); <code>catch</code> escalonado de lo específico a lo general</td></tr>
+    <tr><td>8</td><td>Tipos enumerativos</td><td><code>TipoVehiculo</code>, <code>Estado</code>, <code>Situacion</code>, <code>Color</code>, carrocerías, <code>TipoMotocicleta</code>, <code>Rol</code>, <code>Permiso</code></td></tr>
+    <tr><td>9</td><td>Interacción con el usuario</td><td>Menús por rol, formularios por pasos con validación y reintentos, tablas, fichas y mensajes con significado (sección 6)</td></tr>
+    <tr><td>10</td><td>Wrappers</td><td><code>Integer</code>/<code>Boolean</code> en el modelo (<code>null</code> = sin cargar), <code>parseInt</code> al leer, autoboxing en los mapas de reportes</td></tr>
+    <tr><td>11</td><td>Colección y métodos esenciales</td><td><code>HashMap</code>, <code>TreeMap</code>, <code>ArrayList</code>, <code>EnumMap</code>, <code>EnumSet</code>; <code>equals</code>, <code>hashCode</code>, <code>toString</code>, <code>compareTo</code></td></tr>
+  </table>
+
+  <h2>4. Modelo del dominio</h2>
+  <p><code>Vehiculo</code> es una clase abstracta con lo común a todos: código, marca,
+  modelo, año, color, estado (0&nbsp;km o usado), kilometraje, patente, precio de lista y
+  situación (disponible, vendido, dada de baja). Cada subclase agrega lo suyo:</p>
+  <table>
+    <tr><th>Subclase</th><th>Atributos propios</th><th>Depreciación (usados)</th><th>Recargo y patentamiento (0 km)</th></tr>
+    <tr><td><code>Automovil</code></td><td>Carrocería, puertas (2 a 5)</td><td>6 % por año, tope 45 %; 1 % cada 10.000 km, tope 15 %</td><td>Patentamiento 3 %</td></tr>
+    <tr><td><code>Camioneta</code></td><td>Carrocería, tracción 4x4, carga útil (kg)</td><td>5 % por año, tope 40 %; 0,8 % cada 10.000 km, tope 12 %</td><td>4x4: +7 %; patentamiento 3 %</td></tr>
+    <tr><td><code>Motocicleta</code></td><td>Tipo de moto, cilindrada (cc)</td><td>8 % por año, tope 50 %; 1 % cada 5.000 km, tope 20 %</td><td>Patentamiento 2 %, mínimo $ 150.000</td></tr>
+  </table>
+  <p>El cálculo es un <b>método plantilla</b>: <code>desglosarPrecio()</code> es
+  <code>final</code> en <code>Vehiculo</code> y define los pasos (lista, menos
+  depreciaciones, más recargos, más patentamiento, redondeo a pesos), mientras que cada
+  subclase solo aporta sus porcentajes y topes. Así el polimorfismo decide <em>cuánto</em>
+  y la clase base decide <em>cómo</em>. Por ejemplo, una Toyota Hilux 2019 usada con
+  112.900 km, 4x4 y precio de lista de $ 38.000.000 se cotiza en 2026 así: 35 % por
+  antigüedad, 8,8 % por kilometraje y 7 % de recargo 4x4, con un precio final de
+  <b>$ 22.850.920</b>. Ese ejemplo es una de las pruebas automáticas.</p>
+  <p>La <b>marca</b> es una entidad propia con su catálogo: se elige escribiendo las
+  primeras letras y nunca se tipea a mano en cada alta, lo que evita "Toyota",
+  "TOYOTA" y "Toyta" como marcas distintas. Dos marcas son iguales si su nombre
+  normalizado coincide, y al crear una se avisa si hay otra parecida.</p>
+  <p>Los setters de las entidades <b>validan</b> y lanzan <code>DatoInvalidoException</code>
+  con un mensaje que dice cómo corregir el dato. La regla vive en un solo lugar: la usan
+  por igual la consola, el importador CSV y las pruebas.</p>
+</section>
+
+<!-- ============================================================== ARQUITECTURA -->
+<section>
+  <h2>5. Arquitectura: Diseño vs. Negocio</h2>
+  <div class="capas">
+    <div class="capa"><b>presentacion</b> · consola y pantallas: muestra y pide datos; no toca los datos directamente</div>
+    <div class="flecha">▼ usa</div>
+    <div class="capa"><b>negocio</b> · servicios: reglas, permisos y cálculos; no imprime ni importa <code>java.io</code></div>
+    <div class="flecha">▼ usa (solo interfaces)</div>
+    <div class="capa"><b>datos</b> · repositorios en memoria y persistencia en archivo</div>
+    <div class="flecha">transversales a las tres capas: <code>modelo</code> · <code>excepciones</code> · <code>comun</code></div>
+  </div>
+  <p>El negocio depende de <b>interfaces</b> (<code>Repositorio&lt;T,K&gt;</code>,
+  <code>Persistencia</code>, <code>ArchivosExportacion</code>) y no de sus
+  implementaciones. La clase <code>App</code> es la única que conoce todas las piezas: crea
+  los repositorios, se los pasa por constructor a los servicios y pasa los servicios a la
+  consola (inyección de dependencias a mano). Gracias a eso, las pruebas arman el negocio
+  completo en memoria con una persistencia falsa que puede simular fallas.</p>
+  <p>Los <b>permisos</b> están en el enum <code>Rol</code> como una matriz: cada servicio
+  llama a <code>sesion.exigir(Permiso)</code> antes de operar. La consola solo muestra lo
+  que el rol puede hacer, pero el negocio vuelve a verificarlo siempre.</p>
+  <p>La <b>venta</b> es todo o nada: se congela el precio, se marca el vehículo como
+  vendido y se registra la venta; si el guardado falla, se deshacen los tres pasos en
+  memoria y el vehículo sigue disponible.</p>
+</section>
+
+<!-- ============================================================== CONSOLA -->
+<section>
+  <h2>6. Interacción con el usuario</h2>
+  <p>La consigna pone el énfasis en la interacción, y el objetivo fue una consola trabajada.
+  Todas las pantallas siguen un mismo esqueleto, definido en SPEC §5: encabezado fijo con el
+  usuario, el rol y la fecha; título y ruta de navegación; una línea de contexto; opciones
+  numeradas con descripción, agrupadas en secciones; y las teclas de salida siempre en la
+  misma columna, diciendo a dónde llevan.</p>
+  <ul>
+    <li><b>Color con significado</b>: verde para el éxito y los 0&nbsp;km, rojo para los
+      errores, amarillo para los avisos y cian para los títulos. Nunca es la única señal
+      (✓, ✗, !), y se apaga con <code>--sin-color</code>, con <code>NO_COLOR</code> o si la
+      salida no es una terminal.</li>
+    <li><b>Controles de data-entry</b>: cada campo se valida al momento y se vuelve a pedir
+      hasta 3 veces con un mensaje que explica cómo corregirlo; <code>:q</code> cancela; en
+      las modificaciones se muestra el valor actual y Enter lo mantiene.</li>
+    <li><b>Confirmaciones proporcionales</b>: s/n para las altas; para una baja hay que
+      escribir el código del vehículo.</li>
+  </ul>
+  <figure>
+<pre class="consola"> CONCESIONARIA MULTIMARCA                                 admin · Administrador · mar 24/11/2026
+ ───────────────────────────────────────────────────────────────────────────────────────────────
+ INICIO
+ Hola, Luciano Balbiano.
+
+   Stock disponible              Ventas de nov 2026            Valor del stock
+   9 vehículos                   1 venta                       $ 177.456.520
+   0 km: 3 · usados: 6           $ 33.475.000                  a precio final de hoy
+
+   Operación
+      1  Vehículos           stock, búsqueda, altas y bajas
+      2  Ventas              vender e historial
+      3  Reportes            stock, ventas y vendedores
+
+   Administración
+      4  Marcas              catálogo de marcas
+      5  Usuarios            altas, roles y claves
+      6  Datos               exportar e importar CSV
+
+   Mi cuenta
+      7  Cambiar mi clave    pide la clave actual
+      C  Cerrar sesión       volver al inicio de sesión
+
+      0  Salir del programa  guarda los cambios pendientes
+
+ ───────────────────────────────────────────────────────────────────────────────────────────────
+ Elegí una opción › 1</pre>
+    <figcaption>Figura 1. Inicio del administrador: resumen según el rol y menú por secciones.</figcaption>
+  </figure>
+  <figure>
+<pre class="consola"> CONCESIONARIA MULTIMARCA                                 admin · Administrador · mar 24/11/2026
+ ───────────────────────────────────────────────────────────────────────────────────────────────
+ LISTAR STOCK                                                  Inicio › Vehículos › Listar stock
+
+ Filtro: Disponibles   Orden: Tipo y marca
+
+ Código  Marca       Modelo      Año  Estado       Km  Detalle                      Precio final
+ ───────────────────────────────────────────────────────────────────────────────────────────────
+ Automóviles · 3 unidades · $ 42.497.000
+ A-0003  Fiat        Cronos     2026  0 km          —  Sedán · 4 puertas            $ 25.647.000
+ A-0004  Peugeot     208        2021  Usado    45.300  Hatchback · 5 puertas        $ 12.342.000
+ A-0002  Volkswagen  Gol Trend  2015  Usado    98.000  Hatchback · 5 puertas         $ 4.508.000
+
+ Camionetas · 4 unidades · $ 120.337.520
+ C-0004  Chevrolet   Tracker    2023  Usado    31.200  SUV · 4x2 · 400 kg           $ 22.715.000
+ C-0002  Ford        Ranger     2026  0 km          —  Doble cabina · 4x4 · 1.100…  $ 57.309.200
+ C-0001  Toyota      Hilux      2019  Usado   112.900  Doble cabina · 4x4 · 1.000…  $ 22.850.920
+ C-0003  Volkswagen  Amarok     2017  Usado   150.000  Doble cabina · 4x4 · 1.000…  $ 17.462.400
+
+ Motocicletas · 2 unidades · $ 14.622.000
+ M-0001  Honda       CB 500F    2026  0 km          —  Naked · 471 cc               $ 12.750.000
+ M-0002  Yamaha      FZ         2020  Usado    21.000  Calle · 150 cc                $ 1.872.000
+
+ 9 vehículos · 0 km: 3 · usados: 6 · página 1 de 1
+
+ ───────────────────────────────────────────────────────────────────────────────────────────────
+ F filtrar · O ordenar · L limpiar filtros · V ver ficha · 0 Volver a Vehículos
+ Elegí una opción › 0</pre>
+    <figcaption>Figura 2. Stock agrupado por tipo, con cantidad y valor de cada grupo.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <figure>
+<pre class="consola"> CONCESIONARIA MULTIMARCA                                 admin · Administrador · mar 24/11/2026
+ ───────────────────────────────────────────────────────────────────────────────────────────────
+ REGISTRAR VEHÍCULO                                      Inicio › Vehículos › Registrar vehículo
+
+ Son 4 pasos. Escribí :q en cualquier campo para cancelar sin guardar nada.
+
+ Paso 1 de 4 · Tipo y estado
+   1  Automóvil
+   2  Camioneta
+   3  Motocicleta
+ Tipo › 3
+
+   1  0 km
+   2  Usado
+ Estado › 2
+
+ Paso 2 de 4 · Datos generales
+   Marca: escribí las primeras letras; solo aparecen las activas que fabrican motocicletas.
+ Marca (primeras letras) › hon
+ → Honda
+ Modelo › CB 190R
+   Año entre 1990 y 2027.
+ Año › dos mil
+ ✗ "dos mil" no es un número. Escribí el año con cuatro dígitos, por ejemplo 2019. Te quedan 2
+   intentos.
+ Año › 2022
+
+   1  Blanco   2  Negro    3  Gris
+   4  Plata    5  Rojo     6  Azul
+   7  Verde    8  Bordó    9  Beige
+ Color › 4
+   Precio de lista en pesos, sin depreciación ni patentamiento: el precio final se calcula solo.
+ Precio de lista $ › 4.200.000
+
+ Paso 3 de 4 · Uso y patente
+ Kilometraje › 15000
+   Formatos de patente: 123ABC o A123BCD.
+ Patente › AB123CD
+ ✗ "AB123CD" no es una patente de moto. Formatos: 123ABC o A123BCD. Te quedan 2 intentos.
+ Patente › 123ABC
+
+ Paso 4 de 4 · Datos de la moto
+   1  Calle       2  Naked       3  Deportiva
+   4  Touring     5  Enduro      6  Scooter
+   7  Custom
+ Tipo de moto › 5
+ Cilindrada (cc) › 190
+
+ ───────────────────────────────────────────────────────────────────────────────────────────────
+ Resumen
+
+ Honda CB 190R 2022  · Sin registrar
+
+   Vehículo                                   Registro
+   Tipo       Motocicleta                     Estado       Usado
+   Detalle    Enduro · 190 cc                 Kilometraje  15.000 km
+   Marca      Honda (Japón)                   Patente      123ABC
+   Año        2022
+   Color      Plata
+
+   Precio de lista                               $ 4.200.000
+   Depreciación por antigüedad (32 %)           -$ 1.344.000
+   Depreciación por km (3 %)                      -$ 126.000
+   ─────────────────────────────────────────────────────────
+   Precio final                                  $ 2.730.000
+
+ ¿Registrar este vehículo? (s/n) › n
+ No se registró nada.</pre>
+    <figcaption>Figura 3. Alta de una moto usada en 4 pasos: ayuda antes de cada campo, errores
+    que dicen cómo corregir y resumen con el precio antes de confirmar.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <figure>
+<pre class="consola"> CONCESIONARIA MULTIMARCA                                 admin · Administrador · mar 24/11/2026
+ ───────────────────────────────────────────────────────────────────────────────────────────────
+ VER FICHA                                                        Inicio › Vehículos › Ver ficha
+
+ Código › c1
+
+ C-0001  Toyota Hilux 2019  · Disponible
+
+   Vehículo                                   Registro
+   Tipo       Camioneta                       Estado       Usado
+   Detalle    Doble cabina · 4x4 · 1.000 kg   Kilometraje  112.900 km
+   Marca      Toyota (Japón)                  Patente      AD456FG
+   Año        2019                            Ingreso      24/11/2026
+   Color      Blanco
+
+ Precio
+   Precio de lista                              $ 38.000.000
+   Depreciación por antigüedad (35 %)          -$ 13.300.000
+   Depreciación por km (8,8 %)                  -$ 3.344.000
+   Recargo 4x4 (7 %)                            +$ 1.494.920
+   ─────────────────────────────────────────────────────────
+   Precio final                                 $ 22.850.920</pre>
+    <figcaption>Figura 4. Ficha en dos columnas y desglose del precio final.</figcaption>
+  </figure>
+  <figure>
+<pre class="consola"> CONCESIONARIA MULTIMARCA                                 admin · Administrador · mar 24/11/2026
+ ───────────────────────────────────────────────────────────────────────────────────────────────
+ STOCK POR TIPO Y ESTADO                             Inicio › Reportes › Stock por tipo y estado
+ Al 24/11/2026
+
+ Automóvil
+   0 km   ██████████░░░░░░░░░░░░░░░░░░░░    1
+   Usado  ████████████████████░░░░░░░░░░    2
+ Camioneta
+   0 km   ██████████░░░░░░░░░░░░░░░░░░░░    1
+   Usado  ██████████████████████████████    3
+ Motocicleta
+   0 km   ██████████░░░░░░░░░░░░░░░░░░░░    1
+   Usado  ██████████░░░░░░░░░░░░░░░░░░░░    1
+
+ Total disponible: 9 vehículos
+
+ ───────────────────────────────────────────────────────────────────────────────────────────────
+ E exportar a .txt · Enter Volver a Reportes
+ Elegí una opción ›</pre>
+    <figcaption>Figura 5. Reporte para directivos con gráfico de barras, exportable a .txt.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <figure>
+<pre class="consola"> CONCESIONARIA MULTIMARCA                                 admin · Administrador · mar 24/11/2026
+ ───────────────────────────────────────────────────────────────────────────────────────────────
+ VENDER                                                                 Inicio › Ventas › Vender
+
+ Son 3 pasos. :q en cualquier campo cancela sin vender nada.
+
+ Paso 1 de 3 · Vehículo
+   Escribí el código (c4, A-0001) o una búsqueda: marca, modelo o patente.
+ Vehículo › corolla
+
+ A-0001  Toyota Corolla 2026  · Disponible
+
+   Vehículo                                   Registro
+   Tipo       Automóvil                       Estado       0 km
+   Detalle    Sedán · 4 puertas               Kilometraje  —
+   Marca      Toyota (Japón)                  Patente      sin patentar
+   Año        2026                            Ingreso      24/11/2026
+   Color      Blanco
+
+   Precio de lista                              $ 32.500.000
+   Patentamiento                                  +$ 975.000
+   ─────────────────────────────────────────────────────────
+   Precio final                                 $ 33.475.000
+
+ Paso 2 de 3 · Comprador
+   Nombre y apellido como figuran en el DNI; el DNI, con o sin puntos.
+ Nombre y apellido › Juan Pérez
+ DNI › 30123456
+
+ Paso 3 de 3 · Confirmación
+   El precio queda congelado en la venta: si después cambia, la venta no cambia.
+ ¿Confirmar la venta de A-0001 a Juan Pérez por $ 33.475.000? (s/n) › s
+
+ ✓ Venta registrada.
+
+   ─────────────────────────────────────────────────────────
+   COMPROBANTE DE VENTA                           N.º 000001
+   Fecha                                          24/11/2026
+   Vendedor                                            admin
+   ─────────────────────────────────────────────────────────
+   Comprador                                      Juan Pérez
+   DNI                                            30.123.456
+   Vehículo                     A-0001 · Toyota Corolla 2026
+   ─────────────────────────────────────────────────────────
+   Precio de lista                              $ 32.500.000
+   Patentamiento                                  +$ 975.000
+   ─────────────────────────────────────────────────────────
+   Precio final                                 $ 33.475.000
+   ─────────────────────────────────────────────────────────</pre>
+    <figcaption>Figura 6. Venta en 3 pasos y comprobante.</figcaption>
+  </figure>
+</section>
+
+<!-- ============================================================== EXCEPCIONES -->
+<section>
+  <h2>7. Excepciones, wrappers y colecciones</h2>
+  <h3>Excepciones propias</h3>
+  <p>Todas heredan de <code>ConcesionariaException</code> (chequeada), agrupadas por lo que
+  significan para quien las atiende:</p>
+  <table>
+    <tr><th>Categoría</th><th>Excepciones</th></tr>
+    <tr><td><code>DatoInvalidoException</code></td><td>Un dato no cumple su regla; guarda el campo y el valor</td></tr>
+    <tr><td><code>EntidadNoEncontradaException</code></td><td><code>VehiculoNoEncontrado</code>, <code>MarcaNoEncontrada</code></td></tr>
+    <tr><td><code>ReglaNegocioException</code></td><td><code>VehiculoNoDisponible</code>, <code>PatenteDuplicada</code>, <code>MarcaDuplicada</code>, <code>MarcaEnUso</code></td></tr>
+    <tr><td><code>SeguridadException</code></td><td><code>CredencialesInvalidas</code>, <code>AccesoDenegado</code></td></tr>
+    <tr><td><code>PersistenciaException</code></td><td>Encadena la <code>IOException</code> original como causa</td></tr>
+  </table>
+  <p>La clase base de las pantallas atrapa de lo específico a lo general, como se vio en
+  clase. Un error esperado muestra su mensaje; uno imprevisto (<code>RuntimeException</code>)
+  queda registrado en <code>error.log</code> y el programa sigue funcionando.</p>
+
+  <h3>Wrappers</h3>
+  <p>Los atributos numéricos y lógicos del modelo son <code>Integer</code> y
+  <code>Boolean</code>: <code>null</code> significa "todavía no se cargó", algo que un
+  <code>int</code> no puede distinguir de un cero. Los textos se convierten con
+  <code>Integer.parseInt</code> y la <code>NumberFormatException</code> se traduce a una
+  excepción propia con un mensaje claro. Los reportes usan autoboxing en mapas como
+  <code>Map&lt;Estado, Long&gt;</code>.</p>
+
+  <h3>Colecciones y métodos esenciales</h3>
+  <table>
+    <tr><th>Operación</th><th>Estructura</th><th>Costo</th></tr>
+    <tr><td>Buscar vehículo por código</td><td><code>HashMap&lt;String, Vehiculo&gt;</code></td><td>O(1)</td></tr>
+    <tr><td>¿Patente repetida?</td><td><code>HashMap</code> patente → código</td><td>O(1)</td></tr>
+    <tr><td>Marcas por prefijo ("toy")</td><td><code>TreeMap.subMap</code></td><td>O(log n + k)</td></tr>
+    <tr><td>Historial de ventas</td><td><code>ArrayList</code> (queda en orden cronológico)</td><td>O(1) agregar</td></tr>
+    <tr><td>Reportes por tipo y estado</td><td><code>EnumMap</code> y <code>Collectors.groupingBy</code></td><td>Una pasada</td></tr>
+  </table>
+  <p>Cada entidad sobrescribe <code>equals</code> y <code>hashCode</code> según su
+  identidad (el código del vehículo, el nombre normalizado de la marca, el número de venta,
+  el nombre de usuario), <code>toString</code> para depurar (el de <code>Usuario</code> nunca
+  muestra la clave) y <code>compareTo</code> para el orden natural.</p>
+</section>
+
+<!-- ============================================================== PERSISTENCIA -->
+<section>
+  <h2>8. Persistencia</h2>
+  <p>Todo el sistema se guarda como una sola foto (<code>Almacen</code>, serializable) en
+  <code>datos.ser</code>. Un único archivo hace que una venta, que modifica vehículos y
+  ventas a la vez, quede guardada entera o no quede.</p>
+  <ol>
+    <li>Se escribe en un archivo temporal y se fuerza a disco.</li>
+    <li>El archivo anterior se copia a <code>datos.ser.bak</code>.</li>
+    <li>El temporal reemplaza al real con <code>Files.move(..., ATOMIC_MOVE)</code>: un corte
+      de luz en el medio nunca deja un archivo a medias.</li>
+  </ol>
+  <p>Al arrancar, si el archivo está dañado se recupera la copia <code>.bak</code> y el
+  dañado se renombra a <code>.corrupto</code> para poder inspeccionarlo. Cada archivo lleva
+  su versión de esquema y <code>serialVersionUID</code>, así un <code>.jar</code> nuevo sabe
+  leer datos viejos. Además, el stock, las marcas y las ventas se exportan a CSV, y el stock
+  se puede importar: si una sola fila tiene un error, no se importa nada y se informa cada
+  error con su número de línea.</p>
+</section>
+
+<!-- ============================================================== PRUEBAS -->
+<section>
+  <h2>9. Pruebas y rendimiento</h2>
+  <p>Sin JUnit (fuera del JDK), las pruebas usan un runner propio. Cada prueba es una lambda
+  registrada con un identificador, y <code>./build.sh test PR-PRECIO</code> corre un solo
+  grupo. "Hoy" se fija con un <code>Clock</code> para que los cálculos de antigüedad den
+  siempre lo mismo.</p>
+  <table>
+    <tr><th>Grupo</th><th>Qué cubre</th></tr>
+    <tr><td>PR-PRECIO</td><td>Los ejemplos de la spec al peso exacto, topes de depreciación, mínimo de patentamiento</td></tr>
+    <tr><td>PR-VALID · PR-PATENTE</td><td>Cada regla de validación en su límite; formatos y unicidad de patentes</td></tr>
+    <tr><td>PR-VENTA · PR-MARCA</td><td>Venta exitosa, doble venta, rollback ante falla al guardar; marcas duplicadas y en uso</td></tr>
+    <tr><td>PR-PERMISO</td><td>Cada rol contra cada operación de la matriz de permisos</td></tr>
+    <tr><td>PR-PERSIST · PR-CSV</td><td>Guardar y cargar, archivo corrupto, versión vieja; importación con una fila mala</td></tr>
+    <tr><td>PR-COLECCION · PR-COMUN</td><td><code>equals</code>, <code>hashCode</code> y <code>compareTo</code>; formatos argentinos</td></tr>
+  </table>
+  <p>Lo visual (colores, Ctrl+C, terminal angosta) está en un plan de pruebas manual de 16
+  pasos (SPEC §8).</p>
+
+  <h3>Rendimiento medido</h3>
+  <p><code>./build.sh bench</code> genera datos con semilla fija, hace 5 vueltas de
+  calentamiento y toma la mediana de 20 repeticiones. Medido en una Apple M4 con JVM 27:</p>
+  <table>
+    <tr><th>Escenario (10.000 vehículos)</th><th class="num">Medido</th><th class="num">Objetivo</th></tr>
+    <tr><td>Guardar todo el archivo (1,4 MB)</td><td class="num">12,6 ms</td><td class="num">&lt; 500 ms</td></tr>
+    <tr><td>Arrancar (leer y armar índices)</td><td class="num">13,4 ms</td><td class="num">&lt; 1 s</td></tr>
+    <tr><td>Listar, filtrar y ordenar por precio</td><td class="num">2,6 ms</td><td class="num">&lt; 100 ms</td></tr>
+    <tr><td>Listar en orden natural</td><td class="num">7,1 ms</td><td class="num">&lt; 100 ms</td></tr>
+  </table>
+  <p>Con 100.000 vehículos, mil búsquedas por código tardan 0,037 ms con el
+  <code>HashMap</code> y 155,8 ms recorriendo un <code>ArrayList</code>: <b>unas 4.200 veces
+  más</b>. La medición además encontró un problema real: el listado en orden natural tardaba
+  89 ms porque normalizaba el nombre de la marca en cada comparación. Guardar esa clave ya
+  calculada (en un campo <code>transient</code>) lo bajó a 7 ms.</p>
+</section>
+
+<!-- ============================================================== EXTRA -->
+<section>
+  <h2>10. Contenido extra</h2>
+  <p>La rúbrica pide justificar lo que no se vio en clase. Cada ítem tiene un comentario en
+  el código que remite a SPEC §7.</p>
+  <table>
+    <tr><th>Qué</th><th>Para qué</th></tr>
+    <tr><td><code>BigDecimal</code></td><td>Los precios: <code>double</code> no representa bien los decimales y con plata no se aproxima</td></tr>
+    <tr><td><code>java.time</code> y <code>Clock</code></td><td>Fechas sin hora ni zona; fijar "hoy" en las pruebas</td></tr>
+    <tr><td><code>MessageDigest</code> (SHA-256), <code>SecureRandom</code>, <code>HexFormat</code></td><td>Guardar un hash con sal en lugar de la clave</td></tr>
+    <tr><td>Códigos de escape ANSI</td><td>Color, negrita y limpiar la pantalla sin librerías</td></tr>
+    <tr><td><code>Files.move(..., ATOMIC_MOVE)</code></td><td>Guardado atómico</td></tr>
+    <tr><td><code>Runtime.addShutdownHook</code></td><td>Guardar si se cierra con Ctrl+C</td></tr>
+    <tr><td><code>Console.readPassword()</code></td><td>Que la clave no se vea al escribirla</td></tr>
+    <tr><td><code>Normalizer</code> · <code>TreeMap.subMap</code></td><td>Comparar sin acentos · buscar marcas por prefijo</td></tr>
+  </table>
+</section>
+
+<!-- ============================================================== METODOLOGÍA -->
+<section>
+  <h2>11. Metodología de trabajo</h2>
+  <p>Se trabajó con <b>Spec-Driven Development</b> en versión liviana: primero la
+  especificación y después el código. Si algo no estaba en la spec, primero se agregaba ahí.
+  La documentación quedó en el repositorio:</p>
+  <table>
+    <tr><th>Documento</th><th>Contenido</th></tr>
+    <tr><td><code>docs/SPEC.md</code></td><td>17 casos de uso, validaciones, reglas de precio, criterios de la consola, contenido extra y plan de pruebas</td></tr>
+    <tr><td><code>docs/MODELO.md</code></td><td>Jerarquía de clases, enums, interfaces y excepciones, con diagramas</td></tr>
+    <tr><td><code>docs/ARQUITECTURA.md</code></td><td>Capas, flujo de una operación, persistencia, seguridad y rendimiento medido</td></tr>
+    <tr><td><code>docs/TRAZABILIDAD.md</code></td><td>Requisito del enunciado → clase → prueba</td></tr>
+    <tr><td><code>CONTEXTO.md</code></td><td>Cada decisión tomada y su porqué</td></tr>
+  </table>
+  <p>El código se integró con <b>ramas y pull requests</b> en GitHub, uno por etapa, cada
+  uno con su descripción, comentarios de revisión en las líneas clave y las pruebas en verde
+  antes del merge:</p>
+  <table>
+    <tr><th>PR</th><th>Etapa</th><th class="num">Pruebas</th></tr>
+    <tr><td>#1</td><td>Especificación SDD</td><td class="num">—</td></tr>
+    <tr><td>#2</td><td>Build, runner de pruebas y modelo del dominio</td><td class="num">43</td></tr>
+    <tr><td>#3</td><td>Datos: repositorios, persistencia atómica y CSV</td><td class="num">55</td></tr>
+    <tr><td>#4</td><td>Negocio: servicios, permisos, venta todo o nada, reportes</td><td class="num">87</td></tr>
+    <tr><td>#5</td><td>Consola por rol y <code>App</code></td><td class="num">87</td></tr>
+    <tr><td>#6</td><td>Medición de rendimiento, optimización y documentación</td><td class="num">87</td></tr>
+    <tr><td>#7 a #9</td><td>Rediseño de la interfaz: esqueleto común, formularios por pasos, resumen por rol</td><td class="num">87</td></tr>
+  </table>
+  <p>Los commits siguen un formato fijo (<code>tipo(ámbito): descripción</code>) con un
+  cuerpo que explica por qué y para qué. La versión entregada está publicada como release
+  <code>v1.0.0</code> con el <code>.jar</code> y su hash SHA-256.</p>
+
+  <h2>12. Conclusiones</h2>
+  <p>El sistema integra los once contenidos que pide la consigna en un caso concreto, en
+  lugar de mostrarlos por separado. La jerarquía de vehículos y el método plantilla del
+  precio muestran herencia y polimorfismo con una razón de negocio. La separación en capas
+  con interfaces es lo que permitió probar el negocio sin la consola ni el disco. Y las
+  excepciones propias son las que alimentan los mensajes que ve el usuario.</p>
+  <p>Dos aprendizajes quedaron explícitos en el proceso. El primero: medir antes de
+  optimizar. La intuición decía que el problema iba a ser el guardado (O(n) en cada cambio)
+  y resultó que tardaba 13 ms; el problema real estaba en un comparador. El segundo:
+  escribir la especificación de la consola antes de programarla. Cuando la primera versión
+  se vio "tirada", fijar el esqueleto común en la spec hizo que el rediseño se resolviera
+  una vez para todas las pantallas.</p>
+  <div class="nota">Repositorio: <b>github.com/BalbianoLuciano/tfi-concesionaria-multimarca</b>
+  · Release: <b>v1.0.0</b> · Documentación técnica completa en <code>docs/</code>.</div>
+</section>
+
+</body>
+</html>
