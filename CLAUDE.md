@@ -55,5 +55,6 @@ ARQUITECTURA.md.
 
 ## Documentación de entrega
 
-Carátula: plantilla oficial TUP UTN FRRe en `docs/assets/caratula/`. Datos del alumno en
-CONTEXTO.md.
+Carátula: plantilla oficial TUP UTN FRRe en `docs/assets/caratula/`. Informe en
+`docs/informe/` (ver CONTEXTO.md). El DNI y el legajo nunca se escriben en archivos
+versionados: el repo es público.

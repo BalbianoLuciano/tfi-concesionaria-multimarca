@@ -70,24 +70,13 @@ se tomó la opción recomendada.
 
 ## Estado actual
 
-- Implementación completa: los CU-01 a CU-17 funcionan en la consola.
+- Implementación completa: los CU-01 a CU-17 funcionan en la consola, con el rediseño de
+  SPEC §5 (esqueleto común, formularios por pasos, resumen por rol).
 - `./build.sh test`: 87 pruebas automáticas en verde. Plan manual PM-01 a PM-16 en SPEC §8.
 - `./build.sh bench`: resultados reales en ARQUITECTURA §7 (Apple M4, JVM 27).
 - `./build.sh docs`: JavaDoc sin errores.
-- Pendiente: correr el plan manual en una terminal real, carátula e informe de entrega,
-  release del `.jar` en GitHub.
-
-## Antecedentes en el curso
-
-En `CursoDeJava/src/` hay referencia de estilo y de lo que se dio:
-
-- `Practica/calculadorabase3/`: jerarquía de excepciones propias, `catch` de lo específico a lo
-  general, reintentos de data-entry, traducción de `NumberFormatException` a excepción propia.
-- `Practica/biblioteca/` y `Practica/gestioninventario/`: encapsulamiento, constructores
-  encadenados, validación en setters.
-- `CursoJava/Serializacion/`, `Colecciones*`, `ExpresionesLambda*`, `InterfaceEscritorio/`
-  (Swing), `BasesDeDatos/` (JDBC + MySQL).
-- `run.sh`: compila y ejecuta con `javac` y `java` sin IDE.
-
-No aparecen en el curso, así que se explican como extra si se usan: `BigDecimal`, `java.time`,
-`MessageDigest`, códigos ANSI, `Files.move` atómico.
+- Release `v1.0.0` publicado en GitHub con el `.jar` y su SHA-256.
+- Informe de entrega: `docs/informe/informe.html`. El PDF se arma con
+  `ALUMNO_DNI=... ALUMNO_LEGAJO=... docs/informe/generar.sh` en `dist/entrega/`; el DNI y el
+  legajo no se versionan porque el repositorio es público.
+- Pendiente: recorrer el plan manual en una terminal real.
