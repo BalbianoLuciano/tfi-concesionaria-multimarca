@@ -288,6 +288,40 @@ una línea en blanco. Los errores de un campo que se vuelve a preguntar van pega
   "Registro" (estado, kilometraje, patente, ingreso) a la derecha, con la situación al lado
   del título (verde si está disponible).
 
+### Elegir un vehículo
+
+Nadie tiene que recordar un código. Ver ficha, cotizar, modificar, dar de baja y vender
+eligen el vehículo con un mismo selector:
+
+```
+   Escribí parte de la marca, el modelo o la patente (o el código). Enter muestra todos.
+ Vehículo › toyota
+
+     #  Código  Vehículo             Estado   Precio final
+     1  C-0001  Toyota Hilux 2019    Usado    $ 22.850.920
+     2  A-0005  Toyota Corolla 2026  0 km     $ 33.475.000
+
+ N.º u otra búsqueda › 2
+```
+
+- **Búsqueda:** la misma de CU-05 (código, patente, marca y modelo, sin mayúsculas ni
+  acentos), restringida a los vehículos que admite la operación: todos para ver la ficha;
+  solo los disponibles para cotizar, modificar, dar de baja o vender; y los del filtro
+  actual cuando se llega desde el listado (V).
+- **Enter vacío** muestra todos los candidatos.
+- **Una sola coincidencia** se elige sola y se confirma con "→ C-0001 · Toyota Hilux 2019".
+- **Varias:** tabla numerada. En "N.º u otra búsqueda" un número elige de la tabla y
+  cualquier otro texto busca de nuevo (sin gastar un intento); Enter vuelve a mostrar todos.
+  Si hay más de 15, se muestran las 15 primeras y un aviso pide escribir algo más para
+  acotar.
+- **Ninguna:** error que sugiere probar con menos letras o con Enter; cuenta como intento.
+- La baja sigue pidiendo escribir el código para confirmar (CU-08): ahí el código
+  está a la vista, en la ficha que se muestra antes.
+
+No hay autocompletado con Tab: leer tecla por tecla exige poner la terminal en modo crudo,
+algo que el JDK no ofrece sin comandos del sistema operativo. La búsqueda por partes cubre
+la misma necesidad sin salir de la entrada por líneas.
+
 ### Inicio y listados
 
 - **Resumen en el inicio:** debajo del saludo, tarjetas con lo que el rol puede ver: stock

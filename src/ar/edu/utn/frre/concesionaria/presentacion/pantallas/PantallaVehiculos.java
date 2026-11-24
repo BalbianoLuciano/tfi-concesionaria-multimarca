@@ -137,7 +137,7 @@ final class PantallaVehiculos extends Pantalla {
                     pagina = 0;
                     break;
                 case "v":
-                    if (ejecutar(this::verFicha)) {
+                    if (ejecutar(() -> verFicha(lista))) {
                         lector.pausa();
                     }
                     break;
@@ -220,7 +220,16 @@ final class PantallaVehiculos extends Pantalla {
     }
 
     private void verFicha() throws ConcesionariaException, OperacionCancelada {
-        Vehiculo v = leerVehiculo();
+        verFicha(candidatos(false));
+    }
+
+    /**
+     * Ficha de un vehículo elegido entre los candidatos: todos desde el menú, los del filtro
+     * actual desde el listado.
+     */
+    private void verFicha(List<Vehiculo> candidatos)
+            throws ConcesionariaException, OperacionCancelada {
+        Vehiculo v = elegirVehiculo(candidatos);
         t.blanco();
         t.lineas(Vistas.ficha(v, estilo));
         t.blanco();
@@ -229,22 +238,23 @@ final class PantallaVehiculos extends Pantalla {
     }
 
     /**
-     * Pide un código y busca el vehículo; 3 intentos.
+     * Los vehículos que admite una operación (SPEC §5, "Elegir un vehículo").
+     *
+     * @param soloDisponibles {@code true} para modificar, dar de baja o cotizar
+     * @return los candidatos, en el orden natural
      */
-    private Vehiculo leerVehiculo() throws OperacionCancelada {
-        return lector.leer("Código", codigo -> {
-            try {
-                return e.vehiculos.buscar(sesion, codigo);
-            } catch (ConcesionariaException ex) {
-                throw new DatoInvalidoException("Código", codigo, ex.getMessage());
-            }
-        });
+    private List<Vehiculo> candidatos(boolean soloDisponibles) throws ConcesionariaException {
+        FiltroVehiculos todos = new FiltroVehiculos();
+        if (!soloDisponibles) {
+            todos.setSituacion(null);
+        }
+        return e.vehiculos.listar(sesion, todos, OrdenVehiculos.TIPO_Y_MARCA);
     }
 
     // ---------------------------------------------------------------- CU-09 cotizar
 
     private void cotizar() throws ConcesionariaException, OperacionCancelada {
-        Vehiculo v = leerVehiculo();
+        Vehiculo v = elegirVehiculo(candidatos(true));
         t.blanco();
         t.titulo("Cotización · " + v.getCodigo() + " · " + v.getDescripcion());
         t.info(v.getTipo().getEtiqueta() + " · " + v.getDetalleTipo() + " · "
@@ -447,7 +457,7 @@ final class PantallaVehiculos extends Pantalla {
 
     private void modificar() throws ConcesionariaException, OperacionCancelada {
         lector.operacion("la modificación");
-        Vehiculo original = leerVehiculo();
+        Vehiculo original = elegirVehiculo(candidatos(true));
         original.exigirDisponible("modificar");
         Vehiculo v = original.copia();
         t.blanco();
@@ -512,7 +522,7 @@ final class PantallaVehiculos extends Pantalla {
 
     private void darDeBaja() throws ConcesionariaException, OperacionCancelada {
         lector.operacion("la baja");
-        Vehiculo v = leerVehiculo();
+        Vehiculo v = elegirVehiculo(candidatos(true));
         v.exigirDisponible("dar de baja");
         t.blanco();
         t.lineas(Vistas.ficha(v, estilo));

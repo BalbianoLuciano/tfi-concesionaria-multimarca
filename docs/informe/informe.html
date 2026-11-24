@@ -277,6 +277,9 @@
     <li><b>Controles de data-entry</b>: cada campo se valida al momento y se vuelve a pedir
       hasta 3 veces con un mensaje que explica cómo corregirlo; <code>:q</code> cancela; en
       las modificaciones se muestra el valor actual y Enter lo mantiene.</li>
+    <li><b>Selección sin códigos</b>: para ver una ficha, cotizar, modificar, dar de baja o
+      vender, se escribe parte de la marca, el modelo o la patente y se elige de una tabla
+      numerada; Enter muestra todos los candidatos.</li>
     <li><b>Confirmaciones proporcionales</b>: s/n para las altas; para una baja hay que
       escribir el código del vehículo.</li>
   </ul>
@@ -424,7 +427,9 @@
  ───────────────────────────────────────────────────────────────────────────────────────────────
  VER FICHA                                                        Inicio › Vehículos › Ver ficha
 
- Código › c1
+   Escribí parte de la marca, el modelo o la patente (o el código). Enter muestra todos.
+ Vehículo › hilux
+ → C-0001 · Toyota Hilux 2019
 
  C-0001  Toyota Hilux 2019  · Disponible
 
@@ -478,7 +483,7 @@
  Son 3 pasos. :q en cualquier campo cancela sin vender nada.
 
  Paso 1 de 3 · Vehículo
-   Escribí el código (c4, A-0001) o una búsqueda: marca, modelo o patente.
+   Escribí parte de la marca, el modelo o la patente (o el código). Enter muestra todos.
  Vehículo › corolla
 
  A-0001  Toyota Corolla 2026  · Disponible
