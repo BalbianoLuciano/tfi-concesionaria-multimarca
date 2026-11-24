@@ -38,6 +38,11 @@ public final class MigradorAlmacen {
         if (version < 2) {
             armarCatalogoDeModelos(almacen);
         }
+        if (version < 3) {
+            // Esquema 3: se suma el catálogo de referencia de marcas y modelos (CU-12) sin tocar
+            // lo que el usuario ya tenía.
+            CatalogoReferencia.incorporar(new RepositorioMarcasMemoria(almacen));
+        }
         almacen.setVersionEsquema(Almacen.VERSION_ESQUEMA_ACTUAL);
         return true;
     }

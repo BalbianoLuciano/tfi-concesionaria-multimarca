@@ -2,6 +2,7 @@ package ar.edu.utn.frre.concesionaria.pruebas;
 
 import ar.edu.utn.frre.concesionaria.datos.Almacen;
 import ar.edu.utn.frre.concesionaria.datos.AlmacenArchivo;
+import ar.edu.utn.frre.concesionaria.datos.CatalogoReferencia;
 import ar.edu.utn.frre.concesionaria.datos.DatosDemo;
 import ar.edu.utn.frre.concesionaria.datos.RepositorioMarcasMemoria;
 import ar.edu.utn.frre.concesionaria.datos.RepositorioVehiculosMemoria;
@@ -75,7 +76,9 @@ public final class PruebasPersistencia implements GrupoPruebas {
             Almacen leido = otro.cargar();
             Verificar.igual(AlmacenArchivo.EstadoCarga.NORMAL, otro.getEstadoCarga());
             Verificar.igual(10, leido.getVehiculos().size());
-            Verificar.igual(8, leido.getMarcas().size());
+            Verificar.igual((int) CatalogoReferencia.leer().stream()
+                    .map(CatalogoReferencia.Linea::getMarca).distinct().count(),
+                    leido.getMarcas().size());
             Vehiculo hilux = leido.getVehiculos().get("C-0001");
             Verificar.igual("Hilux", hilux.getModelo());
             Verificar.monto("22850920", hilux.calcularPrecioFinal(Fabrica.HOY));
@@ -140,7 +143,7 @@ public final class PruebasPersistencia implements GrupoPruebas {
             Verificar.igual(AlmacenArchivo.EstadoCarga.MIGRADO, archivo.getEstadoCarga());
             Verificar.igual(Almacen.VERSION_ESQUEMA_ACTUAL, leido.getVersionEsquema());
         });
-        r.prueba("PR-PERSIST-09", "esquema 1 → 2: el catálogo se arma con los vehículos", () -> {
+        r.prueba("PR-PERSIST-09", "esquemas 1 → 3: catálogo con los vehículos y el de referencia", () -> {
             Fabrica.fijarHoy();
             Path carpeta = carpetaTemporal();
             Almacen viejo = new Almacen();
@@ -148,6 +151,7 @@ public final class PruebasPersistencia implements GrupoPruebas {
             Marca fiat = new Marca("Fiat", "Italia", EnumSet.of(TipoVehiculo.AUTOMOVIL));
             fiat.setId(1);
             viejo.getMarcas().put(1, fiat);
+            viejo.setUltimaMarca(1);
             Automovil cronos = new Automovil(Estado.NUEVO, fiat, "cronos", 2026, Color.ROJO,
                     new BigDecimal("25000000"), null, null, CarroceriaAutomovil.SEDAN, 4);
             cronos.setCodigo("A-0001");
@@ -166,8 +170,15 @@ public final class PruebasPersistencia implements GrupoPruebas {
             Marca migrada = leido.getMarcas().get(1);
             Verificar.igual("Cronos", migrada.buscarModelo("CRONOS").get().getNombre());
             // un modelo que no cumple la regla nueva no entra, pero el vehículo se conserva
-            Verificar.igual(1, migrada.getModelos().size());
+            Verificar.verdadero(migrada.buscarModelo("X").isEmpty(), "X no entra al catálogo");
             Verificar.igual(2, leido.getVehiculos().size());
+            // esquema 3: se suma el catálogo de referencia sin pisar la marca que ya estaba
+            Verificar.igual("Italia", migrada.getPaisOrigen());
+            Verificar.verdadero(migrada.buscarModelo("Toro").isPresent(), "Fiat suma la Toro");
+            Verificar.verdadero(leido.getMarcas().values().stream()
+                    .anyMatch(m -> m.getNombre().equals("Toyota")), "se suma Toyota");
+            Verificar.igual(1, (int) leido.getMarcas().values().stream()
+                    .filter(m -> m.getNombre().equals("Fiat")).count());
         });
         r.prueba("PR-PERSIST-08", "índices de patente y de prefijo de marca", () -> {
             Almacen a = conDemo(new AlmacenArchivo(carpetaTemporal()));

@@ -1,0 +1,96 @@
+# Catálogo de referencia de marcas y modelos del mercado argentino (2026), SPEC CU-12.
+#
+# Incluye la oferta vigente de 0 km y los modelos discontinuados que siguen siendo habituales
+# en el mercado de usados (Gol Trend, Etios, Clio, Palio...), porque la concesionaria vende
+# las dos cosas. No pretende ser exhaustivo: el administrador agrega lo que falte desde
+# Marcas › Modelos o desde el alta de un vehículo.
+#
+# Formato: marca;país de origen;tipo;modelos separados por coma
+# El tipo es Automóvil, Camioneta (SUV, pick-up y utilitarios) o Motocicleta.
+# Las líneas que empiezan con # se ignoran.
+
+# ── Automóviles y camionetas ──────────────────────────────────────────────────────────────
+Toyota;Japón;Automóvil;Yaris,Corolla,Etios,Camry,Prius,GR86,GR Yaris
+Toyota;Japón;Camioneta;Hilux,Hilux GR-Sport,SW4,Corolla Cross,Yaris Cross,RAV4,Land Cruiser,Land Cruiser Prado,Hiace
+Ford;Estados Unidos;Automóvil;Ka,Fiesta,Focus,Mondeo,Mustang
+Ford;Estados Unidos;Camioneta;Ranger,Ranger Raptor,F-150,Maverick,Territory,Bronco,Bronco Sport,Kuga,EcoSport,Mustang Mach-E,Transit
+Volkswagen;Alemania;Automóvil;Gol,Gol Trend,Voyage,Up,Fox,Suran,Polo,Virtus,Vento,Bora,Golf,Golf GTI,Jetta,Passat
+Volkswagen;Alemania;Camioneta;Amarok,Saveiro,T-Cross,Nivus,Tera,Taos,Tiguan,Tiguan Allspace,Touareg,ID.4
+Chevrolet;Estados Unidos;Automóvil;Onix,Onix Plus,Prisma,Cruze,Classic,Corsa,Agile,Celta,Sonic,Cobalt,Spin,Camaro
+Chevrolet;Estados Unidos;Camioneta;Tracker,Montana,S10,Trailblazer,Equinox,Captiva,Silverado
+Fiat;Italia;Automóvil;Cronos,Argo,Mobi,Uno,Palio,Siena,Grand Siena,Punto,Idea,500
+Fiat;Italia;Camioneta;Pulse,Fastback,600,Strada,Toro,Titano,Fiorino,Ducato
+Peugeot;Francia;Automóvil;208,308,408,508,206,207,207 Compact,307,301
+Peugeot;Francia;Camioneta;2008,3008,5008,Partner,Expert,Landtrek
+Renault;Francia;Automóvil;Kwid,Kwid E-Tech,Sandero,Sandero Stepway,Logan,Clio,Symbol,Megane,Fluence
+Renault;Francia;Camioneta;Kardian,Duster,Boreal,Captur,Koleos,Oroch,Alaskan,Kangoo,Master
+Citroën;Francia;Automóvil;C3,C4,C4 Lounge,C-Elysée,C3 Picasso
+Citroën;Francia;Camioneta;Basalt,C3 Aircross,C4 Cactus,C5 Aircross,Berlingo,Jumpy
+DS;Francia;Camioneta;DS 3,DS 7
+Nissan;Japón;Automóvil;March,Note,Versa,Sentra,Tiida,Leaf
+Nissan;Japón;Camioneta;Kait,Kicks,X-Trail,Frontier
+Honda;Japón;Automóvil;Fit,City,Civic,Accord
+Honda;Japón;Camioneta;WR-V,HR-V,ZR-V,CR-V,Pilot
+Jeep;Estados Unidos;Camioneta;Renegade,Compass,Commander,Wrangler,Gladiator,Grand Cherokee
+RAM;Estados Unidos;Camioneta;Rampage,Dakota,1500,2500
+Hyundai;Corea del Sur;Automóvil;i10,HB20,Accent,Elantra
+Hyundai;Corea del Sur;Camioneta;Creta,Kona,Tucson,Santa Fe,Ioniq 5,H-1
+Kia;Corea del Sur;Automóvil;Picanto,Rio,Cerato
+Kia;Corea del Sur;Camioneta;Soul,Stonic,Seltos,Sportage,Sorento,Carnival,K2500
+Mitsubishi;Japón;Automóvil;Lancer
+Mitsubishi;Japón;Camioneta;L200,ASX,Eclipse Cross,Outlander,Montero
+Suzuki;Japón;Automóvil;Swift,Baleno,Fun
+Suzuki;Japón;Camioneta;Jimny,Vitara,Grand Vitara,S-Cross
+Subaru;Japón;Automóvil;Impreza,WRX
+Subaru;Japón;Camioneta;Crosstrek,XV,Forester,Outback
+Chery;China;Automóvil;QQ,Arrizo 5
+Chery;China;Camioneta;Tiggo 2,Tiggo 3,Tiggo 4,Tiggo 4 Pro,Tiggo 7 Pro,Tiggo 8 Pro
+BYD;China;Automóvil;Dolphin,Dolphin Mini,Seal
+BYD;China;Camioneta;Yuan Pro,Atto 3,Song Pro,Song Plus,Seal U,Shark
+Haval;China;Camioneta;Jolion,H6
+GWM;China;Automóvil;Ora 03
+GWM;China;Camioneta;Poer,Tank 300
+JAC;China;Automóvil;E-JS1
+JAC;China;Camioneta;JS2,JS4,T8,T9
+BAIC;China;Camioneta;X35,X55,BJ30,BJ40
+Geely;China;Camioneta;Coolray,EX5
+Jetour;China;Camioneta;Dashing,X70,T2
+Leapmotor;China;Automóvil;T03
+Leapmotor;China;Camioneta;B10,C10
+BMW;Alemania;Automóvil;Serie 1,Serie 2,Serie 3,Serie 4,Serie 5,M2,M3,M4
+BMW;Alemania;Camioneta;X1,iX1,X2,X3,X4,X5,X6,X7,iX
+Mercedes-Benz;Alemania;Automóvil;Clase A,CLA,Clase C,Clase E,Clase S,AMG GT
+Mercedes-Benz;Alemania;Camioneta;GLA,GLB,GLC,GLE,GLS,Clase G,Vito,Sprinter
+Audi;Alemania;Automóvil;A1,A3,A4,A5,A6,RS3,e-tron GT
+Audi;Alemania;Camioneta;Q2,Q3,Q5,Q7,Q8,Q8 e-tron
+Porsche;Alemania;Automóvil;911,718 Cayman,Panamera,Taycan
+Porsche;Alemania;Camioneta;Macan,Cayenne
+Volvo;Suecia;Automóvil;S60
+Volvo;Suecia;Camioneta;EX30,XC40,C40,XC60,XC90
+Mini;Reino Unido;Automóvil;Cooper,Cooper S,Aceman
+Mini;Reino Unido;Camioneta;Countryman
+Land Rover;Reino Unido;Camioneta;Defender,Discovery,Discovery Sport,Range Rover Evoque,Range Rover Velar,Range Rover Sport,Range Rover
+Alfa Romeo;Italia;Automóvil;Giulia
+Alfa Romeo;Italia;Camioneta;Junior,Tonale,Stelvio
+
+# ── Motocicletas ──────────────────────────────────────────────────────────────────────────
+Honda;Japón;Motocicleta;Wave 110S,Biz 125,Elite 125,Navi,PCX 160,CG 150 Titan,CB 190R,CB 250 Twister,CB 300F Twister,CB 500F,CB 650R,CBR 500R,XR 150L,XR 190L,XR 250 Tornado,XRE 300,NX500,XL750 Transalp,NC 750X,Africa Twin,Rebel 500
+Yamaha;Japón;Motocicleta;Crypton,YBR 125,YBR 125 Z,FZ-S,FZ25,Fazer 250,MT-03,MT-07,MT-09,R3,R15,XTZ 125,XTZ 150,XTZ 250,Ténéré 700,Tracer 9 GT,Ray ZR,Fascino 125,NMAX,XMAX 300
+Suzuki;Japón;Motocicleta;GN 125,EN 125,Gixxer 150,Gixxer 250,V-Strom 250 SX,V-Strom 650,V-Strom 800DE,GSX-8S,DR 650,Hayabusa
+Kawasaki;Japón;Motocicleta;Z400,Z500,Z650,Z900,Ninja 400,Ninja 500,Ninja 650,Ninja ZX-6R,Ninja ZX-10R,Versys 650,Versys 1000,Vulcan S,KLR 650,KLX 300
+Motomel;Argentina;Motocicleta;Blitz 110,Max 110,S2 150,Skua 150,Skua 250,Strato 150,Custom 150
+Corven;Argentina;Motocicleta;Energy 110,Mirage 110,Hunter 150,Triax 150,Triax 200,TXR 250,Expert 150,Indiana 256
+Gilera;Argentina;Motocicleta;Smash 110,VC 150,Sahel 150,SMX 200
+Zanella;Argentina;Motocicleta;ZB 110,RX 150,Styler 150,Patagonian Eagle 150,Patagonian Eagle 250
+Bajaj;India;Motocicleta;Boxer 150,Rouser NS 125,Rouser NS 160,Rouser NS 200,Rouser RS 200,Dominar 250,Dominar 400
+TVS;India;Motocicleta;Ntorq 125,Apache RTR 160,Apache RTR 200,Apache RR 310
+Hero;India;Motocicleta;Ignitor 125,Hunk 160R,Xpulse 200
+Royal Enfield;India;Motocicleta;Hunter 350,Classic 350,Bullet 350,Meteor 350,Scram 411,Himalayan 450,Interceptor 650,Continental GT 650,Super Meteor 650
+KTM;Austria;Motocicleta;200 Duke,250 Duke,390 Duke,790 Duke,RC 200,RC 390,390 Adventure,890 Adventure
+Benelli;Italia;Motocicleta;TNT 135,180S,302S,Leoncino 250,Leoncino 500,TRK 251,TRK 502,TRK 502X,Imperiale 400,752S
+CFMoto;China;Motocicleta;300NK,450NK,300SR,450SR,450MT,650MT,800MT
+Voge;China;Motocicleta;300AC,300R,525DSX
+BMW;Alemania;Motocicleta;G 310 R,G 310 GS,F 900 R,F 900 GS,R 1300 GS,R 18,S 1000 RR,C 400 GT
+Ducati;Italia;Motocicleta;Scrambler Icon,Monster,Streetfighter V4,Panigale V2,Panigale V4,Multistrada V2,Multistrada V4,DesertX,Diavel V4
+Triumph;Reino Unido;Motocicleta;Speed 400,Scrambler 400 X,Trident 660,Street Triple,Speed Triple 1200,Tiger 900,Tiger 1200,Bonneville T100,Bonneville T120,Rocket 3
+Harley-Davidson;Estados Unidos;Motocicleta;Nightster,Sportster S,Low Rider S,Fat Boy,Heritage Classic,Street Glide,Road Glide,Pan America 1250

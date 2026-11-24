@@ -58,8 +58,9 @@ public final class PantallaInicio extends Pantalla {
                 Sesion sesion = e.autenticacion.crearAdministradorInicial(usuario, nombre, clave);
                 t.exito("Se creó el administrador " + usuario + ".");
                 t.blanco();
-                t.linea(" ¿Querés cargar datos de demostración? Son 8 marcas y 10 vehículos de");
-                t.linea(" ejemplo, útiles para probar el sistema. Después los podés dar de baja.");
+                t.linea(" El catálogo de marcas y modelos ya está cargado. ¿Querés sumar datos de");
+                t.linea(" demostración? Son 10 vehículos de ejemplo, útiles para probar el sistema.");
+                t.linea(" Después los podés dar de baja.");
                 if (lector.confirmar("Cargar datos de demostración")) {
                     e.autenticacion.cargarDatosDemo(sesion);
                     t.exito("Se cargaron los datos de demostración.");

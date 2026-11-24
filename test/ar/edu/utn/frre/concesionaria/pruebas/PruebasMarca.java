@@ -1,5 +1,6 @@
 package ar.edu.utn.frre.concesionaria.pruebas;
 
+import ar.edu.utn.frre.concesionaria.datos.CatalogoReferencia;
 import ar.edu.utn.frre.concesionaria.excepciones.AccesoDenegadoException;
 import ar.edu.utn.frre.concesionaria.excepciones.DatoInvalidoException;
 import ar.edu.utn.frre.concesionaria.excepciones.MarcaDuplicadaException;
@@ -30,10 +31,12 @@ public final class PruebasMarca implements GrupoPruebas {
     public void registrar(Registro r) {
         r.prueba("PR-MARCA-01", "alta normalizada", () -> {
             Contexto c = new Contexto();
-            Marca m = c.marcas.crear(c.admin, "  renault ", "francia",
+            int siguiente = c.repoMarcas.listar().stream().mapToInt(Marca::getId).max()
+                    .getAsInt() + 1;
+            Marca m = c.marcas.crear(c.admin, "  lada ", "rusia",
                     EnumSet.of(TipoVehiculo.AUTOMOVIL));
-            Verificar.igual("Renault", m.getNombre());
-            Verificar.igual(9, m.getId());
+            Verificar.igual("Lada", m.getNombre());
+            Verificar.igual(siguiente, m.getId());
         });
         r.prueba("PR-MARCA-02", "duplicado con otra capitalización o acentos", () -> {
             Contexto c = new Contexto();
@@ -45,7 +48,7 @@ public final class PruebasMarca implements GrupoPruebas {
         r.prueba("PR-MARCA-03", "avisa de marcas parecidas: Tollota → Toyota", () -> {
             Contexto c = new Contexto();
             Verificar.igual("Toyota", c.marcas.parecidas("Tollota").get(0).getNombre());
-            Verificar.igual(0, c.marcas.parecidas("Renault").size());
+            Verificar.igual(0, c.marcas.parecidas("Lada").size());
         });
         r.prueba("PR-MARCA-04", "una marca en uso no se borra, se desactiva", () -> {
             Contexto c = new Contexto();
@@ -66,16 +69,22 @@ public final class PruebasMarca implements GrupoPruebas {
         });
         r.prueba("PR-MARCA-06", "una marca sin vehículos se borra", () -> {
             Contexto c = new Contexto();
-            Marca m = c.marcas.crear(c.admin, "Renault", "Francia", EnumSet.of(TipoVehiculo.AUTOMOVIL));
+            Marca m = c.marcas.crear(c.admin, "Lada", "Rusia", EnumSet.of(TipoVehiculo.AUTOMOVIL));
             c.marcas.eliminar(c.admin, m.getId());
-            Verificar.verdadero(c.repoMarcas.buscarPorNombre("renault").isEmpty(), "se borró");
+            Verificar.verdadero(c.repoMarcas.buscarPorNombre("lada").isEmpty(), "se borró");
         });
         r.prueba("PR-MARCA-07", "para el alta: solo activas que fabrican el tipo", () -> {
             Contexto c = new Contexto();
-            Verificar.igual(2, c.marcas.paraAlta(TipoVehiculo.MOTOCICLETA, "").size());
+            long deMotos = CatalogoReferencia.leer().stream()
+                    .filter(l -> l.getTipo() == TipoVehiculo.MOTOCICLETA).count();
+            Verificar.igual((int) deMotos, c.marcas.paraAlta(TipoVehiculo.MOTOCICLETA, "").size());
             Verificar.igual("Honda", c.marcas.paraAlta(TipoVehiculo.MOTOCICLETA, "ho").get(0)
                     .getNombre());
-            Verificar.igual(0, c.marcas.paraAlta(TipoVehiculo.CAMIONETA, "fiat").size());
+            Verificar.igual(0, c.marcas.paraAlta(TipoVehiculo.CAMIONETA, "yamaha").size());
+            Verificar.igual("Volkswagen", c.marcas.paraAlta(TipoVehiculo.AUTOMOVIL, "VW").get(0)
+                    .getNombre());
+            Verificar.igual("Chevrolet", c.marcas.paraAlta(TipoVehiculo.CAMIONETA, "chevy").get(0)
+                    .getNombre());
         });
         r.prueba("PR-MARCA-08", "no se puede quitar un tipo con vehículos cargados", () -> {
             Contexto c = new Contexto();
@@ -86,8 +95,8 @@ public final class PruebasMarca implements GrupoPruebas {
         r.prueba("PR-MARCA-09", "catálogo: alta normalizada, sin duplicados ni tipos ajenos", () -> {
             Contexto c = new Contexto();
             Marca toyota = c.repoMarcas.buscarPorNombre("Toyota").get();
-            Modelo nuevo = c.marcas.agregarModelo(c.admin, toyota, "prius", TipoVehiculo.AUTOMOVIL);
-            Verificar.igual("Prius", nuevo.getNombre());
+            Modelo nuevo = c.marcas.agregarModelo(c.admin, toyota, "supra", TipoVehiculo.AUTOMOVIL);
+            Verificar.igual("Supra", nuevo.getNombre());
             Verificar.lanza(ReglaNegocioException.class, () -> c.marcas.agregarModelo(c.admin,
                     toyota, " COROLLA ", TipoVehiculo.AUTOMOVIL));
             Verificar.lanza(ReglaNegocioException.class, () -> c.marcas.agregarModelo(c.admin,
@@ -103,8 +112,11 @@ public final class PruebasMarca implements GrupoPruebas {
             Verificar.igual(List.of("Corolla"), c.marcas.modelosQueCoinciden(toyota,
                     TipoVehiculo.AUTOMOVIL, "cor").stream().map(Modelo::getNombre).toList());
             // "Corolla Cross" es camioneta: no aparece entre los automóviles
-            Verificar.igual(3, c.marcas.modelosQueCoinciden(toyota, TipoVehiculo.AUTOMOVIL,
-                    null).size());
+            Verificar.verdadero(c.marcas.modelosQueCoinciden(toyota, TipoVehiculo.AUTOMOVIL, null)
+                    .stream().noneMatch(m -> m.getNombre().equals("Corolla Cross")),
+                    "Corolla Cross no es automóvil");
+            Verificar.igual(1, c.marcas.modelosQueCoinciden(toyota, TipoVehiculo.CAMIONETA,
+                    "corolla").size());
             Verificar.igual("Corolla", c.marcas.modelosParecidos(toyota, TipoVehiculo.AUTOMOVIL,
                     "korollà").get(0).getNombre());
             Verificar.igual("Corolla", c.marcas.modelosParecidos(toyota, TipoVehiculo.AUTOMOVIL,
@@ -121,6 +133,23 @@ public final class PruebasMarca implements GrupoPruebas {
                     e.getMessage());
             a.setModelo("corolla");
             Verificar.noLanza(() -> c.vehiculos.registrar(c.admin, a));
+        });
+        r.prueba("PR-MARCA-13", "catálogo de referencia: sin repetidos y se puede reincorporar", () -> {
+            Contexto c = new Contexto();
+            int declarados = CatalogoReferencia.leer().stream()
+                    .mapToInt(l -> l.getModelos().size()).sum();
+            int cargados = c.repoMarcas.listar().stream().mapToInt(m -> m.getModelos().size())
+                    .sum();
+            // si algún modelo estuviera repetido dentro de su marca, se habría cargado una vez
+            Verificar.igual(declarados, cargados);
+            Verificar.verdadero(cargados > 450, "más de 450 modelos: " + cargados);
+            int[] otraVez = CatalogoReferencia.incorporar(c.repoMarcas);
+            Verificar.igual(0, otraVez[0] + otraVez[1]);
+            Marca hyundai = c.repoMarcas.buscarPorNombre("hyundai").get();
+            Verificar.igual("i10", hyundai.buscarModelo("I10").get().getNombre());
+            Marca toyota = c.repoMarcas.buscarPorNombre("Toyota").get();
+            Verificar.igual("Corolla", c.marcas.modelosParecidos(toyota, TipoVehiculo.AUTOMOVIL,
+                    "korola").get(0).getNombre());
         });
         r.prueba("PR-MARCA-12", "un modelo en uso no se quita del catálogo", () -> {
             Contexto c = new Contexto();
