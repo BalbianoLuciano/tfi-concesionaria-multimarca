@@ -34,7 +34,7 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 
 | Caso de uso | Pantalla | Servicio |
 |---|---|---|
-| CU-01 Primer arranque | `PantallaInicio` | `ServicioAutenticacion`, `DatosDemo` |
+| CU-01 Primer arranque | `PantallaInicio`; `App` incorpora el catálogo de referencia | `ServicioAutenticacion`, `DatosDemo`, `datos/CatalogoReferencia` (`catalogo-ar-2026.csv`) |
 | CU-02 Sesión | `PantallaInicio`, `MenuPrincipal` (cerrar sesión) | `ServicioAutenticacion`, `Sesion` |
 | CU-03 a CU-09 Vehículos | `PantallaVehiculos` (modelo con `elegirModelo`); selector común en `Pantalla.elegirVehiculo` (SPEC §5) | `ServicioVehiculos`, `FiltroVehiculos`, `OrdenVehiculos`; `ServicioMarcas.paraAlta` y `exigirModeloDelCatalogo` |
 | CU-10, CU-11 Ventas | `PantallaVentas` (comprobante en `Vistas`; vehículo con `Pantalla.elegirVehiculo`) | `ServicioVentas` |
@@ -50,4 +50,5 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 |---|---|---|
 | Rendimiento (ARQUITECTURA §7) | Índices en `RepositorioVehiculosMemoria` y `RepositorioMarcasMemoria`; clave cacheada en `Marca` | `rendimiento/MedicionRendimiento` (`./build.sh bench`) |
 | Consola trabajada (SPEC §5) | `presentacion/consola/` y `presentacion/pantallas/`; aire entre campos con `Terminal.separarCampo` | Plan manual PM-01 a PM-18 (SPEC §8); PR-COMUN-10 a PR-COMUN-12 |
-| Compatibilidad de datos (ARQUITECTURA §4) | `MigradorAlmacen`: esquema 1 → 2 arma el catálogo de modelos | PR-PERSIST-09 |
+| Compatibilidad de datos (ARQUITECTURA §4) | `MigradorAlmacen`: esquema 1 → 2 arma el catálogo de modelos; 2 → 3 suma el catálogo de referencia | PR-PERSIST-09 |
+| Catálogo de referencia (CU-12) | `datos/CatalogoReferencia` lee `catalogo-ar-2026.csv` (52 marcas, unos 490 modelos) | PR-MARCA-13 |

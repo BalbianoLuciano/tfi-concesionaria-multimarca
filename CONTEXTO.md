@@ -70,6 +70,7 @@ se tomó la opción recomendada.
 | Elegir un vehículo (2026-11-24) | Selector común en `Pantalla.elegirVehiculo`: búsqueda por partes y tabla numerada, en lugar de pedir el código. Sin autocompletado con Tab: exigiría la terminal en modo crudo, fuera del JDK (SPEC §5) |
 | Tolerancia al error humano (2026-11-24) | Listas por número o nombre (`Textos.coincidencias`), números con unidad, patentes con puntos, sugerencia de marca parecida, y al agotar los intentos de un campo se pregunta si seguir en vez de descartar el formulario (SPEC §3). El login conserva su límite de 3 |
 | Catálogo de modelos (2026-11-24) | Cada `Marca` tiene su catálogo de `Modelo` (nombre y tipo). El modelo se elige de la lista, nunca se escribe libre; el negocio lo vuelve a controlar en alta, modificación e importación. Búsqueda por comienzo y, si no hay, por clave fonética (`Textos.fonetica`: k/q→c, z→s, v→b, y→i, sin h ni dobles) o hasta 2 letras de diferencia: "korollà" → "¿Quisiste decir Corolla?". Solo el administrador agrega modelos (también desde el alta). Esquema 2: la migración arma el catálogo con los vehículos existentes. El vehículo guarda el modelo como texto, así el CSV no cambió |
+| Catálogo de referencia (2026-11-24) | `catalogo-ar-2026.csv` dentro del `.jar` (recurso junto a `CatalogoReferencia`; `build.sh` copia todo lo que no es `.java`): 52 marcas y unos 490 modelos del mercado argentino, vigentes en 2026 y habituales en usados. Se incorpora en el primer arranque y en la migración al esquema 3, solo agregando lo que falta. `DatosDemo` ya no define marcas: toma las del catálogo y suma 10 vehículos. Apodos de marca para buscar ("vw", "chevy"). `nombrePropio` respeta siglas de hasta 4 letras, mayúsculas mezcladas ("CFMoto") y conectores ("Corea del Sur"). El catálogo sale del conocimiento del mercado a mediados de 2026: no es exhaustivo y el administrador completa lo que falte |
 | Aire entre campos (2026-11-24) | `Terminal` recuerda qué imprimió último y deja un renglón en blanco antes de cada campo nuevo, sin duplicarlo ni separar un campo de su ayuda o su lista. La ayuda y los avisos se parten al ancho de la consola |
 | Interactividad | `Lector` recibe `interactivo` explícito: con entrada redirigida hace eco de lo leído y no usa `readPassword` |
 
@@ -77,7 +78,7 @@ se tomó la opción recomendada.
 
 - Implementación completa: los CU-01 a CU-17 funcionan en la consola, con el rediseño de
   SPEC §5 (esqueleto común, formularios por pasos, resumen por rol).
-- `./build.sh test`: 95 pruebas automáticas en verde. Plan manual PM-01 a PM-18 en SPEC §8.
+- `./build.sh test`: 96 pruebas automáticas en verde. Plan manual PM-01 a PM-18 en SPEC §8.
 - `./build.sh bench`: resultados reales en ARQUITECTURA §7 (Apple M4, JVM 27).
 - `./build.sh docs`: JavaDoc sin errores.
 - Releases en GitHub con el `.jar` y su SHA-256: `v1.0.0` (entrega inicial) y `v1.1.0`
