@@ -49,4 +49,4 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 | Requisito | Dónde se cumple | Verificación |
 |---|---|---|
 | Rendimiento (ARQUITECTURA §7) | Índices en `RepositorioVehiculosMemoria` y `RepositorioMarcasMemoria`; clave cacheada en `Marca` | `rendimiento/MedicionRendimiento` (`./build.sh bench`) |
-| Consola trabajada (SPEC §5) | `presentacion/consola/` y `presentacion/pantallas/` | Plan manual PM-01 a PM-16 (SPEC §8) |
+| Consola trabajada (SPEC §5) | `presentacion/consola/` y `presentacion/pantallas/` | Plan manual PM-01 a PM-17 (SPEC §8); PR-COMUN-10 y PR-COMUN-11 |

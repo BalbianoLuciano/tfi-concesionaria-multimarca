@@ -68,13 +68,14 @@ se tomó la opción recomendada.
 | Formularios y resumen (2026-11-24) | Formularios por pasos con ayuda antes del campo, ficha en dos columnas, tarjetas de resumen en el inicio según el rol y stock agrupado por tipo en el orden natural |
 | README e imágenes (2026-11-24) | Capturas reales de la consola (por pseudo-terminal) convertidas a SVG, más diagramas de capas, precio y persistencia en `docs/img/`. Copias PNG en `docs/img/png/` para las notas del release, donde un SVG relativo no se ve |
 | Elegir un vehículo (2026-11-24) | Selector común en `Pantalla.elegirVehiculo`: búsqueda por partes y tabla numerada, en lugar de pedir el código. Sin autocompletado con Tab: exigiría la terminal en modo crudo, fuera del JDK (SPEC §5) |
+| Tolerancia al error humano (2026-11-24) | Listas por número o nombre (`Textos.coincidencias`), números con unidad, patentes con puntos, sugerencia de marca parecida, y al agotar los intentos de un campo se pregunta si seguir en vez de descartar el formulario (SPEC §3). El login conserva su límite de 3 |
 | Interactividad | `Lector` recibe `interactivo` explícito: con entrada redirigida hace eco de lo leído y no usa `readPassword` |
 
 ## Estado actual
 
 - Implementación completa: los CU-01 a CU-17 funcionan en la consola, con el rediseño de
   SPEC §5 (esqueleto común, formularios por pasos, resumen por rol).
-- `./build.sh test`: 87 pruebas automáticas en verde. Plan manual PM-01 a PM-16 en SPEC §8.
+- `./build.sh test`: 89 pruebas automáticas en verde. Plan manual PM-01 a PM-17 en SPEC §8.
 - `./build.sh bench`: resultados reales en ARQUITECTURA §7 (Apple M4, JVM 27).
 - `./build.sh docs`: JavaDoc sin errores.
 - Release `v1.0.0` publicado en GitHub con el `.jar` y su SHA-256.

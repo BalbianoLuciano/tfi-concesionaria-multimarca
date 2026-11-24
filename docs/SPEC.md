@@ -165,7 +165,7 @@ corrido, en lugar de exigir el formato exacto:
 | Situación | Se acepta | Se interpreta como |
 |---|---|---|
 | Elegir de una lista (tipo, estado, color, carrocería…) | El número, el nombre o su comienzo, sin importar mayúsculas ni acentos | "auto" → Automóvil, "usado" → Usado, "sedan" → Sedán |
-| El texto coincide con varias opciones | — | Error que las nombra: "«c» puede ser Coupé, Convertible o Crossover." |
+| El texto coincide con varias opciones | — | Error que las nombra: "«c» puede ser Coupé o Convertible." |
 | Número con su unidad | "85.000 km", "190cc", "4 puertas", "1.000 kg" | 85000, 190, 4, 1000 |
 | Monto | "$ 20.000.000", "20000000", "20.000.000,50" | el monto en pesos |
 | Patente | "ab 123 cd", "ab-123-cd", "AB.123.CD" | AB123CD |
@@ -449,3 +449,4 @@ java -Dconcesionaria.dir=/tmp/demo -jar dist/concesionaria.jar
 | PM-14 | Registrar un vehículo y, sin salir, cerrar con Ctrl+C. Volver a abrir. | El vehículo sigue ahí (se guardó al confirmar; el shutdown hook cubre lo pendiente). |
 | PM-15 | Con el programa cerrado, truncar `/tmp/demo/datos.ser` (`: > /tmp/demo/datos.ser`) y abrir. | Aviso en amarillo: se recuperó la copia anterior; queda `datos.ser.corrupto`. |
 | PM-16 | `java -jar dist/concesionaria.jar < /dev/null`. | Sale con "Hasta luego." sin excepciones (fin de entrada). |
+| PM-17 | Registrar un auto escribiendo `auto`, `usado`, `toyta`, `rojo`, `85.000 km`, `ab.123.cd`, `sedan` y `4 puertas`; en el año, tres errores seguidos. | Acepta todo; sugiere "¿Quisiste decir Toyota?"; tras el tercer error en el año pregunta "¿Seguir con «Año»?" y, con Enter, sigue sin perder lo cargado. |
