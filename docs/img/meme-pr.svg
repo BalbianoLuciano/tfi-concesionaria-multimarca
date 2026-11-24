@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 566" width="960" height="566" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+<defs><clipPath id="v"><rect width="960" height="566" rx="11"/></clipPath>
+<marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#7d848e"/></marker></defs>
+<g clip-path="url(#v)"><rect width="960" height="566" fill="#15181d"/><rect width="960" height="38" fill="#262a30"/>
+<circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
+<text x="480.0" y="23.5" font-size="12" fill="#a9adb3" text-anchor="middle">github.com/BalbianoLuciano/tfi-concesionaria-multimarca/pull/4</text>
+<line x1="0" y1="38" x2="960" y2="38" stroke="#000" stroke-opacity=".4"/>
+<g transform="translate(0 38)">
+<text x="40" y="46" font-size="19" fill="#e6e8eb" font-weight="600">feat(negocio): servicios con permisos, venta atómica y reportes</text>
+<text x="640" y="46" font-size="19" fill="#9aa1ab">#4</text>
+<rect x="40" y="62" width="76" height="26" rx="13" fill="#8957e5"/>
+<text x="78" y="80" font-size="12.5" fill="#fff" font-weight="600" text-anchor="middle">Merged</text>
+<text x="128" y="80" font-size="13" fill="#9aa1ab">BalbianoLuciano merged 1 commit into main</text>
+<line x1="57" y1="112" x2="57" y2="470" stroke="#353b44" stroke-width="2"/>
+<circle cx="57" cy="130" r="17" fill="#2b6cb0"/><text x="57" y="135" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">LB</text>
+<text x="88" y="135" font-size="13.5" fill="#9aa1ab"><tspan font-weight="700" fill="#e6e8eb">BalbianoLuciano</tspan> abrió el pull request</text>
+<rect x="560" y="119" width="54.0" height="21" rx="10.5" fill="none" stroke="#353b44"/>
+<text x="568" y="134" font-size="11.5" fill="#9aa1ab">Autor</text>
+<circle cx="57" cy="180" r="17" fill="#2b6cb0"/><text x="57" y="185" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">LB</text>
+<text x="88" y="185" font-size="13.5" fill="#9aa1ab"><tspan font-weight="700" fill="#e6e8eb">BalbianoLuciano</tspan> pidió revisión a <tspan font-weight="700" fill="#e6e8eb">BalbianoLuciano</tspan></text>
+<rect x="560" y="169" width="69.19999999999999" height="21" rx="10.5" fill="none" stroke="#353b44"/>
+<text x="568" y="184" font-size="11.5" fill="#9aa1ab">Revisor</text>
+<circle cx="57" cy="230" r="17" fill="#2b6cb0"/><text x="57" y="235" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">LB</text>
+<text x="88" y="235" font-size="13.5" fill="#9aa1ab"><tspan font-weight="700" fill="#e6e8eb">BalbianoLuciano</tspan> dejó 3 comentarios de revisión</text>
+<rect x="560" y="219" width="69.19999999999999" height="21" rx="10.5" fill="none" stroke="#353b44"/>
+<text x="568" y="234" font-size="11.5" fill="#9aa1ab">Revisor</text>
+<text x="88" y="257" font-size="12.5" fill="#7d848e" font-style="italic">"¿Esto no debería ser BigDecimal?" — sí, ya lo es.</text>
+<circle cx="57" cy="292" r="17" fill="#2b6cb0"/><text x="57" y="297" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">LB</text>
+<text x="88" y="297" font-size="13.5" fill="#9aa1ab"><tspan font-weight="700" fill="#e6e8eb">BalbianoLuciano</tspan> respondió los comentarios</text>
+<rect x="560" y="281" width="54.0" height="21" rx="10.5" fill="none" stroke="#353b44"/>
+<text x="568" y="296" font-size="11.5" fill="#9aa1ab">Autor</text>
+<text x="88" y="319" font-size="12.5" fill="#7d848e" font-style="italic">"Buen punto, gracias por la revisión."</text>
+<circle cx="57" cy="354" r="17" fill="#2b6cb0"/><text x="57" y="359" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">LB</text>
+<text x="88" y="359" font-size="13.5" fill="#9aa1ab"><tspan font-weight="700" fill="#e6e8eb">BalbianoLuciano</tspan> aprobó estos cambios</text>
+<rect x="560" y="343" width="69.19999999999999" height="21" rx="10.5" fill="none" stroke="#353b44"/>
+<text x="568" y="358" font-size="11.5" fill="#9aa1ab">Revisor</text>
+<circle cx="57" cy="404" r="17" fill="#2b6cb0"/><text x="57" y="409" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">LB</text>
+<text x="88" y="409" font-size="13.5" fill="#9aa1ab"><tspan font-weight="700" fill="#e6e8eb">BalbianoLuciano</tspan> hizo merge a main</text>
+<rect x="560" y="393" width="92.0" height="21" rx="10.5" fill="none" stroke="#353b44"/>
+<text x="568" y="408" font-size="11.5" fill="#9aa1ab">Maintainer</text>
+<rect x="700" y="112" width="220" height="358" rx="10" fill="#191c21" stroke="#353b44" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="720" y="140" font-size="11.5" fill="#f5c451" font-weight="700" letter-spacing="1.2">EL EQUIPO</text>
+<text x="720" y="172" font-size="13" fill="#9aa1ab">Product owner</text>
+<text x="900" y="172" font-size="13" fill="#4cd07d" font-weight="700" text-anchor="end">yo</text>
+<text x="720" y="196" font-size="13" fill="#9aa1ab">Arquitecto</text>
+<text x="900" y="196" font-size="13" fill="#4cd07d" font-weight="700" text-anchor="end">yo</text>
+<text x="720" y="220" font-size="13" fill="#9aa1ab">Dev</text>
+<text x="900" y="220" font-size="13" fill="#4cd07d" font-weight="700" text-anchor="end">yo</text>
+<text x="720" y="244" font-size="13" fill="#9aa1ab">QA</text>
+<text x="900" y="244" font-size="13" fill="#4cd07d" font-weight="700" text-anchor="end">yo</text>
+<text x="720" y="268" font-size="13" fill="#9aa1ab">Reviewer</text>
+<text x="900" y="268" font-size="13" fill="#4cd07d" font-weight="700" text-anchor="end">yo</text>
+<text x="720" y="292" font-size="13" fill="#9aa1ab">Release manager</text>
+<text x="900" y="292" font-size="13" fill="#4cd07d" font-weight="700" text-anchor="end">yo</text>
+<text x="720" y="316" font-size="13" fill="#9aa1ab">Defensa oral</text>
+<text x="900" y="316" font-size="13" fill="#4cd07d" font-weight="700" text-anchor="end">yo</text>
+<line x1="720" y1="348" x2="900" y2="348" stroke="#353b44"/>
+<text x="720" y="374" font-size="13" fill="#9aa1ab">Pair programming</text>
+<text x="900" y="374" font-size="13" fill="#c58af9" font-weight="700" text-anchor="end">una IA</text>
+<text x="720" y="402" font-size="12" fill="#7d848e" font-style="italic">escribe comentarios de</text>
+<text x="720" y="420" font-size="12" fill="#7d848e" font-style="italic">revisión a las 3 AM, pero</text>
+<text x="720" y="438" font-size="12" fill="#7d848e" font-style="italic">el botón de Merge lo</text>
+<text x="720" y="456" font-size="12" fill="#7d848e" font-style="italic">aprieto yo</text>
+<text x="480" y="504" font-size="13" fill="#9aa1ab" text-anchor="middle" font-style="italic">Code review con cuatro ojos: dos míos y dos de una IA que, por suerte, no tiene permiso de merge.</text>
+</g></g></svg>

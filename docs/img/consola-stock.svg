@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 827 560" width="827" height="560">
+<defs><clipPath id="v"><rect width="827" height="560" rx="11"/></clipPath></defs>
+<g clip-path="url(#v)">
+<rect width="827" height="560" fill="#15181d"/>
+<rect width="827" height="38" fill="#262a30"/>
+<circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
+<text x="413.5" y="23.5" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" fill="#a9adb3" text-anchor="middle">java -jar concesionaria.jar</text>
+<line x1="0" y1="38" x2="827" y2="38" stroke="#000" stroke-opacity=".4"/>
+<g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" xml:space="preserve">
+<text x="29.8" y="69" fill="#5ac8fa" font-weight="700">CONCESIONARIA MULTIMARCA</text>
+<text x="507.5" y="69" fill="#7d848e">admin · Administrador · mar 24/11/2026</text>
+<text x="29.8" y="87" fill="#7d848e">───────────────────────────────────────────────────────────────────────────────────────────────────</text>
+<text x="29.8" y="105" fill="#5ac8fa" font-weight="700">LISTAR STOCK</text>
+<text x="546.6" y="105" fill="#7d848e">Inicio › Vehículos › Listar stock</text>
+<text x="29.8" y="141" fill="#7d848e">Filtro: Disponibles</text>
+<text x="202.1" y="141" fill="#7d848e">Orden: Tipo y marca</text>
+<text x="29.8" y="177" fill="#d6d9de" font-weight="700">Código</text>
+<text x="92.5" y="177" fill="#d6d9de" font-weight="700">Marca</text>
+<text x="186.4" y="177" fill="#d6d9de" font-weight="700">Modelo</text>
+<text x="280.4" y="177" fill="#d6d9de" font-weight="700">Año</text>
+<text x="319.5" y="177" fill="#d6d9de" font-weight="700">Estado</text>
+<text x="421.3" y="177" fill="#d6d9de" font-weight="700">Km</text>
+<text x="452.6" y="177" fill="#d6d9de" font-weight="700">Detalle</text>
+<text x="695.4" y="177" fill="#d6d9de" font-weight="700">Precio final</text>
+<text x="29.8" y="195" fill="#7d848e">─────────────────────────────────────────────────────────────────────────────────────────────────</text>
+<text x="29.8" y="213" fill="#5ac8fa" font-weight="700">Automóviles</text>
+<text x="123.8" y="213" fill="#7d848e">· 3 unidades · $ 42.497.000</text>
+<text x="29.8" y="231" fill="#d6d9de">A-0003</text>
+<text x="92.5" y="231" fill="#d6d9de">Fiat</text>
+<text x="186.4" y="231" fill="#d6d9de">Cronos</text>
+<text x="272.6" y="231" fill="#d6d9de">2026</text>
+<text x="319.5" y="231" fill="#4cd07d">0 km</text>
+<text x="429.2" y="231" fill="#d6d9de">—</text>
+<text x="452.6" y="231" fill="#d6d9de">Sedán · 4 puertas</text>
+<text x="695.4" y="231" fill="#d6d9de">$ 25.647.000</text>
+<text x="29.8" y="249" fill="#d6d9de">A-0004</text>
+<text x="92.5" y="249" fill="#d6d9de">Peugeot</text>
+<text x="186.4" y="249" fill="#d6d9de">208</text>
+<text x="272.6" y="249" fill="#d6d9de">2021</text>
+<text x="319.5" y="249" fill="#d6d9de">Usado</text>
+<text x="390.0" y="249" fill="#d6d9de">45.300</text>
+<text x="452.6" y="249" fill="#d6d9de">Hatchback · 5 puertas</text>
+<text x="695.4" y="249" fill="#d6d9de">$ 12.342.000</text>
+<text x="29.8" y="267" fill="#d6d9de">A-0002</text>
+<text x="92.5" y="267" fill="#d6d9de">Volkswagen</text>
+<text x="186.4" y="267" fill="#d6d9de">Gol Trend</text>
+<text x="272.6" y="267" fill="#d6d9de">2015</text>
+<text x="319.5" y="267" fill="#d6d9de">Usado</text>
+<text x="390.0" y="267" fill="#d6d9de">98.000</text>
+<text x="452.6" y="267" fill="#d6d9de">Hatchback · 5 puertas</text>
+<text x="703.2" y="267" fill="#d6d9de">$ 4.508.000</text>
+<text x="29.8" y="303" fill="#5ac8fa" font-weight="700">Camionetas</text>
+<text x="116.0" y="303" fill="#7d848e">· 3 unidades · $ 97.622.520</text>
+<text x="29.8" y="321" fill="#d6d9de">C-0002</text>
+<text x="92.5" y="321" fill="#d6d9de">Ford</text>
+<text x="186.4" y="321" fill="#d6d9de">Ranger</text>
+<text x="272.6" y="321" fill="#d6d9de">2026</text>
+<text x="319.5" y="321" fill="#4cd07d">0 km</text>
+<text x="429.2" y="321" fill="#d6d9de">—</text>
+<text x="452.6" y="321" fill="#d6d9de">Doble cabina · 4x4 · 1.100 kg</text>
+<text x="695.4" y="321" fill="#d6d9de">$ 57.309.200</text>
+<text x="29.8" y="339" fill="#d6d9de">C-0001</text>
+<text x="92.5" y="339" fill="#d6d9de">Toyota</text>
+<text x="186.4" y="339" fill="#d6d9de">Hilux</text>
+<text x="272.6" y="339" fill="#d6d9de">2019</text>
+<text x="319.5" y="339" fill="#d6d9de">Usado</text>
+<text x="382.2" y="339" fill="#d6d9de">112.900</text>
+<text x="452.6" y="339" fill="#d6d9de">Doble cabina · 4x4 · 1.000 kg</text>
+<text x="695.4" y="339" fill="#d6d9de">$ 22.850.920</text>
+<text x="29.8" y="357" fill="#d6d9de">C-0003</text>
+<text x="92.5" y="357" fill="#d6d9de">Volkswagen</text>
+<text x="186.4" y="357" fill="#d6d9de">Amarok</text>
+<text x="272.6" y="357" fill="#d6d9de">2017</text>
+<text x="319.5" y="357" fill="#d6d9de">Usado</text>
+<text x="382.2" y="357" fill="#d6d9de">150.000</text>
+<text x="452.6" y="357" fill="#d6d9de">Doble cabina · 4x4 · 1.000 kg</text>
+<text x="695.4" y="357" fill="#d6d9de">$ 17.462.400</text>
+<text x="29.8" y="393" fill="#5ac8fa" font-weight="700">Motocicletas</text>
+<text x="131.6" y="393" fill="#7d848e">· 2 unidades · $ 14.622.000</text>
+<text x="29.8" y="411" fill="#d6d9de">M-0001</text>
+<text x="92.5" y="411" fill="#d6d9de">Honda</text>
+<text x="186.4" y="411" fill="#d6d9de">CB 500F</text>
+<text x="272.6" y="411" fill="#d6d9de">2026</text>
+<text x="319.5" y="411" fill="#4cd07d">0 km</text>
+<text x="429.2" y="411" fill="#d6d9de">—</text>
+<text x="452.6" y="411" fill="#d6d9de">Naked · 471 cc</text>
+<text x="695.4" y="411" fill="#d6d9de">$ 12.750.000</text>
+<text x="29.8" y="429" fill="#d6d9de">M-0002</text>
+<text x="92.5" y="429" fill="#d6d9de">Yamaha</text>
+<text x="186.4" y="429" fill="#d6d9de">FZ</text>
+<text x="272.6" y="429" fill="#d6d9de">2020</text>
+<text x="319.5" y="429" fill="#d6d9de">Usado</text>
+<text x="390.0" y="429" fill="#d6d9de">21.000</text>
+<text x="452.6" y="429" fill="#d6d9de">Calle · 150 cc</text>
+<text x="703.2" y="429" fill="#d6d9de">$ 1.872.000</text>
+<text x="29.8" y="465" fill="#d6d9de" font-weight="700">8 vehículos</text>
+<text x="123.8" y="465" fill="#7d848e">· 0 km: 3 · usados: 5 · página 1 de 1</text>
+<text x="29.8" y="501" fill="#7d848e">───────────────────────────────────────────────────────────────────────────────────────────────────</text>
+<text x="29.8" y="519" fill="#7d848e">F filtrar · O ordenar · L limpiar filtros · V ver ficha · 0 Volver a Vehículos</text>
+<text x="29.8" y="537" fill="#d6d9de" font-weight="700">Elegí una opción ›</text>
+<text x="178.6" y="537" fill="#d6d9de">0</text>
+</g></g></svg>

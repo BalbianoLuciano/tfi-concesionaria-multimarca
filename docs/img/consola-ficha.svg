@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 827 470" width="827" height="470">
+<defs><clipPath id="v"><rect width="827" height="470" rx="11"/></clipPath></defs>
+<g clip-path="url(#v)">
+<rect width="827" height="470" fill="#15181d"/>
+<rect width="827" height="38" fill="#262a30"/>
+<circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
+<text x="413.5" y="23.5" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" fill="#a9adb3" text-anchor="middle">java -jar concesionaria.jar</text>
+<line x1="0" y1="38" x2="827" y2="38" stroke="#000" stroke-opacity=".4"/>
+<g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" xml:space="preserve">
+<text x="29.8" y="69" fill="#5ac8fa" font-weight="700">CONCESIONARIA MULTIMARCA</text>
+<text x="507.5" y="69" fill="#7d848e">admin · Administrador · mar 24/11/2026</text>
+<text x="29.8" y="87" fill="#7d848e">───────────────────────────────────────────────────────────────────────────────────────────────────</text>
+<text x="29.8" y="105" fill="#5ac8fa" font-weight="700">VER FICHA</text>
+<text x="570.1" y="105" fill="#7d848e">Inicio › Vehículos › Ver ficha</text>
+<text x="29.8" y="141" fill="#d6d9de" font-weight="700">Código ›</text>
+<text x="100.3" y="141" fill="#d6d9de">c1</text>
+<text x="29.8" y="177" fill="#5ac8fa" font-weight="700">C-0001</text>
+<text x="92.5" y="177" fill="#5ac8fa" font-weight="700">Toyota Hilux 2019</text>
+<text x="241.2" y="177" fill="#7d848e">·</text>
+<text x="256.9" y="177" fill="#4cd07d">Disponible</text>
+<text x="45.5" y="213" fill="#d6d9de" font-weight="700">Vehículo</text>
+<text x="382.2" y="213" fill="#d6d9de" font-weight="700">Registro</text>
+<text x="45.5" y="231" fill="#7d848e">Tipo</text>
+<text x="131.6" y="231" fill="#d6d9de">Camioneta</text>
+<text x="382.2" y="231" fill="#7d848e">Estado</text>
+<text x="484.0" y="231" fill="#d6d9de">Usado</text>
+<text x="45.5" y="249" fill="#7d848e">Detalle</text>
+<text x="131.6" y="249" fill="#d6d9de">Doble cabina · 4x4 · 1.000 kg</text>
+<text x="382.2" y="249" fill="#7d848e">Kilometraje</text>
+<text x="484.0" y="249" fill="#d6d9de">112.900 km</text>
+<text x="45.5" y="267" fill="#7d848e">Marca</text>
+<text x="131.6" y="267" fill="#d6d9de">Toyota (Japón)</text>
+<text x="382.2" y="267" fill="#7d848e">Patente</text>
+<text x="484.0" y="267" fill="#d6d9de">AD456FG</text>
+<text x="45.5" y="285" fill="#7d848e">Año</text>
+<text x="131.6" y="285" fill="#d6d9de">2019</text>
+<text x="382.2" y="285" fill="#7d848e">Ingreso</text>
+<text x="484.0" y="285" fill="#d6d9de">24/11/2026</text>
+<text x="45.5" y="303" fill="#7d848e">Color</text>
+<text x="131.6" y="303" fill="#d6d9de">Blanco</text>
+<text x="29.8" y="339" fill="#5ac8fa" font-weight="700">Precio</text>
+<text x="45.5" y="357" fill="#d6d9de">Precio de lista</text>
+<text x="397.8" y="357" fill="#d6d9de">$ 38.000.000</text>
+<text x="45.5" y="375" fill="#d6d9de">Depreciación por antigüedad (35 %)</text>
+<text x="390.0" y="375" fill="#d6d9de">-$ 13.300.000</text>
+<text x="45.5" y="393" fill="#d6d9de">Depreciación por km (8,8 %)</text>
+<text x="397.8" y="393" fill="#d6d9de">-$ 3.344.000</text>
+<text x="45.5" y="411" fill="#d6d9de">Recargo 4x4 (7 %)</text>
+<text x="397.8" y="411" fill="#d6d9de">+$ 1.494.920</text>
+<text x="45.5" y="429" fill="#7d848e">─────────────────────────────────────────────────────────</text>
+<text x="45.5" y="447" fill="#d6d9de" font-weight="700">Precio final</text>
+<text x="397.8" y="447" fill="#d6d9de" font-weight="700">$ 22.850.920</text>
+</g></g></svg>

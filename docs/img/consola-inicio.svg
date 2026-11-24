@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 827 560" width="827" height="560">
+<defs><clipPath id="v"><rect width="827" height="560" rx="11"/></clipPath></defs>
+<g clip-path="url(#v)">
+<rect width="827" height="560" fill="#15181d"/>
+<rect width="827" height="38" fill="#262a30"/>
+<circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
+<text x="413.5" y="23.5" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" fill="#a9adb3" text-anchor="middle">java -jar concesionaria.jar</text>
+<line x1="0" y1="38" x2="827" y2="38" stroke="#000" stroke-opacity=".4"/>
+<g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" xml:space="preserve">
+<text x="29.8" y="69" fill="#5ac8fa" font-weight="700">CONCESIONARIA MULTIMARCA</text>
+<text x="507.5" y="69" fill="#7d848e">admin · Administrador · mar 24/11/2026</text>
+<text x="29.8" y="87" fill="#7d848e">───────────────────────────────────────────────────────────────────────────────────────────────────</text>
+<text x="29.8" y="105" fill="#5ac8fa" font-weight="700">INICIO</text>
+<text x="29.8" y="123" fill="#7d848e">Hola, Luciano Balbiano.</text>
+<text x="45.5" y="159" fill="#7d848e">Stock disponible</text>
+<text x="280.4" y="159" fill="#7d848e">Ventas de nov 2026</text>
+<text x="515.3" y="159" fill="#7d848e">Valor del stock</text>
+<text x="45.5" y="177" fill="#d6d9de" font-weight="700">8 vehículos</text>
+<text x="280.4" y="177" fill="#d6d9de" font-weight="700">2 ventas</text>
+<text x="515.3" y="177" fill="#d6d9de" font-weight="700">$ 154.741.520</text>
+<text x="45.5" y="195" fill="#7d848e">0 km: 3 · usados: 5</text>
+<text x="280.4" y="195" fill="#7d848e">$ 56.190.000</text>
+<text x="515.3" y="195" fill="#7d848e">a precio final de hoy</text>
+<text x="45.5" y="231" fill="#d6d9de" font-weight="700">Operación</text>
+<text x="69.0" y="249" fill="#d6d9de" font-weight="700">1</text>
+<text x="92.5" y="249" fill="#d6d9de">Vehículos</text>
+<text x="249.1" y="249" fill="#7d848e">stock, búsqueda, altas y bajas</text>
+<text x="69.0" y="267" fill="#d6d9de" font-weight="700">2</text>
+<text x="92.5" y="267" fill="#d6d9de">Ventas</text>
+<text x="249.1" y="267" fill="#7d848e">vender e historial</text>
+<text x="69.0" y="285" fill="#d6d9de" font-weight="700">3</text>
+<text x="92.5" y="285" fill="#d6d9de">Reportes</text>
+<text x="249.1" y="285" fill="#7d848e">stock, ventas y vendedores</text>
+<text x="45.5" y="321" fill="#d6d9de" font-weight="700">Administración</text>
+<text x="69.0" y="339" fill="#d6d9de" font-weight="700">4</text>
+<text x="92.5" y="339" fill="#d6d9de">Marcas</text>
+<text x="249.1" y="339" fill="#7d848e">catálogo de marcas</text>
+<text x="69.0" y="357" fill="#d6d9de" font-weight="700">5</text>
+<text x="92.5" y="357" fill="#d6d9de">Usuarios</text>
+<text x="249.1" y="357" fill="#7d848e">altas, roles y claves</text>
+<text x="69.0" y="375" fill="#d6d9de" font-weight="700">6</text>
+<text x="92.5" y="375" fill="#d6d9de">Datos</text>
+<text x="249.1" y="375" fill="#7d848e">exportar e importar CSV</text>
+<text x="45.5" y="411" fill="#d6d9de" font-weight="700">Mi cuenta</text>
+<text x="69.0" y="429" fill="#d6d9de" font-weight="700">7</text>
+<text x="92.5" y="429" fill="#d6d9de">Cambiar mi clave</text>
+<text x="249.1" y="429" fill="#7d848e">pide la clave actual</text>
+<text x="69.0" y="447" fill="#d6d9de" font-weight="700">C</text>
+<text x="92.5" y="447" fill="#d6d9de">Cerrar sesión</text>
+<text x="249.1" y="447" fill="#7d848e">volver al inicio de sesión</text>
+<text x="69.0" y="483" fill="#d6d9de" font-weight="700">0</text>
+<text x="92.5" y="483" fill="#d6d9de">Salir del programa</text>
+<text x="249.1" y="483" fill="#7d848e">guarda los cambios pendientes</text>
+<text x="29.8" y="519" fill="#7d848e">───────────────────────────────────────────────────────────────────────────────────────────────────</text>
+<text x="29.8" y="537" fill="#d6d9de" font-weight="700">Elegí una opción ›</text>
+<text x="178.6" y="537" fill="#d6d9de">1</text>
+</g></g></svg>

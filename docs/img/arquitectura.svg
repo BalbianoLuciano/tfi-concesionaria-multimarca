@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 628" width="960" height="628" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+<defs><clipPath id="v"><rect width="960" height="628" rx="11"/></clipPath>
+<marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#7d848e"/></marker></defs>
+<g clip-path="url(#v)"><rect width="960" height="628" fill="#15181d"/><rect width="960" height="38" fill="#262a30"/>
+<circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
+<text x="480.0" y="23.5" font-size="12" fill="#a9adb3" text-anchor="middle">Tres capas con dependencias en un solo sentido</text>
+<line x1="0" y1="38" x2="960" y2="38" stroke="#000" stroke-opacity=".4"/>
+<g transform="translate(0 38)">
+<rect x="40" y="30" width="640" height="112" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<rect x="40" y="44" width="4" height="84" rx="2" fill="#c58af9"/>
+<text x="64" y="60" font-size="11.5" fill="#c58af9" font-weight="700" letter-spacing="1.2">PRESENTACIÓN</text>
+<text x="189.60000000000002" y="60" font-size="14" fill="#e6e8eb" font-weight="600">La consola: pide, valida el formato y muestra</text>
+<text x="64" y="90" font-size="12.5" fill="#9aa1ab" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Pantallas por rol · Terminal · Lector · Tabla · Vistas</text>
+<text x="64" y="118" font-size="12.5" fill="#9aa1ab">No importa datos. No sabe cómo se guarda nada.</text>
+<line x1="360.0" y1="142" x2="360.0" y2="178" stroke="#7d848e" stroke-width="1.5" marker-end="url(#f)"/>
+<text x="372.0" y="165" font-size="11.5" fill="#7d848e">usa</text>
+<rect x="40" y="180" width="640" height="112" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<rect x="40" y="194" width="4" height="84" rx="2" fill="#5ac8fa"/>
+<text x="64" y="210" font-size="11.5" fill="#5ac8fa" font-weight="700" letter-spacing="1.2">NEGOCIO</text>
+<text x="143.10000000000002" y="210" font-size="14" fill="#e6e8eb" font-weight="600">Servicios: reglas, permisos y cálculos</text>
+<text x="64" y="240" font-size="12.5" fill="#9aa1ab" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">ServicioVehiculos · ServicioVentas · ServicioReportes · …</text>
+<text x="64" y="268" font-size="12.5" fill="#9aa1ab">No importa java.io ni imprime. Verifica el permiso en cada operación.</text>
+<line x1="360.0" y1="292" x2="360.0" y2="328" stroke="#7d848e" stroke-width="1.5" marker-end="url(#f)"/>
+<text x="372.0" y="315" font-size="11.5" fill="#7d848e">usa solo interfaces</text>
+<rect x="40" y="330" width="640" height="112" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<rect x="40" y="344" width="4" height="84" rx="2" fill="#4cd07d"/>
+<text x="64" y="360" font-size="11.5" fill="#4cd07d" font-weight="700" letter-spacing="1.2">DATOS</text>
+<text x="124.5" y="360" font-size="14" fill="#e6e8eb" font-weight="600">Repositorios en memoria y persistencia</text>
+<text x="64" y="390" font-size="12.5" fill="#9aa1ab" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Repositorio&lt;T,K&gt; · Persistencia · ArchivosExportacion</text>
+<text x="64" y="418" font-size="12.5" fill="#9aa1ab">El negocio solo conoce estas interfaces, nunca las clases que las implementan.</text>
+<rect x="710" y="30" width="220" height="412" rx="10" fill="#191c21" stroke="#353b44" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="730" y="58" font-size="11.5" fill="#f5c451" font-weight="700" letter-spacing="1.2">TRANSVERSALES</text>
+<text x="730" y="78" font-size="12" fill="#9aa1ab">las usan las tres capas</text>
+<text x="730" y="120" font-size="13.5" fill="#e6e8eb" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">modelo</text>
+<text x="730" y="140" font-size="12" fill="#9aa1ab">Vehiculo y subclases,</text>
+<text x="730" y="157" font-size="12" fill="#9aa1ab">Marca, Venta, Usuario, enums</text>
+<text x="730" y="212" font-size="13.5" fill="#e6e8eb" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">excepciones</text>
+<text x="730" y="232" font-size="12" fill="#9aa1ab">ConcesionariaException</text>
+<text x="730" y="249" font-size="12" fill="#9aa1ab">y sus 13 hijas</text>
+<text x="730" y="304" font-size="13.5" fill="#e6e8eb" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">comun</text>
+<text x="730" y="324" font-size="12" fill="#9aa1ab">Formatos argentinos, Textos</text>
+<text x="730" y="341" font-size="12" fill="#9aa1ab">(sin acentos), Reloj</text>
+<rect x="40" y="488" width="890" height="74" rx="10" fill="#1b2027" stroke="#353b44" stroke-width="1.5"/>
+<text x="64" y="518" font-size="11.5" fill="#ff6b6b" font-weight="700" letter-spacing="1.2">APP</text>
+<text x="110" y="518" font-size="13" fill="#e6e8eb">arma todo a mano: crea los repositorios, se los pasa a los servicios y los servicios a la consola</text>
+<text x="64" y="544" font-size="12.5" fill="#9aa1ab">Inyección de dependencias por constructor, sin framework. Por eso las pruebas arman el negocio entero en memoria.</text>
+</g></g></svg>

@@ -66,6 +66,7 @@ se tomó la opción recomendada.
 | Clave nueva | `Pantalla.leerClaveNueva()` la comparten el primer arranque, el alta de usuarios y el cambio de clave |
 | Pantallas (2026-11-24) | Esqueleto común de SPEC §5: título y ruta, contexto, opciones con descripción y secciones, `0`/`C` alineados y "Volver a …", cada acción en su propia pantalla, prompt en negrita y avisos en amarillo |
 | Formularios y resumen (2026-11-24) | Formularios por pasos con ayuda antes del campo, ficha en dos columnas, tarjetas de resumen en el inicio según el rol y stock agrupado por tipo en el orden natural |
+| README e imágenes (2026-11-24) | Capturas reales de la consola (por pseudo-terminal) convertidas a SVG, más diagramas de capas, precio y persistencia en `docs/img/`. Copias PNG en `docs/img/png/` para las notas del release, donde un SVG relativo no se ve |
 | Interactividad | `Lector` recibe `interactivo` explícito: con entrada redirigida hace eco de lo leído y no usa `readPassword` |
 
 ## Estado actual
