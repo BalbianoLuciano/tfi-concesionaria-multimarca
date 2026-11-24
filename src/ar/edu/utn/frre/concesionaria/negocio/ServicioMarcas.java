@@ -64,6 +64,14 @@ public class ServicioMarcas extends ServicioBase {
             "citroen", "Citroën");
 
     /**
+     * @param texto lo que escribió el usuario
+     * @return el nombre oficial si es un apodo conocido ("vw" → "Volkswagen"), o {@code null}
+     */
+    public String nombrePorApodo(String texto) {
+        return APODOS.get(Textos.compacta(texto == null ? "" : texto));
+    }
+
+    /**
      * Marcas para elegir en el alta: activas, que fabrican el tipo y empiezan con el prefijo
      * (o con el nombre oficial, si se escribió un apodo como "vw").
      *

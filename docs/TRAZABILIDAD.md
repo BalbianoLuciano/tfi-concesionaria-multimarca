@@ -49,6 +49,6 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 | Requisito | Dónde se cumple | Verificación |
 |---|---|---|
 | Rendimiento (ARQUITECTURA §7) | Índices en `RepositorioVehiculosMemoria` y `RepositorioMarcasMemoria`; clave cacheada en `Marca` | `rendimiento/MedicionRendimiento` (`./build.sh bench`) |
-| Consola trabajada (SPEC §5) | `presentacion/consola/` y `presentacion/pantallas/`; aire entre campos con `Terminal.separarCampo` | Plan manual PM-01 a PM-18 (SPEC §8); PR-COMUN-10 a PR-COMUN-12 |
+| Consola trabajada (SPEC §5) | `presentacion/consola/` y `presentacion/pantallas/`; aire entre campos con `Terminal.separarCampo` | Plan manual PM-01 a PM-20 (SPEC §8); PR-COMUN-10 a PR-COMUN-12 |
 | Compatibilidad de datos (ARQUITECTURA §4) | `MigradorAlmacen`: esquema 1 → 2 arma el catálogo de modelos; 2 → 3 suma el catálogo de referencia | PR-PERSIST-09 |
 | Catálogo de referencia (CU-12) | `datos/CatalogoReferencia` lee `catalogo-ar-2026.csv` (52 marcas, unos 490 modelos) | PR-MARCA-13 |

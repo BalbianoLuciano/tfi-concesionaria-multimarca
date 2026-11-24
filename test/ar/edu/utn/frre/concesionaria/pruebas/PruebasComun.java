@@ -72,6 +72,10 @@ public final class PruebasComun implements GrupoPruebas {
             // la coincidencia exacta gana sobre el comienzo: "Usado" no es ambiguo
             Verificar.igual(List.of(1), Textos.coincidencias("usado", List.of("Usados", "Usado")));
             Verificar.igual(List.of(), Textos.coincidencias("rojo", tipos));
+            // una letra suelta no elige por "contiene": "t" no es Etios (SPEC §3)
+            List<String> toyota = List.of("Corolla", "Etios", "Yaris");
+            Verificar.igual(List.of(), Textos.coincidencias("t", toyota));
+            Verificar.igual(List.of(1), Textos.coincidencias("tio", toyota));
         });
         r.prueba("PR-COMUN-12", "clave fonética: korola y korollà son Corolla", () -> {
             Verificar.igual(Textos.fonetica("Corolla"), Textos.fonetica("korola"));

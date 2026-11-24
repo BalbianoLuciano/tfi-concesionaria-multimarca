@@ -130,7 +130,8 @@ public final class Textos {
                 niveles.get(0).add(i);
             } else if (etiqueta.startsWith(buscado)) {
                 niveles.get(1).add(i);
-            } else if (etiqueta.contains(buscado)) {
+            } else if (buscado.length() >= 3 && etiqueta.contains(buscado)) {
+                // dentro del nombre solo con 3 letras o más: una letra suelta no elige nada
                 niveles.get(2).add(i);
             }
         }
