@@ -4,6 +4,7 @@ import ar.edu.utn.frre.concesionaria.comun.Textos;
 import ar.edu.utn.frre.concesionaria.excepciones.ConcesionariaException;
 import ar.edu.utn.frre.concesionaria.excepciones.DatoInvalidoException;
 import ar.edu.utn.frre.concesionaria.modelo.Marca;
+import ar.edu.utn.frre.concesionaria.modelo.Modelo;
 import ar.edu.utn.frre.concesionaria.modelo.TipoVehiculo;
 import ar.edu.utn.frre.concesionaria.negocio.Sesion;
 import ar.edu.utn.frre.concesionaria.presentacion.consola.OperacionCancelada;
@@ -27,6 +28,7 @@ final class PantallaMarcas extends Pantalla {
         List<Opcion> opciones = new ArrayList<>();
         agregar(opciones, "Listar marcas", "país, tipos y vehículos de cada una", true,
                 this::listar);
+        agregar(opciones, "Modelos", "catálogo de modelos de cada marca", false, this::modelos);
         agregar(opciones, "Nueva marca", "avisa si hay una parecida", true, () -> crear(null, null));
         agregar(opciones, "Modificar país o tipos", "el nombre no cambia", true, this::modificar);
         agregar(opciones, "Activar o desactivar", "una desactivada no se ofrece en las altas", true,
@@ -48,6 +50,81 @@ final class PantallaMarcas extends Pantalla {
                     m.estaActiva() ? "Activa" : estilo.tenue("Desactivada"));
         }
         t.lineas(tabla.renglones(t.ancho(), estilo));
+    }
+
+    /**
+     * Catálogo de modelos de una marca (CU-12): listado por tipo, alta y baja.
+     */
+    private void modelos() throws ConcesionariaException, OperacionCancelada {
+        List<Marca> marcas = e.marcas.listar(sesion);
+        if (marcas.isEmpty()) {
+            t.info("Todavía no hay marcas. Creá una con Nueva marca.");
+            lector.pausa();
+            return;
+        }
+        Marca marca = lector.elegir("Marca", marcas, Marca::getNombre);
+        while (true) {
+            cabecera("Marcas › Modelos", marca.getNombre() + " · " + marca.getModelos().size()
+                    + " modelos");
+            Tabla tabla = new Tabla().texto("Modelo").numero("Vehículos");
+            for (TipoVehiculo tipo : TipoVehiculo.values()) {
+                List<Modelo> delTipo = marca.modelosDe(tipo);
+                if (delTipo.isEmpty()) {
+                    continue;
+                }
+                tabla.grupo(tipo.getPlural().substring(0, 1).toUpperCase()
+                        + tipo.getPlural().substring(1) + " · " + delTipo.size());
+                for (Modelo m : delTipo) {
+                    tabla.fila(m.getNombre(),
+                            String.valueOf(e.marcas.cantidadVehiculos(marca, m)));
+                }
+            }
+            if (tabla.estaVacia()) {
+                t.linea(" " + marca.getNombre() + " todavía no tiene modelos en el catálogo.");
+            } else {
+                t.lineas(tabla.renglones(t.ancho(), estilo));
+            }
+            t.pie("A agregar modelo · Q quitar modelo · 0 Volver a Marcas");
+            String opcion = lector.opcion(List.of("a", "q", "0"));
+            if (opcion.equals("0")) {
+                return;
+            }
+            ejecutar(opcion.equals("a") ? () -> agregarModelo(marca) : () -> quitarModelo(marca));
+            lector.pausa();
+        }
+    }
+
+    private void agregarModelo(Marca marca) throws ConcesionariaException, OperacionCancelada {
+        lector.operacion("el alta del modelo");
+        List<TipoVehiculo> tipos = new ArrayList<>(marca.getTiposQueFabrica());
+        TipoVehiculo tipo = tipos.size() == 1 ? tipos.get(0)
+                : lector.elegir("Tipo", tipos, TipoVehiculo::getEtiqueta);
+        String nombre = lector.leer("Nombre del modelo", Modelo::normalizar);
+        List<Modelo> parecidos = e.marcas.modelosParecidos(marca, null, nombre).stream()
+                .filter(m -> !m.getClave().equals(Textos.compacta(nombre))).toList();
+        if (!parecidos.isEmpty()) {
+            t.aviso("Ya hay modelos parecidos: " + parecidos.stream().map(Modelo::getNombre)
+                    .collect(Collectors.joining(", ")) + ".");
+            if (!lector.confirmar("¿Agregar \"" + nombre + "\" igual?")) {
+                throw new OperacionCancelada("No se agregó el modelo.");
+            }
+        }
+        Modelo nuevo = e.marcas.agregarModelo(sesion, marca, nombre, tipo);
+        t.exito("Se agregó " + nuevo + " al catálogo de " + marca.getNombre() + ".");
+    }
+
+    private void quitarModelo(Marca marca) throws ConcesionariaException, OperacionCancelada {
+        List<Modelo> todos = marca.getModelos();
+        if (todos.isEmpty()) {
+            t.info("No hay modelos para quitar.");
+            return;
+        }
+        Modelo modelo = lector.elegir("Modelo a quitar", todos, Modelo::toString);
+        if (lector.confirmar("¿Quitar " + modelo.getNombre() + " del catálogo de "
+                + marca.getNombre() + "?")) {
+            e.marcas.quitarModelo(sesion, marca, modelo);
+            t.exito("Se quitó " + modelo.getNombre() + ".");
+        }
     }
 
     /**
