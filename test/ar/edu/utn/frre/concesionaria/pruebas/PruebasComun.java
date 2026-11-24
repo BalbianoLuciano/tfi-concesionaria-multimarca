@@ -25,6 +25,9 @@ public final class PruebasComun implements GrupoPruebas {
             Verificar.igual("Toyota", Textos.nombrePropio("  toyota "));
             Verificar.igual("Mercedes-Benz", Textos.nombrePropio("MERCEDES-BENZ"));
             Verificar.igual("BMW", Textos.nombrePropio("BMW"));
+            Verificar.igual("BAIC", Textos.nombrePropio("BAIC"));
+            Verificar.igual("CFMoto", Textos.nombrePropio("CFMoto"));
+            Verificar.igual("Corea del Sur", Textos.nombrePropio("COREA DEL SUR"));
         });
         r.prueba("PR-COMUN-04", "distancia de edición", () ->
                 Verificar.igual(2, Textos.distancia("tollota", "toyota")));
