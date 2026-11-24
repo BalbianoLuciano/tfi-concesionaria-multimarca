@@ -186,12 +186,24 @@ Reglas generales:
   guardar nada.
 - Cada error dice qué estuvo mal y cómo corregirlo, y muestra los intentos que quedan.
 
+**Nada se elige sin que el usuario lo vea.** Es la regla que manda sobre toda la tolerancia
+de abajo, para marca, modelo y vehículo:
+
+1. Solo se toma directo lo que coincide con el **nombre completo** (sin importar mayúsculas,
+   acentos ni espacios): "toyota", "COROLLA", "c-0001", la patente exacta.
+2. Una coincidencia **parcial única** se confirma: "t" → "¿Toyota? (S/n)". Enter o `s` la
+   toma; `n` vuelve a preguntar.
+3. Varias coincidencias se muestran numeradas para elegir.
+4. Si no hay ninguna, primero se buscan parecidas ("¿Quisiste decir…?") y, si tampoco hay, se
+   muestra la lista completa. Nunca se elige una opción porque "contiene" una letra suelta:
+   buscar dentro del nombre exige al menos 3 letras.
+
 **Tolerancia al error humano.** El sistema interpreta lo que una persona escribe de
 corrido, en lugar de exigir el formato exacto:
 
 | Situación | Se acepta | Se interpreta como |
 |---|---|---|
-| Elegir de una lista (tipo, estado, color, carrocería…) | El número, el nombre o su comienzo, sin importar mayúsculas ni acentos | "auto" → Automóvil, "usado" → Usado, "sedan" → Sedán |
+| Elegir de una lista que está a la vista (tipo, estado, color, carrocería…) | El número, el nombre o su comienzo, sin importar mayúsculas ni acentos; "contiene" solo con 3 letras o más | "auto" → Automóvil, "usado" → Usado, "sedan" → Sedán. Como las opciones están en pantalla, el comienzo único funciona como una tecla y no se confirma |
 | El texto coincide con varias opciones | — | Error que las nombra: "«c» puede ser Coupé o Convertible." |
 | Número con su unidad | "85.000 km", "190cc", "4 puertas", "1.000 kg" | 85000, 190, 4, 1000 |
 | Monto | "$ 20.000.000", "20000000", "20.000.000,50" | el monto en pesos |
@@ -199,7 +211,9 @@ corrido, en lugar de exigir el formato exacto:
 | Confirmación | s, si, sí, n, no, en mayúsculas o minúsculas | sí o no |
 | Marca mal escrita | "toyta" (sin ninguna marca que empiece así) | "¿Quisiste decir Toyota?" antes de ofrecer crear una marca nueva |
 | Apodo de una marca | "vw", "chevy", "mb", "harley" | Se busca por el nombre oficial (Volkswagen, Chevrolet, Mercedes-Benz, Harley-Davidson); se guarda siempre el oficial |
-| Modelo del catálogo | "cor", "COROLLA", "korola", "korollà", "Hilx" | Primero por nombre o comienzo, sin mayúsculas ni acentos; si no hay, por parecido fonético (k/c/q, z/s, v/b, sin h, letras dobles) o por hasta 2 letras de diferencia. Una coincidencia exacta se toma directo; una aproximada se confirma: "¿Quisiste decir Corolla?" |
+| Marca o modelo por sus primeras letras | "t" con una sola marca que empiece así | "¿Toyota? (S/n)": nunca se toma sin confirmar |
+| Modelo del catálogo | "cor", "COROLLA", "korola", "korollà", "Hilx" | Primero por nombre o comienzo, sin mayúsculas ni acentos; si no hay, por parecido fonético (k/c/q, z/s, v/b, sin h, letras dobles) o por hasta 2 letras de diferencia. El nombre completo se toma directo; el comienzo único se confirma ("¿Corolla? (S/n)") y lo aproximado también ("¿Quisiste decir Corolla?") |
+| Modelo que no empieza así ni se parece | "t" para un automóvil Toyota | "Ningún modelo de Toyota empieza con «t»" y la lista completa, numerada. Recién si se escribe otra vez un nombre que no está, el administrador puede agregarlo |
 
 | Campo | Regla | Mensaje de ejemplo |
 |---|---|---|
@@ -357,7 +371,8 @@ eligen el vehículo con un mismo selector:
   solo los disponibles para cotizar, modificar, dar de baja o vender; y los del filtro
   actual cuando se llega desde el listado (V).
 - **Enter vacío** muestra todos los candidatos.
-- **Una sola coincidencia** se elige sola y se confirma con "→ C-0001 · Toyota Hilux 2019".
+- **Una sola coincidencia:** si se escribió el código o la patente exactos, se elige sola
+  ("→ C-0001 · Toyota Hilux 2019"); si no, se pregunta "¿C-0001 · Toyota Hilux 2019? (S/n)".
 - **Varias:** tabla numerada. En "N.º u otra búsqueda" un número elige de la tabla y
   cualquier otro texto busca de nuevo (sin gastar un intento); Enter vuelve a mostrar todos.
   Si hay más de 15, se muestran las 15 primeras y un aviso pide escribir algo más para
@@ -485,3 +500,4 @@ java -Dconcesionaria.dir=/tmp/demo -jar dist/concesionaria.jar
 | PM-16 | `java -jar dist/concesionaria.jar < /dev/null`. | Sale con "Hasta luego." sin excepciones (fin de entrada). |
 | PM-17 | Registrar un auto escribiendo `auto`, `usado`, `toyta`, `rojo`, `85.000 km`, `ab.123.cd`, `sedan` y `4 puertas`; en el año, tres errores seguidos. | Acepta todo; sugiere "¿Quisiste decir Toyota?"; tras el tercer error en el año pregunta "¿Seguir con «Año»?" y, con Enter, sigue sin perder lo cargado. |
 | PM-18 | Registrar un auto Toyota escribiendo en el modelo `korola`; después, como vendedor, escribir un modelo que no existe. | "¿Quisiste decir Corolla?"; con `s` sigue. Al vendedor no le ofrece crear el modelo: le indica pedírselo al administrador. |
+| PM-19 | En el alta de un auto 0 km escribir `t` en la marca y después `t` en el modelo. | Marca: "¿Toyota? (S/n)" y con Enter sigue. Modelo: "Ningún modelo de Toyota empieza con «t»" y la lista numerada de los 7; no elige nada solo. |
