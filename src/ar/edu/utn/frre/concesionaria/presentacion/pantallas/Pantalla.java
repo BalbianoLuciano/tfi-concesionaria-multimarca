@@ -275,7 +275,7 @@ abstract class Pantalla {
      * @param candidatos los vehículos que admite la operación
      * @return el elegido
      * @throws ConcesionariaException si no tiene permiso para buscar
-     * @throws OperacionCancelada     si escribió {@code :q} o agotó los intentos
+     * @throws OperacionCancelada     si escribió {@code :q} o no quiso seguir buscando
      */
     protected Vehiculo elegirVehiculo(List<Vehiculo> candidatos)
             throws ConcesionariaException, OperacionCancelada {
@@ -288,7 +288,7 @@ abstract class Pantalla {
                 + "Enter muestra todos.");
         String texto = lector.leerOpcional("Vehículo", s -> s);
         int fallidos = 0;
-        while (fallidos < Lector.INTENTOS) {
+        while (true) {
             List<Vehiculo> encontrados = texto == null ? candidatos
                     : e.vehiculos.buscarTexto(sesion, texto).stream()
                             .filter(v -> admitidos.contains(v.getCodigo())).toList();
@@ -296,9 +296,11 @@ abstract class Pantalla {
                 fallidos++;
                 t.error("Ningún vehículo coincide con \"" + texto + "\". Probá con menos letras,"
                         + " o Enter para ver todos.");
-                if (fallidos < Lector.INTENTOS) {
-                    texto = lector.leerOpcional("Vehículo", s -> s);
+                if (fallidos == Lector.INTENTOS) {
+                    lector.exigirSeguir("Vehículo");
+                    fallidos = 0;
                 }
+                texto = lector.leerOpcional("Vehículo", s -> s);
                 continue;
             }
             if (encontrados.size() == 1) {
@@ -329,7 +331,6 @@ abstract class Pantalla {
             }
             texto = respuesta;
         }
-        throw new OperacionCancelada("Se canceló la operación: demasiados intentos en «Vehículo».");
     }
 
     /** Tabla numerada del selector de vehículos. */
@@ -362,10 +363,10 @@ abstract class Pantalla {
      * Pide una clave nueva dos veces, con la regla de SPEC §3.
      *
      * @return la clave
-     * @throws OperacionCancelada si agotó los intentos
+     * @throws OperacionCancelada si no quiso seguir tras agotar los intentos
      */
     protected String leerClaveNueva() throws OperacionCancelada {
-        for (int intento = 1; intento <= Lector.INTENTOS; intento++) {
+        for (int intento = 1; true; intento++) {
             String clave = lector.clave("Clave (8 o más, con letras y números)");
             try {
                 Claves.validar(clave);
@@ -378,7 +379,10 @@ abstract class Pantalla {
                 int quedan = Lector.INTENTOS - intento;
                 t.error(ex.getMessage() + (quedan > 0 ? " Te quedan " + quedan + " intentos." : ""));
             }
+            if (intento == Lector.INTENTOS) {
+                lector.exigirSeguir("Clave");
+                intento = 0;
+            }
         }
-        throw new OperacionCancelada("Se canceló: demasiados intentos en «Clave».");
     }
 }

@@ -1,6 +1,8 @@
 package ar.edu.utn.frre.concesionaria.comun;
 
 import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utilidades de texto que comparten todas las capas.
@@ -88,6 +90,41 @@ public final class Textos {
             inicio = c == '-';
         }
         return sb.toString();
+    }
+
+    /**
+     * Opciones que coinciden con lo que escribió el usuario, para elegir de una lista por el
+     * nombre en lugar del número (SPEC §3): primero las iguales, si no las que empiezan así y
+     * si no las que lo contienen. No importan mayúsculas, acentos, espacios ni guiones:
+     * "sedan" encuentra "Sedán" y "pickup", "Pick-up cabina simple".
+     *
+     * @param texto     lo que escribió el usuario
+     * @param etiquetas el texto de cada opción
+     * @return las posiciones (desde 0) de las que coinciden; vacía si ninguna
+     */
+    public static List<Integer> coincidencias(String texto, List<String> etiquetas) {
+        String buscado = compacta(texto);
+        if (buscado.isEmpty()) {
+            return List.of();
+        }
+        List<List<Integer>> niveles = List.of(new ArrayList<>(), new ArrayList<>(),
+                new ArrayList<>());
+        for (int i = 0; i < etiquetas.size(); i++) {
+            String etiqueta = compacta(etiquetas.get(i));
+            if (etiqueta.equals(buscado)) {
+                niveles.get(0).add(i);
+            } else if (etiqueta.startsWith(buscado)) {
+                niveles.get(1).add(i);
+            } else if (etiqueta.contains(buscado)) {
+                niveles.get(2).add(i);
+            }
+        }
+        return niveles.stream().filter(n -> !n.isEmpty()).findFirst().orElse(List.of());
+    }
+
+    /** @return la clave sin espacios, guiones ni signos: "Pick-up" → "pickup" */
+    private static String compacta(String texto) {
+        return clave(texto).replaceAll("[^a-z0-9]", "");
     }
 
     /**

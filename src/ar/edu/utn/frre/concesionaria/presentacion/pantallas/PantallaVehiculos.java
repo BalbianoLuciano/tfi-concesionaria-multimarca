@@ -357,7 +357,7 @@ final class PantallaVehiculos extends Pantalla {
      */
     private Marca elegirMarca(TipoVehiculo tipo, Marca actual)
             throws ConcesionariaException, OperacionCancelada {
-        for (int intento = 1; intento <= Lector.INTENTOS; intento++) {
+        for (int intento = 1; true; intento++) {
             String prefijo = actual == null
                     ? lector.leer("Marca (primeras letras)", s -> s)
                     : lector.leer("Marca (primeras letras)", actual.getNombre(), s -> s);
@@ -372,14 +372,30 @@ final class PantallaVehiculos extends Pantalla {
             if (!coinciden.isEmpty()) {
                 return lector.elegir("Marca", coinciden, Marca::getNombre);
             }
+            // Un error de tipeo ("toyta") no tiene que terminar en una marca duplicada: primero
+            // se sugiere la parecida (SPEC §3, tolerancia al error humano).
+            List<Marca> validas = e.marcas.paraAlta(tipo, "");
+            List<Marca> parecidas = e.marcas.parecidas(prefijo).stream()
+                    .filter(validas::contains).toList();
+            if (parecidas.size() == 1
+                    && lector.confirmar("¿Quisiste decir " + parecidas.get(0).getNombre() + "?")) {
+                return parecidas.get(0);
+            }
+            if (parecidas.size() > 1) {
+                t.info("No hay marcas que empiecen con \"" + prefijo + "\". Parecidas:");
+                return lector.elegir("Marca", parecidas, Marca::getNombre);
+            }
             t.error("No hay marcas activas de " + tipo.getPlural() + " que empiecen con \""
                     + prefijo + "\".");
             if (sesion.puede(Permiso.GESTIONAR_MARCAS)
                     && lector.confirmar("¿Crear la marca \"" + prefijo + "\" ahora?")) {
                 return new PantallaMarcas(e, sesion).crear(prefijo, EnumSet.of(tipo));
             }
+            if (intento == Lector.INTENTOS) {
+                lector.exigirSeguir("Marca");
+                intento = 0;
+            }
         }
-        throw new OperacionCancelada("Se canceló el registro: demasiados intentos en «Marca».");
     }
 
     /**

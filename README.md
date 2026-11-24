@@ -6,7 +6,7 @@ unidad, registra las ventas, genera reportes para los directivos y restringe las
 usuario según su rol.
 
 [![Java 25](https://img.shields.io/badge/Java-SE%2025-e76f00)](https://openjdk.org/projects/jdk/25/)
-![pruebas: 87](https://img.shields.io/badge/pruebas-87%20en%20verde-16a34a)
+![pruebas: 89](https://img.shields.io/badge/pruebas-89%20en%20verde-16a34a)
 ![dependencias: 0](https://img.shields.io/badge/dependencias-0%20(solo%20el%20JDK)-16a34a)
 [![release](https://img.shields.io/github/v/release/BalbianoLuciano/tfi-concesionaria-multimarca?label=release&color=2563eb)](https://github.com/BalbianoLuciano/tfi-concesionaria-multimarca/releases/latest)
 
@@ -40,7 +40,7 @@ A partir del código fuente:
 
 ```bash
 ./build.sh run              # compila con javac --release 25, arma el .jar y lo ejecuta
-./build.sh test             # 87 pruebas con un runner propio, sin JUnit
+./build.sh test             # 89 pruebas con un runner propio, sin JUnit
 ./build.sh test PR-PRECIO   # un solo grupo
 ./build.sh docs             # JavaDoc en dist/javadoc/
 ./build.sh bench            # mediciones de rendimiento con 10.000 vehículos
@@ -204,6 +204,8 @@ antes de la integración:
 | [#7](../../pull/7) · [#8](../../pull/8) · [#9](../../pull/9) | Rediseño de la interfaz en tres partes | 87 |
 | [#10](../../pull/10) | Informe de entrega | 87 |
 | [#11](../../pull/11) · [#12](../../pull/12) | README y notas del release | 87 |
+| [#13](../../pull/13) | Selección de vehículos por búsqueda, sin códigos | 87 |
+| [#14](../../pull/14) | Tolerancia al error humano en el data-entry | 89 |
 
 Por tratarse de un trabajo individual, el autor cumplió todos los roles del proceso de revisión, como ilustra la siguiente imagen.
 

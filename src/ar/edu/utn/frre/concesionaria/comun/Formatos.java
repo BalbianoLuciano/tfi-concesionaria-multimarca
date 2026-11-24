@@ -127,14 +127,16 @@ public final class Formatos {
 
     /**
      * Lee un número entero que puede venir con puntos de miles: "84.500" → 84500.
-     * También acepta "84500" y "84 500".
+     * También acepta "84500", "84 500" y el número seguido de su unidad, como lo escribe una
+     * persona: "85.000 km", "190cc", "4 puertas" (SPEC §3, tolerancia al error humano).
      *
      * @param texto el texto escrito por el usuario
      * @return el número
      * @throws NumberFormatException si no es un entero
      */
     public static long leerEntero(String texto) {
-        String limpio = Textos.limpiar(texto).replace(" ", "");
+        String limpio = Textos.limpiar(texto).replace(" ", "")
+                .replaceFirst("^(-?[\\d.]+)\\p{L}+\\.?$", "$1");
         if (!limpio.matches("-?\\d{1,3}(\\.\\d{3})+|-?\\d+")) {
             throw new NumberFormatException(texto);
         }

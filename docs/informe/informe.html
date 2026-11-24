@@ -168,7 +168,7 @@
     <tr><th>El proyecto en números</th><th class="num">Cantidad</th></tr>
     <tr><td>Clases e interfaces del sistema (<code>src/</code>)</td><td class="num">89</td></tr>
     <tr><td>Líneas de código del sistema</td><td class="num">9.486</td></tr>
-    <tr><td>Pruebas automáticas, en 10 grupos</td><td class="num">87</td></tr>
+    <tr><td>Pruebas automáticas, en 10 grupos</td><td class="num">89</td></tr>
     <tr><td>Casos de uso especificados e implementados</td><td class="num">17</td></tr>
     <tr><td>Pull requests revisados y mergeados en GitHub</td><td class="num">9</td></tr>
   </table>
@@ -182,7 +182,7 @@
     <tr><td><code>java -Dconcesionaria.dir=/tmp/demo -jar concesionaria.jar</code></td><td>Usa otra carpeta de datos (útil para probar desde cero)</td></tr>
     <tr><td><code>java -jar concesionaria.jar --sin-color</code></td><td>Sin códigos de color (también con la variable <code>NO_COLOR</code>)</td></tr>
     <tr><td><code>./build.sh</code> · <code>./build.sh run</code></td><td>Compila con <code>javac --release 25</code> y arma el <code>.jar</code>; <code>run</code> además lo ejecuta</td></tr>
-    <tr><td><code>./build.sh test</code></td><td>Corre las 87 pruebas automáticas</td></tr>
+    <tr><td><code>./build.sh test</code></td><td>Corre las 89 pruebas automáticas</td></tr>
     <tr><td><code>./build.sh docs</code> · <code>./build.sh bench</code></td><td>Genera el JavaDoc · mide el rendimiento</td></tr>
   </table>
   <p>En el primer arranque se crea el usuario administrador y se ofrece cargar datos de
@@ -274,9 +274,14 @@
       errores, amarillo para los avisos y cian para los títulos. Nunca es la única señal
       (✓, ✗, !), y se apaga con <code>--sin-color</code>, con <code>NO_COLOR</code> o si la
       salida no es una terminal.</li>
-    <li><b>Controles de data-entry</b>: cada campo se valida al momento y se vuelve a pedir
-      hasta 3 veces con un mensaje que explica cómo corregirlo; <code>:q</code> cancela; en
-      las modificaciones se muestra el valor actual y Enter lo mantiene.</li>
+    <li><b>Controles de data-entry</b>: cada campo se valida al momento con un mensaje que
+      explica cómo corregirlo; tras 3 errores se pregunta si seguir, sin perder lo ya cargado;
+      <code>:q</code> cancela; en las modificaciones se muestra el valor actual y Enter lo
+      mantiene.</li>
+    <li><b>Tolerancia al error humano</b>: las listas aceptan el número o el nombre
+      ("auto", "sedan"), los números admiten su unidad ("85.000 km"), las patentes admiten
+      espacios, guiones o puntos, y una marca mal escrita ("toyta") se corrige con una
+      sugerencia en lugar de crear un duplicado.</li>
     <li><b>Selección sin códigos</b>: para ver una ficha, cotizar, modificar, dar de baja o
       vender, se escribe parte de la marca, el modelo o la patente y se elige de una tabla
       numerada; Enter muestra todos los candidatos.</li>
@@ -670,6 +675,7 @@
     <tr><td>#5</td><td>Consola por rol y <code>App</code></td><td class="num">87</td></tr>
     <tr><td>#6</td><td>Medición de rendimiento, optimización y documentación</td><td class="num">87</td></tr>
     <tr><td>#7 a #9</td><td>Rediseño de la interfaz: esqueleto común, formularios por pasos, resumen por rol</td><td class="num">87</td></tr>
+    <tr><td>#13 y #14</td><td>Selección de vehículos por búsqueda y tolerancia al error humano</td><td class="num">89</td></tr>
   </table>
   <p>Los commits siguen un formato fijo (<code>tipo(ámbito): descripción</code>) con un
   cuerpo que explica por qué y para qué. La versión entregada está publicada como release
