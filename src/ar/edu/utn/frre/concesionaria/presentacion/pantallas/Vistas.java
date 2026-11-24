@@ -10,6 +10,7 @@ import ar.edu.utn.frre.concesionaria.modelo.Vehiculo;
 import ar.edu.utn.frre.concesionaria.modelo.Venta;
 import ar.edu.utn.frre.concesionaria.presentacion.consola.Estilo;
 import ar.edu.utn.frre.concesionaria.presentacion.consola.Tabla;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,22 @@ final class Vistas {
      * @return la tabla, para agregarle filas o mostrarla
      */
     static Tabla tablaStock(List<Vehiculo> lista, Estilo estilo, boolean conSituacion) {
+        return tablaStock(lista, estilo, conSituacion, null);
+    }
+
+    /**
+     * Tabla de stock agrupada por tipo (SPEC §5), con un subtítulo por grupo que dice cuántas
+     * unidades hay y cuánto valen. La lista tiene que venir ordenada por tipo.
+     *
+     * @param lista        los vehículos de la página
+     * @param estilo       con o sin color
+     * @param conSituacion si agrega la columna de situación
+     * @param todos        todos los vehículos del listado, para los totales de cada grupo, o
+     *                     {@code null} para no agrupar
+     * @return la tabla
+     */
+    static Tabla tablaStock(List<Vehiculo> lista, Estilo estilo, boolean conSituacion,
+            List<Vehiculo> todos) {
         Tabla tabla = new Tabla().fija("Código").texto("Marca").texto("Modelo").numero("Año")
                 .fija("Estado").numero("Km").texto("Detalle");
         if (conSituacion) {
@@ -41,7 +58,12 @@ final class Vistas {
         }
         tabla.numero("Precio final");
         LocalDate hoy = Reloj.hoy();
+        TipoVehiculo grupoActual = null;
         for (Vehiculo v : lista) {
+            if (todos != null && v.getTipo() != grupoActual) {
+                grupoActual = v.getTipo();
+                tabla.grupo(subtitulo(grupoActual, todos, hoy, estilo));
+            }
             List<String> celdas = new ArrayList<>(List.of(v.getCodigo(), v.getMarca().getNombre(),
                     v.getModelo(), String.valueOf(v.getAnio()), estado(v.getEstado(), estilo),
                     v.getEstado() == Estado.NUEVO ? "—" : Formatos.miles(v.getKilometraje()),
@@ -53,6 +75,44 @@ final class Vistas {
             tabla.fila(celdas.toArray(new String[0]));
         }
         return tabla;
+    }
+
+    private static String subtitulo(TipoVehiculo tipo, List<Vehiculo> todos, LocalDate hoy,
+            Estilo estilo) {
+        List<Vehiculo> delTipo = todos.stream().filter(v -> v.getTipo() == tipo).toList();
+        BigDecimal valor = delTipo.stream().map(v -> v.calcularPrecioFinal(hoy))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        String plural = tipo.getPlural();
+        return estilo.titulo(Character.toUpperCase(plural.charAt(0)) + plural.substring(1))
+                + estilo.tenue(" · " + delTipo.size() + (delTipo.size() == 1 ? " unidad"
+                : " unidades") + " · " + Formatos.moneda(valor));
+    }
+
+    /**
+     * Tarjetas de resumen una al lado de la otra: título tenue, valor en negrita y detalle.
+     *
+     * @param tarjetas cada una con {título, valor, detalle}
+     * @param estilo   con o sin color
+     * @param ancho    ancho de cada tarjeta
+     * @return las tres líneas
+     */
+    static List<String> tarjetas(List<String[]> tarjetas, Estilo estilo, int ancho) {
+        StringBuilder[] l = {new StringBuilder("   "), new StringBuilder("   "),
+                new StringBuilder("   ")};
+        for (String[] tarjeta : tarjetas) {
+            l[0].append(relleno(estilo.tenue(tarjeta[0]), ancho));
+            l[1].append(relleno(estilo.negrita(tarjeta[1]), ancho));
+            l[2].append(relleno(estilo.tenue(tarjeta[2]), ancho));
+        }
+        List<String> salida = new ArrayList<>();
+        for (StringBuilder b : l) {
+            salida.add(b.toString().stripTrailing());
+        }
+        return salida;
+    }
+
+    private static String relleno(String texto, int ancho) {
+        return texto + " ".repeat(Math.max(2, ancho - Estilo.largoVisible(texto)));
     }
 
     /**

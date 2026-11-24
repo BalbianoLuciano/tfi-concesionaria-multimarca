@@ -1,7 +1,18 @@
 package ar.edu.utn.frre.concesionaria.presentacion.pantallas;
 
+import ar.edu.utn.frre.concesionaria.comun.Formatos;
+import ar.edu.utn.frre.concesionaria.comun.Reloj;
+import ar.edu.utn.frre.concesionaria.excepciones.ConcesionariaException;
+import ar.edu.utn.frre.concesionaria.modelo.Estado;
 import ar.edu.utn.frre.concesionaria.modelo.Permiso;
+import ar.edu.utn.frre.concesionaria.modelo.Vehiculo;
+import ar.edu.utn.frre.concesionaria.modelo.Venta;
+import ar.edu.utn.frre.concesionaria.negocio.FiltroVehiculos;
+import ar.edu.utn.frre.concesionaria.negocio.OrdenVehiculos;
+import ar.edu.utn.frre.concesionaria.negocio.ServicioVentas;
 import ar.edu.utn.frre.concesionaria.negocio.Sesion;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +46,11 @@ public final class MenuPrincipal extends Pantalla {
     public Salida mostrar() {
         while (true) {
             cabecera("", "Hola, " + sesion.getUsuario().getNombreCompleto() + ".");
+            List<String[]> resumen = resumen();
+            if (!resumen.isEmpty()) {
+                t.lineas(Vistas.tarjetas(resumen, estilo, 30));
+                t.blanco();
+            }
 
             List<String> teclas = new ArrayList<>();
             List<Runnable> acciones = new ArrayList<>();
@@ -106,6 +122,44 @@ public final class MenuPrincipal extends Pantalla {
             }
             acciones.get(Integer.parseInt(elegida) - 1).run();
         }
+    }
+
+    /**
+     * Tarjetas del inicio según lo que el rol puede ver (SPEC §5). Si un dato no se puede
+     * calcular, esa tarjeta no aparece.
+     */
+    private List<String[]> resumen() {
+        List<String[]> tarjetas = new ArrayList<>();
+        LocalDate hoy = Reloj.hoy();
+        try {
+            List<Vehiculo> stock = e.vehiculos.listar(sesion, new FiltroVehiculos(),
+                    OrdenVehiculos.TIPO_Y_MARCA);
+            long nuevos = stock.stream().filter(v -> v.getEstado() == Estado.NUEVO).count();
+            tarjetas.add(new String[]{"Stock disponible", stock.size() + " vehículos",
+                    "0 km: " + nuevos + " · usados: " + (stock.size() - nuevos)});
+        } catch (ConcesionariaException ex) {
+            // Sin permiso para ver el stock: no se muestra la tarjeta.
+        }
+        try {
+            List<Venta> delMes = e.ventas.historial(sesion, hoy.withDayOfMonth(1), hoy, null);
+            boolean todas = sesion.puede(Permiso.VER_VENTAS);
+            tarjetas.add(new String[]{(todas ? "Ventas de " : "Tus ventas de ")
+                    + Formatos.mes(YearMonth.from(hoy)),
+                    delMes.size() + (delMes.size() == 1 ? " venta" : " ventas"),
+                    Formatos.moneda(ServicioVentas.total(delMes))});
+        } catch (ConcesionariaException ex) {
+            // Sin permiso para ver ventas.
+        }
+        if (sesion.puede(Permiso.VER_REPORTES)) {
+            try {
+                tarjetas.add(new String[]{"Valor del stock",
+                        Formatos.moneda(e.reportes.valorizacion(sesion).getSumaFinal()),
+                        "a precio final de hoy"});
+            } catch (ConcesionariaException ex) {
+                // No debería pasar: ya se verificó el permiso.
+            }
+        }
+        return tarjetas;
     }
 
     private static void seccionMenu(List<String[]> filas, String nombre) {

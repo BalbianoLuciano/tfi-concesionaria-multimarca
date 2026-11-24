@@ -25,6 +25,8 @@ public final class Tabla {
     private final List<Alineacion> alineaciones = new ArrayList<>();
     private final List<Boolean> recortables = new ArrayList<>();
     private final List<String[]> filas = new ArrayList<>();
+    /** Subtítulo de grupo que va antes de la fila con ese índice. */
+    private final java.util.Map<Integer, String> grupos = new java.util.HashMap<>();
 
     /**
      * Agrega una columna de texto que se puede recortar si falta espacio.
@@ -72,6 +74,16 @@ public final class Tabla {
         filas.add(celdas);
     }
 
+    /**
+     * Empieza un grupo: las filas que se agreguen después van debajo de este subtítulo. No
+     * cuenta para el ancho de las columnas.
+     *
+     * @param titulo el subtítulo ("Automóviles · 4 unidades · $ 75.972.000"), puede traer color
+     */
+    public void grupo(String titulo) {
+        grupos.put(filas.size(), titulo);
+    }
+
     /** @return {@code true} si no tiene filas */
     public boolean estaVacia() {
         return filas.isEmpty();
@@ -103,7 +115,14 @@ public final class Tabla {
         }
         salida.add(estilo.negrita(enc.toString()));
         salida.add(" " + estilo.tenue("─".repeat(Math.max(0, total(anchos)))));
-        for (String[] f : filas) {
+        for (int i = 0; i < filas.size(); i++) {
+            String[] f = filas.get(i);
+            if (grupos.containsKey(i)) {
+                if (i > 0) {
+                    salida.add("");
+                }
+                salida.add(" " + grupos.get(i));
+            }
             StringBuilder linea = new StringBuilder(" ");
             for (int c = 0; c < n; c++) {
                 String valor = celda(f, c);
