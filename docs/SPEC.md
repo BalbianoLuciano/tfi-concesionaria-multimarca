@@ -226,30 +226,64 @@ La consigna pide énfasis en la interacción con el usuario, y el profesor advir
 historial del proyecto (menú, stock, alta con errores y reporte).
 
 ### Estructura de cada pantalla
-```
- CONCESIONARIA MULTIMARCA                    lbalbiano · Vendedor · mié 18/11/2026
- Inicio › Vehículos › Registrar
- ─────────────────────────────────────────────────────────────────────────────────
- (contenido)
 
- 0 Volver · Enter confirma
- Opción ›
+Todas las pantallas tienen el mismo esqueleto, así el usuario siempre sabe dónde mirar:
+
 ```
-- **Encabezado fijo:** nombre del sistema, usuario, rol y fecha.
-- **Ruta de navegación** ("Inicio › Vehículos › Registrar") para saber dónde se está.
-- **Pie con las teclas** disponibles en esa pantalla.
-- La pantalla se limpia entre menús. Si la terminal no lo soporta, se imprime un separador.
+ CONCESIONARIA MULTIMARCA                          admin · Administrador · mié 18/11/2026
+ ─────────────────────────────────────────────────────────────────────────────────────────
+ VEHÍCULOS                                                          Inicio › Vehículos
+ 10 disponibles · 0 km: 4 · usados: 6
+
+   Consultar
+     1  Listar stock          tabla con filtros, orden y páginas
+     2  Buscar                por código, patente, marca o modelo
+
+   Gestionar
+     5  Registrar vehículo    alta paso a paso
+
+     0  Volver a Inicio
+ ─────────────────────────────────────────────────────────────────────────────────────────
+ Elegí una opción ›
+```
+
+1. **Encabezado fijo:** el sistema, el usuario, el rol y la fecha, y una línea debajo.
+2. **Título de la pantalla** en mayúsculas a la izquierda y la **ruta** ("Inicio › Vehículos")
+   a la derecha.
+3. **Línea de contexto** opcional, en tenue, con datos de esa sección (cuántos vehículos hay,
+   cuántas marcas activas).
+4. **Opciones** con el número en negrita, la etiqueta y una descripción corta en tenue,
+   agrupadas en **secciones** cuando hay más de cuatro.
+5. **Las teclas de salida** (`0`, `C`) van en la misma columna que las demás opciones,
+   separadas por una línea en blanco, y dicen a dónde llevan: "Volver a Vehículos",
+   "Cerrar sesión", "Salir del programa".
+6. **Pie fijo:** una línea y debajo el prompt o las teclas de esa pantalla.
+7. **Cada acción abre su propia pantalla**, con su título y su ruta ("Inicio › Vehículos ›
+   Buscar"); el resultado nunca se imprime debajo del menú anterior.
+8. La pantalla se limpia entre menús. Si la terminal no lo soporta, se imprime un separador.
+
+### Tipos de mensaje
+
+| Tipo | Señal | Color | Uso |
+|---|---|---|---|
+| Éxito | `✓` | verde | La operación se hizo |
+| Error | `✗` | rojo | Algo no se pudo hacer; el texto dice cómo corregirlo |
+| Aviso | `!` | amarillo | Algo para tener en cuenta antes de seguir |
+| Información | `·` | tenue | Ayuda o dato secundario |
+| Prompt | `›` | negrita | Lo que se le pide al usuario |
+
+Cada mensaje de éxito o de error va separado del contenido por una línea en blanco.
 
 ### Detalles
 - **Tablas:** columnas calculadas según el contenido, números alineados a la derecha,
   separador de miles argentino (`$ 22.850.920`, `112.900 km`) y una sola línea de borde.
-- **Color con significado, nunca de adorno:** cian para los títulos, amarillo para el
-  prompt, verde para el éxito y los 0 km, rojo para los errores y tenue para la información
-  secundaria. Nada más.
+- **Color con significado, nunca de adorno:** cian para los títulos, verde para el éxito y
+  los 0 km, rojo para los errores, amarillo para los avisos y tenue para la información
+  secundaria. Nada más (ver "Tipos de mensaje").
 - **Sin color si no corresponde:** si está definida la variable `NO_COLOR`, si se pasa
   `--sin-color` o si la salida no es una terminal (por ejemplo, se redirige a un archivo).
   El sistema tiene que verse bien sin color: el color nunca es la única forma de transmitir
-  algo (los errores llevan además `✗`, los éxitos `✓`).
+  algo (los errores llevan además `✗`, los éxitos `✓` y los avisos `!`).
 - **Ancho:** usa la variable `COLUMNS` si existe, con un mínimo de 80 columnas. Las columnas
   de texto largas se recortan con `…`.
 - **Gráficos de barras** con caracteres (`█` y `░`), siempre con el número al lado.
