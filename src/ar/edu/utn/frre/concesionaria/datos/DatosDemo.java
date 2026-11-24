@@ -9,6 +9,7 @@ import ar.edu.utn.frre.concesionaria.modelo.CarroceriaCamioneta;
 import ar.edu.utn.frre.concesionaria.modelo.Color;
 import ar.edu.utn.frre.concesionaria.modelo.Estado;
 import ar.edu.utn.frre.concesionaria.modelo.Marca;
+import ar.edu.utn.frre.concesionaria.modelo.Modelo;
 import ar.edu.utn.frre.concesionaria.modelo.Motocicleta;
 import ar.edu.utn.frre.concesionaria.modelo.TipoMotocicleta;
 import ar.edu.utn.frre.concesionaria.modelo.TipoVehiculo;
@@ -50,6 +51,25 @@ public class DatosDemo implements CargadorDemo {
         Marca honda = marca("Honda", "Japón",
                 EnumSet.of(TipoVehiculo.AUTOMOVIL, TipoVehiculo.MOTOCICLETA));
         Marca yamaha = marca("Yamaha", "Japón", EnumSet.of(TipoVehiculo.MOTOCICLETA));
+
+        // Catálogo de modelos (CU-12): los del stock de ejemplo y otros habituales en el país.
+        TipoVehiculo auto = TipoVehiculo.AUTOMOVIL;
+        TipoVehiculo camioneta = TipoVehiculo.CAMIONETA;
+        TipoVehiculo moto = TipoVehiculo.MOTOCICLETA;
+        modelos(toyota, auto, "Corolla", "Etios", "Yaris");
+        modelos(toyota, camioneta, "Hilux", "SW4", "Corolla Cross", "RAV4");
+        modelos(ford, auto, "Ka", "Fiesta", "Focus", "Mustang");
+        modelos(ford, camioneta, "Ranger", "Territory", "Bronco", "Maverick");
+        modelos(volkswagen, auto, "Gol Trend", "Polo", "Virtus", "Vento");
+        modelos(volkswagen, camioneta, "Amarok", "Taos", "T-Cross", "Nivus");
+        modelos(chevrolet, auto, "Onix", "Cruze", "Prisma");
+        modelos(chevrolet, camioneta, "Tracker", "S10", "Equinox");
+        modelos(fiat, auto, "Cronos", "Argo", "Mobi", "Uno", "Pulse");
+        modelos(peugeot, auto, "208", "308", "408");
+        modelos(peugeot, camioneta, "2008", "3008", "Partner");
+        modelos(honda, auto, "Civic", "City", "Fit");
+        modelos(honda, moto, "CB 500F", "CB 190R", "Wave", "XR 150L", "Navi");
+        modelos(yamaha, moto, "FZ", "YBR 125", "XTZ 250", "MT-03");
 
         int anio = Reloj.anioActual();
         List<Vehiculo> lista = List.of(
@@ -94,6 +114,16 @@ public class DatosDemo implements CargadorDemo {
         m.setId(marcas.siguienteId());
         marcas.guardar(m);
         return m;
+    }
+
+    /** Agrega al catálogo de la marca los modelos que todavía no tiene. */
+    private static void modelos(Marca marca, TipoVehiculo tipo, String... nombres)
+            throws ConcesionariaException {
+        for (String nombre : nombres) {
+            if (marca.buscarModelo(nombre).isEmpty()) {
+                marca.agregarModelo(new Modelo(nombre, tipo));
+            }
+        }
     }
 
     private static BigDecimal pesos(long monto) {

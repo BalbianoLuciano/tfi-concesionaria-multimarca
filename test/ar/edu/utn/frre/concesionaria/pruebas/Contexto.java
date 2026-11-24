@@ -65,9 +65,10 @@ public final class Contexto {
     public final RepositorioUsuariosMemoria repoUsuarios = new RepositorioUsuariosMemoria(almacen);
     public final ServicioAutenticacion autenticacion = new ServicioAutenticacion(repoUsuarios,
             persistencia, new DatosDemo(repoMarcas, repoVehiculos));
-    public final ServicioVehiculos vehiculos = new ServicioVehiculos(repoVehiculos, persistencia);
-    public final ServicioVentas ventas = new ServicioVentas(repoVehiculos, repoVentas, persistencia);
     public final ServicioMarcas marcas = new ServicioMarcas(repoMarcas, repoVehiculos, persistencia);
+    public final ServicioVehiculos vehiculos = new ServicioVehiculos(repoVehiculos, marcas,
+            persistencia);
+    public final ServicioVentas ventas = new ServicioVentas(repoVehiculos, repoVentas, persistencia);
     public final ServicioReportes reportes = new ServicioReportes(repoVehiculos, repoVentas);
     public final ServicioArchivos archivos;
 

@@ -21,6 +21,7 @@ import ar.edu.utn.frre.concesionaria.modelo.Vehiculo;
 import ar.edu.utn.frre.concesionaria.negocio.FiltroVehiculos;
 import ar.edu.utn.frre.concesionaria.negocio.OrdenVehiculos;
 import ar.edu.utn.frre.concesionaria.negocio.ServicioAutenticacion;
+import ar.edu.utn.frre.concesionaria.negocio.ServicioMarcas;
 import ar.edu.utn.frre.concesionaria.negocio.ServicioVehiculos;
 import ar.edu.utn.frre.concesionaria.negocio.Sesion;
 import java.math.BigDecimal;
@@ -100,7 +101,8 @@ public final class MedicionRendimiento {
         ServicioAutenticacion auth = new ServicioAutenticacion(
                 new RepositorioUsuariosMemoria(almacen), archivo, () -> { });
         Sesion sesion = auth.crearAdministradorInicial("bench", "Bench Medicion", "bench12345");
-        ServicioVehiculos servicio = new ServicioVehiculos(vehiculos, archivo);
+        ServicioVehiculos servicio = new ServicioVehiculos(vehiculos,
+                new ServicioMarcas(marcas, vehiculos, archivo), archivo);
 
         String n = Formatos.miles(cantidad);
         imprimir("Guardar con " + n + " vehículos", "< 500 ms", medir(archivo::guardar));

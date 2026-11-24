@@ -1,5 +1,7 @@
 package ar.edu.utn.frre.concesionaria.pruebas;
 
+import ar.edu.utn.frre.concesionaria.excepciones.AccesoDenegadoException;
+import ar.edu.utn.frre.concesionaria.excepciones.DatoInvalidoException;
 import ar.edu.utn.frre.concesionaria.excepciones.MarcaDuplicadaException;
 import ar.edu.utn.frre.concesionaria.excepciones.MarcaEnUsoException;
 import ar.edu.utn.frre.concesionaria.excepciones.ReglaNegocioException;
@@ -8,9 +10,11 @@ import ar.edu.utn.frre.concesionaria.modelo.CarroceriaAutomovil;
 import ar.edu.utn.frre.concesionaria.modelo.Color;
 import ar.edu.utn.frre.concesionaria.modelo.Estado;
 import ar.edu.utn.frre.concesionaria.modelo.Marca;
+import ar.edu.utn.frre.concesionaria.modelo.Modelo;
 import ar.edu.utn.frre.concesionaria.modelo.TipoVehiculo;
 import java.math.BigDecimal;
 import java.util.EnumSet;
+import java.util.List;
 
 /**
  * PR-MARCA: normalización, duplicados, marcas parecidas y marcas en uso (CU-12).
@@ -78,6 +82,55 @@ public final class PruebasMarca implements GrupoPruebas {
             Marca toyota = c.repoMarcas.buscarPorNombre("Toyota").get();
             Verificar.lanza(MarcaEnUsoException.class, () -> c.marcas.modificar(c.admin,
                     toyota.getId(), "Japón", EnumSet.of(TipoVehiculo.AUTOMOVIL)));
+        });
+        r.prueba("PR-MARCA-09", "catálogo: alta normalizada, sin duplicados ni tipos ajenos", () -> {
+            Contexto c = new Contexto();
+            Marca toyota = c.repoMarcas.buscarPorNombre("Toyota").get();
+            Modelo nuevo = c.marcas.agregarModelo(c.admin, toyota, "prius", TipoVehiculo.AUTOMOVIL);
+            Verificar.igual("Prius", nuevo.getNombre());
+            Verificar.lanza(ReglaNegocioException.class, () -> c.marcas.agregarModelo(c.admin,
+                    toyota, " COROLLA ", TipoVehiculo.AUTOMOVIL));
+            Verificar.lanza(ReglaNegocioException.class, () -> c.marcas.agregarModelo(c.admin,
+                    toyota, "PCX", TipoVehiculo.MOTOCICLETA));
+            Verificar.lanza(DatoInvalidoException.class, () -> c.marcas.agregarModelo(c.admin,
+                    toyota, "C", TipoVehiculo.AUTOMOVIL));
+            Verificar.lanza(AccesoDenegadoException.class, () -> c.marcas.agregarModelo(
+                    c.vendedor, toyota, "Supra", TipoVehiculo.AUTOMOVIL));
+        });
+        r.prueba("PR-MARCA-10", "catálogo: búsqueda por comienzo y por parecido", () -> {
+            Contexto c = new Contexto();
+            Marca toyota = c.repoMarcas.buscarPorNombre("Toyota").get();
+            Verificar.igual(List.of("Corolla"), c.marcas.modelosQueCoinciden(toyota,
+                    TipoVehiculo.AUTOMOVIL, "cor").stream().map(Modelo::getNombre).toList());
+            // "Corolla Cross" es camioneta: no aparece entre los automóviles
+            Verificar.igual(3, c.marcas.modelosQueCoinciden(toyota, TipoVehiculo.AUTOMOVIL,
+                    null).size());
+            Verificar.igual("Corolla", c.marcas.modelosParecidos(toyota, TipoVehiculo.AUTOMOVIL,
+                    "korollà").get(0).getNombre());
+            Verificar.igual("Corolla", c.marcas.modelosParecidos(toyota, TipoVehiculo.AUTOMOVIL,
+                    "korola").get(0).getNombre());
+        });
+        r.prueba("PR-MARCA-11", "no se registra un modelo fuera del catálogo", () -> {
+            Contexto c = new Contexto();
+            Marca toyota = c.repoMarcas.buscarPorNombre("Toyota").get();
+            Automovil a = new Automovil(Estado.NUEVO, toyota, "Korola", 2026, Color.BLANCO,
+                    new BigDecimal("30000000"), null, null, CarroceriaAutomovil.SEDAN, 4);
+            ReglaNegocioException e = Verificar.lanza(ReglaNegocioException.class,
+                    () -> c.vehiculos.registrar(c.admin, a));
+            Verificar.verdadero(e.getMessage().contains("¿Quisiste decir Corolla?"),
+                    e.getMessage());
+            a.setModelo("corolla");
+            Verificar.noLanza(() -> c.vehiculos.registrar(c.admin, a));
+        });
+        r.prueba("PR-MARCA-12", "un modelo en uso no se quita del catálogo", () -> {
+            Contexto c = new Contexto();
+            Marca toyota = c.repoMarcas.buscarPorNombre("Toyota").get();
+            Modelo hilux = toyota.buscarModelo("hilux").get();
+            Verificar.lanza(ReglaNegocioException.class,
+                    () -> c.marcas.quitarModelo(c.admin, toyota, hilux));
+            Modelo etios = toyota.buscarModelo("Etios").get();
+            c.marcas.quitarModelo(c.admin, toyota, etios);
+            Verificar.verdadero(toyota.buscarModelo("Etios").isEmpty(), "se quitó Etios");
         });
     }
 }

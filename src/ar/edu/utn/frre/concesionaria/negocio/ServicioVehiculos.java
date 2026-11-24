@@ -26,14 +26,18 @@ import java.util.Map;
 public class ServicioVehiculos extends ServicioBase {
 
     private final RepositorioVehiculos vehiculos;
+    private final ServicioMarcas catalogo;
 
     /**
      * @param vehiculos    repositorio de vehículos
+     * @param catalogo     marcas, para controlar que el modelo esté en su catálogo
      * @param persistencia guardado
      */
-    public ServicioVehiculos(RepositorioVehiculos vehiculos, Persistencia persistencia) {
+    public ServicioVehiculos(RepositorioVehiculos vehiculos, ServicioMarcas catalogo,
+            Persistencia persistencia) {
         super(persistencia);
         this.vehiculos = vehiculos;
+        this.catalogo = catalogo;
     }
 
     /**
@@ -70,6 +74,8 @@ public class ServicioVehiculos extends ServicioBase {
                     + " está desactivada. Reactivala en Marcas o elegí otra.");
         }
         exigirPatenteLibre(vehiculo.getPatente(), null);
+        catalogo.exigirModeloDelCatalogo(vehiculo.getMarca(), vehiculo.getTipo(),
+                vehiculo.getModelo());
     }
 
     /**
@@ -192,6 +198,8 @@ public class ServicioVehiculos extends ServicioBase {
         }
         modificado.validarCompleto();
         exigirPatenteLibre(modificado.getPatente(), modificado.getCodigo());
+        catalogo.exigirModeloDelCatalogo(modificado.getMarca(), modificado.getTipo(),
+                modificado.getModelo());
         vehiculos.guardar(modificado);
         guardarCambios();
     }

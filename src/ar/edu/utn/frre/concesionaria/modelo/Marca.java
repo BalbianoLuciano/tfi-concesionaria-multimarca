@@ -3,9 +3,12 @@ package ar.edu.utn.frre.concesionaria.modelo;
 import ar.edu.utn.frre.concesionaria.comun.Textos;
 import ar.edu.utn.frre.concesionaria.excepciones.DatoInvalidoException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,11 @@ public class Marca implements Identificable<Integer>, Serializable, Comparable<M
     private String paisOrigen;
     private Set<TipoVehiculo> tiposQueFabrica = EnumSet.noneOf(TipoVehiculo.class);
     private Boolean activa = Boolean.TRUE;
+    /**
+     * Catálogo de modelos (CU-12). Puede llegar en {@code null} al leer datos del esquema 1,
+     * que no lo tenían: por eso se accede siempre con {@link #catalogo()}.
+     */
+    private List<Modelo> modelos = new ArrayList<>();
     /**
      * Clave normalizada del nombre, calculada una vez. Es {@code transient}: no se guarda, se
      * recalcula al leer. Ordenar el stock la consulta miles de veces (ARQUITECTURA §7).
@@ -148,6 +156,58 @@ public class Marca implements Identificable<Integer>, Serializable, Comparable<M
     /** @param activa si se ofrece en las altas */
     public void setActiva(Boolean activa) {
         this.activa = activa;
+    }
+
+    /** @return la lista de modelos, creada si venía de un archivo del esquema 1 */
+    private List<Modelo> catalogo() {
+        if (modelos == null) {
+            modelos = new ArrayList<>();
+        }
+        return modelos;
+    }
+
+    /**
+     * @return todos los modelos del catálogo, en orden alfabético (sin modificar)
+     */
+    public List<Modelo> getModelos() {
+        return catalogo().stream().sorted().toList();
+    }
+
+    /**
+     * @param tipo un tipo de vehículo
+     * @return los modelos de ese tipo, en orden alfabético
+     */
+    public List<Modelo> modelosDe(TipoVehiculo tipo) {
+        return catalogo().stream().filter(m -> m.getTipo() == tipo).sorted().toList();
+    }
+
+    /**
+     * Busca un modelo por su nombre, sin importar mayúsculas, acentos ni espacios.
+     *
+     * @param nombre el nombre
+     * @return el modelo, si está en el catálogo
+     */
+    public Optional<Modelo> buscarModelo(String nombre) {
+        String clave = Textos.compacta(nombre == null ? "" : nombre);
+        return catalogo().stream().filter(m -> m.getClave().equals(clave)).findFirst();
+    }
+
+    /**
+     * Agrega un modelo al catálogo. Las reglas (que no se repita, que la marca fabrique el
+     * tipo) las controla {@code ServicioMarcas}, que es quien tiene el contexto.
+     *
+     * @param modelo el modelo
+     */
+    public void agregarModelo(Modelo modelo) {
+        catalogo().add(Objects.requireNonNull(modelo));
+    }
+
+    /**
+     * @param modelo el modelo a quitar
+     * @return {@code true} si estaba
+     */
+    public boolean quitarModelo(Modelo modelo) {
+        return catalogo().remove(modelo);
     }
 
     /**
