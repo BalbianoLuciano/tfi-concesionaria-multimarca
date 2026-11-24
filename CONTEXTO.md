@@ -78,7 +78,8 @@ se tomó la opción recomendada.
 - `./build.sh test`: 89 pruebas automáticas en verde. Plan manual PM-01 a PM-17 en SPEC §8.
 - `./build.sh bench`: resultados reales en ARQUITECTURA §7 (Apple M4, JVM 27).
 - `./build.sh docs`: JavaDoc sin errores.
-- Release `v1.0.0` publicado en GitHub con el `.jar` y su SHA-256.
+- Releases en GitHub con el `.jar` y su SHA-256: `v1.0.0` (entrega inicial) y `v1.1.0`
+  (selección de vehículos por búsqueda y tolerancia al error humano).
 - Informe de entrega: `docs/informe/informe.html`. El PDF se arma con
   `ALUMNO_DNI=... ALUMNO_LEGAJO=... docs/informe/generar.sh` en `dist/entrega/`; el DNI y el
   legajo no se versionan porque el repositorio es público.

@@ -1,58 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 827 506" width="827" height="506">
-<defs><clipPath id="v"><rect width="827" height="506" rx="11"/></clipPath></defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 827 812" width="827" height="812">
+<defs><clipPath id="v"><rect width="827" height="812" rx="11"/></clipPath></defs>
 <g clip-path="url(#v)">
-<rect width="827" height="506" fill="#15181d"/>
+<rect width="827" height="812" fill="#15181d"/>
 <rect width="827" height="38" fill="#262a30"/>
 <circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
 <text x="413.5" y="23.5" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" fill="#a9adb3" text-anchor="middle">java -jar concesionaria.jar</text>
 <line x1="0" y1="38" x2="827" y2="38" stroke="#000" stroke-opacity=".4"/>
 <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" xml:space="preserve">
-<text x="29.8" y="69" fill="#7d848e">Paso 2 de 4 ·</text>
-<text x="139.4" y="69" fill="#5ac8fa" font-weight="700">Datos generales</text>
-<text x="45.5" y="87" fill="#7d848e">Marca: escribí las primeras letras; solo aparecen las activas que fabrican motocicletas.</text>
-<text x="29.8" y="105" fill="#d6d9de" font-weight="700">Marca (primeras letras) ›</text>
-<text x="233.4" y="105" fill="#d6d9de">hon</text>
-<text x="29.8" y="123" fill="#7d848e">→ Honda</text>
-<text x="29.8" y="141" fill="#d6d9de" font-weight="700">Modelo ›</text>
-<text x="100.3" y="141" fill="#d6d9de">CB 190R</text>
-<text x="45.5" y="159" fill="#7d848e">Año entre 1990 y 2027.</text>
-<text x="29.8" y="177" fill="#d6d9de" font-weight="700">Año ›</text>
-<text x="76.8" y="177" fill="#d6d9de">dos mil</text>
-<text x="29.8" y="195" fill="#ff6b6b">✗ &quot;dos mil&quot; no es un número. Escribí el año con cuatro dígitos, por ejemplo 2019. Te quedan 2</text>
-<text x="45.5" y="213" fill="#ff6b6b">intentos.</text>
-<text x="29.8" y="231" fill="#d6d9de" font-weight="700">Año ›</text>
-<text x="76.8" y="231" fill="#d6d9de">2022</text>
-<text x="45.5" y="267" fill="#d6d9de">1</text>
-<text x="69.0" y="267" fill="#d6d9de">Blanco</text>
-<text x="139.4" y="267" fill="#d6d9de">2</text>
-<text x="162.9" y="267" fill="#d6d9de">Negro</text>
-<text x="233.4" y="267" fill="#d6d9de">3</text>
-<text x="256.9" y="267" fill="#d6d9de">Gris</text>
-<text x="45.5" y="285" fill="#d6d9de">4</text>
-<text x="69.0" y="285" fill="#d6d9de">Plata</text>
-<text x="139.4" y="285" fill="#d6d9de">5</text>
-<text x="162.9" y="285" fill="#d6d9de">Rojo</text>
-<text x="233.4" y="285" fill="#d6d9de">6</text>
-<text x="256.9" y="285" fill="#d6d9de">Azul</text>
-<text x="45.5" y="303" fill="#d6d9de">7</text>
-<text x="69.0" y="303" fill="#d6d9de">Verde</text>
-<text x="139.4" y="303" fill="#d6d9de">8</text>
-<text x="162.9" y="303" fill="#d6d9de">Bordó</text>
-<text x="233.4" y="303" fill="#d6d9de">9</text>
-<text x="256.9" y="303" fill="#d6d9de">Beige</text>
-<text x="29.8" y="321" fill="#d6d9de" font-weight="700">Color ›</text>
-<text x="92.5" y="321" fill="#d6d9de">4</text>
-<text x="45.5" y="339" fill="#7d848e">Precio de lista en pesos, sin depreciación ni patentamiento: el precio final se calcula solo.</text>
-<text x="29.8" y="357" fill="#d6d9de" font-weight="700">Precio de lista $ ›</text>
-<text x="186.4" y="357" fill="#d6d9de">4.200.000</text>
-<text x="29.8" y="393" fill="#7d848e">Paso 3 de 4 ·</text>
-<text x="139.4" y="393" fill="#5ac8fa" font-weight="700">Uso y patente</text>
-<text x="29.8" y="411" fill="#d6d9de" font-weight="700">Kilometraje ›</text>
-<text x="139.4" y="411" fill="#d6d9de">15000</text>
-<text x="45.5" y="429" fill="#7d848e">Formatos de patente: 123ABC o A123BCD.</text>
-<text x="29.8" y="447" fill="#d6d9de" font-weight="700">Patente ›</text>
-<text x="108.1" y="447" fill="#d6d9de">AB123CD</text>
-<text x="29.8" y="465" fill="#ff6b6b">✗ &quot;AB123CD&quot; no es una patente de moto. Formatos: 123ABC o A123BCD. Te quedan 2 intentos.</text>
-<text x="29.8" y="483" fill="#d6d9de" font-weight="700">Patente ›</text>
-<text x="108.1" y="483" fill="#d6d9de">123ABC</text>
+<text x="29.8" y="69" fill="#7d848e">Paso 1 de 4 ·</text>
+<text x="139.4" y="69" fill="#5ac8fa" font-weight="700">Tipo y estado</text>
+<text x="45.5" y="87" fill="#d6d9de">1</text>
+<text x="69.0" y="87" fill="#d6d9de">Automóvil</text>
+<text x="45.5" y="105" fill="#d6d9de">2</text>
+<text x="69.0" y="105" fill="#d6d9de">Camioneta</text>
+<text x="45.5" y="123" fill="#d6d9de">3</text>
+<text x="69.0" y="123" fill="#d6d9de">Motocicleta</text>
+<text x="29.8" y="141" fill="#d6d9de" font-weight="700">Tipo ›</text>
+<text x="84.6" y="141" fill="#d6d9de">moto</text>
+<text x="45.5" y="177" fill="#d6d9de">1</text>
+<text x="69.0" y="177" fill="#d6d9de">0 km</text>
+<text x="45.5" y="195" fill="#d6d9de">2</text>
+<text x="69.0" y="195" fill="#d6d9de">Usado</text>
+<text x="29.8" y="213" fill="#d6d9de" font-weight="700">Estado ›</text>
+<text x="100.3" y="213" fill="#d6d9de">usado</text>
+<text x="29.8" y="249" fill="#7d848e">Paso 2 de 4 ·</text>
+<text x="139.4" y="249" fill="#5ac8fa" font-weight="700">Datos generales</text>
+<text x="45.5" y="267" fill="#7d848e">Marca: escribí las primeras letras; solo aparecen las activas que fabrican motocicletas.</text>
+<text x="29.8" y="285" fill="#d6d9de" font-weight="700">Marca (primeras letras) ›</text>
+<text x="233.4" y="285" fill="#d6d9de">hoda</text>
+<text x="29.8" y="303" fill="#d6d9de" font-weight="700">¿Quisiste decir Honda? (s/n) ›</text>
+<text x="272.6" y="303" fill="#d6d9de">s</text>
+<text x="29.8" y="321" fill="#d6d9de" font-weight="700">Modelo ›</text>
+<text x="100.3" y="321" fill="#d6d9de">CB 190R</text>
+<text x="45.5" y="339" fill="#7d848e">Año entre 1990 y 2027.</text>
+<text x="29.8" y="357" fill="#d6d9de" font-weight="700">Año ›</text>
+<text x="76.8" y="357" fill="#d6d9de">dos mil</text>
+<text x="29.8" y="375" fill="#ff6b6b">✗ &quot;dos mil&quot; no es un número. Escribí el año con cuatro dígitos, por ejemplo 2019. Te quedan 2</text>
+<text x="45.5" y="393" fill="#ff6b6b">intentos.</text>
+<text x="29.8" y="411" fill="#d6d9de" font-weight="700">Año ›</text>
+<text x="76.8" y="411" fill="#d6d9de">2022</text>
+<text x="45.5" y="447" fill="#d6d9de">1</text>
+<text x="69.0" y="447" fill="#d6d9de">Blanco</text>
+<text x="139.4" y="447" fill="#d6d9de">2</text>
+<text x="162.9" y="447" fill="#d6d9de">Negro</text>
+<text x="233.4" y="447" fill="#d6d9de">3</text>
+<text x="256.9" y="447" fill="#d6d9de">Gris</text>
+<text x="45.5" y="465" fill="#d6d9de">4</text>
+<text x="69.0" y="465" fill="#d6d9de">Plata</text>
+<text x="139.4" y="465" fill="#d6d9de">5</text>
+<text x="162.9" y="465" fill="#d6d9de">Rojo</text>
+<text x="233.4" y="465" fill="#d6d9de">6</text>
+<text x="256.9" y="465" fill="#d6d9de">Azul</text>
+<text x="45.5" y="483" fill="#d6d9de">7</text>
+<text x="69.0" y="483" fill="#d6d9de">Verde</text>
+<text x="139.4" y="483" fill="#d6d9de">8</text>
+<text x="162.9" y="483" fill="#d6d9de">Bordó</text>
+<text x="233.4" y="483" fill="#d6d9de">9</text>
+<text x="256.9" y="483" fill="#d6d9de">Beige</text>
+<text x="29.8" y="501" fill="#d6d9de" font-weight="700">Color ›</text>
+<text x="92.5" y="501" fill="#d6d9de">azul</text>
+<text x="45.5" y="519" fill="#7d848e">Precio de lista en pesos, sin depreciación ni patentamiento: el precio final se calcula solo.</text>
+<text x="29.8" y="537" fill="#d6d9de" font-weight="700">Precio de lista $ ›</text>
+<text x="186.4" y="537" fill="#d6d9de">4.200.000</text>
+<text x="29.8" y="573" fill="#7d848e">Paso 3 de 4 ·</text>
+<text x="139.4" y="573" fill="#5ac8fa" font-weight="700">Uso y patente</text>
+<text x="29.8" y="591" fill="#d6d9de" font-weight="700">Kilometraje ›</text>
+<text x="139.4" y="591" fill="#d6d9de">15.000 km</text>
+<text x="45.5" y="609" fill="#7d848e">Formatos de patente: 123ABC o A123BCD.</text>
+<text x="29.8" y="627" fill="#d6d9de" font-weight="700">Patente ›</text>
+<text x="108.1" y="627" fill="#d6d9de">AB123CD</text>
+<text x="29.8" y="645" fill="#ff6b6b">✗ &quot;AB123CD&quot; no es una patente de moto. Formatos: 123ABC o A123BCD. Te quedan 2 intentos.</text>
+<text x="29.8" y="663" fill="#d6d9de" font-weight="700">Patente ›</text>
+<text x="108.1" y="663" fill="#d6d9de">123ABC</text>
+<text x="29.8" y="699" fill="#7d848e">Paso 4 de 4 ·</text>
+<text x="139.4" y="699" fill="#5ac8fa" font-weight="700">Datos de la moto</text>
+<text x="45.5" y="717" fill="#d6d9de">1</text>
+<text x="69.0" y="717" fill="#d6d9de">Calle</text>
+<text x="162.9" y="717" fill="#d6d9de">2</text>
+<text x="186.4" y="717" fill="#d6d9de">Naked</text>
+<text x="280.4" y="717" fill="#d6d9de">3</text>
+<text x="303.9" y="717" fill="#d6d9de">Deportiva</text>
+<text x="45.5" y="735" fill="#d6d9de">4</text>
+<text x="69.0" y="735" fill="#d6d9de">Touring</text>
+<text x="162.9" y="735" fill="#d6d9de">5</text>
+<text x="186.4" y="735" fill="#d6d9de">Enduro</text>
+<text x="280.4" y="735" fill="#d6d9de">6</text>
+<text x="303.9" y="735" fill="#d6d9de">Scooter</text>
+<text x="45.5" y="753" fill="#d6d9de">7</text>
+<text x="69.0" y="753" fill="#d6d9de">Custom</text>
+<text x="29.8" y="771" fill="#d6d9de" font-weight="700">Tipo de moto ›</text>
+<text x="147.3" y="771" fill="#d6d9de">naked</text>
+<text x="29.8" y="789" fill="#d6d9de" font-weight="700">Cilindrada (cc) ›</text>
+<text x="170.8" y="789" fill="#d6d9de">190cc</text>
 </g></g></svg>
