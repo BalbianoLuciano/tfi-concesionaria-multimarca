@@ -171,6 +171,7 @@ corrido, en lugar de exigir el formato exacto:
 | Patente | "ab 123 cd", "ab-123-cd", "AB.123.CD" | AB123CD |
 | Confirmación | s, si, sí, n, no, en mayúsculas o minúsculas | sí o no |
 | Marca mal escrita | "toyta" (sin ninguna marca que empiece así) | "¿Quisiste decir Toyota?" antes de ofrecer crear una marca nueva |
+| Modelo ya cargado | "hilux", "HILUX" o "Hilx" para una Toyota que ya tiene una Hilux | Se escribe igual que el existente ("Hilux"); ante un error de tipeo, "¿Quisiste decir Hilux?". La ayuda del campo lista los modelos ya cargados de esa marca |
 
 | Campo | Regla | Mensaje de ejemplo |
 |---|---|---|
@@ -181,7 +182,7 @@ corrido, en lugar de exigir el formato exacto:
 | Patente auto/camioneta | `AAA999` (1995–2016) o `AA999AA` (Mercosur) | "AB12CD" no es una patente válida. Formatos: ABC123 o AB123CD. |
 | Patente moto | `999AAA` (anterior) o `A999AAA` (Mercosur) | "AB123CD" no es una patente de moto. Formatos: 123ABC o A123BCD. |
 | Patente | Única en todo el stock (incluye vendidos y bajas) | La patente AB123CD ya está registrada en C-0002. |
-| Modelo | 1 a 40 caracteres: letras, números, espacio, `-` y `.` | El modelo admite letras, números, espacios, guiones y puntos. |
+| Modelo | 2 a 40 caracteres: letras, números, espacio, `-` y `.`. Si se escribe todo en minúsculas, se guarda con la inicial en mayúscula ("corolla" → "Corolla") | El modelo tiene que tener entre 2 y 40 caracteres, por ejemplo Corolla o C3. |
 | Precio de lista | Mayor a 0 y hasta 2.000.000.000. Acepta "38.000.000" o "38000000" | El precio tiene que ser mayor a $ 0. |
 | Puertas | 2 a 5 | Un automóvil tiene entre 2 y 5 puertas. |
 | Carga útil | 300 a 3.500 kg | La carga útil va de 300 a 3.500 kg. |
@@ -297,6 +298,10 @@ una línea en blanco. Los errores de un campo que se vuelve a preguntar van pega
   "Paso 2 de 4 · Datos generales".
 - **Ayuda antes del campo:** en tenue y con sangría, se explica el formato esperado antes de
   pedirlo ("Formatos de patente: ABC123 o AB123CD."), no recién después del error.
+- **Aire entre campos:** cada campo es un bloque separado del anterior por una línea en
+  blanco, con su ayuda o su lista de opciones pegada arriba del pedido. Los reintentos
+  después de un error van pegados al error, sin separación. La ayuda larga se parte en
+  renglones al ancho de la terminal, nunca se corta en el borde.
 - **Resumen antes de confirmar:** separado del formulario por una línea, con la ficha y el
   desglose del precio.
 - **Ficha en dos columnas:** "Vehículo" (tipo, detalle, marca, año, color) a la izquierda y
