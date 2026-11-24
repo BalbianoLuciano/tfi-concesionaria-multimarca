@@ -147,6 +147,28 @@ public final class Terminal {
     }
 
     /**
+     * Encabezado de un paso de un formulario: "Paso 2 de 4 · Datos generales".
+     *
+     * @param numero número de paso
+     * @param total  cantidad de pasos
+     * @param nombre qué se pide en este paso
+     */
+    public void paso(int numero, int total, String nombre) {
+        out.println();
+        out.println(" " + estilo.tenue("Paso " + numero + " de " + total + " ·") + " "
+                + estilo.titulo(nombre));
+    }
+
+    /**
+     * Ayuda de un campo, antes de pedirlo: tenue y con sangría.
+     *
+     * @param texto la ayuda ("Entre 1990 y 2027.")
+     */
+    public void ayuda(String texto) {
+        out.println("   " + estilo.tenue(texto));
+    }
+
+    /**
      * @param texto una línea
      */
     public void linea(String texto) {

@@ -84,24 +84,63 @@ final class Vistas {
     static List<String> ficha(Vehiculo v, Estilo estilo) {
         List<String> l = new ArrayList<>();
         String titulo = (v.getCodigo() == null ? "" : v.getCodigo() + "  ") + v.getDescripcion();
-        l.add(" " + estilo.titulo(titulo));
-        l.add(dato("Tipo", v.getTipo().getEtiqueta() + " · " + v.getDetalleTipo(), estilo));
-        l.add(dato("Estado", estado(v.getEstado(), estilo)
-                + (v.getEstado() == Estado.USADO ? " · " + Formatos.km(v.getKilometraje()) : ""),
-                estilo));
-        l.add(dato("Color", v.getColor().getEtiqueta(), estilo));
-        l.add(dato("Patente", v.getPatente() == null ? "sin patentar" : v.getPatente(), estilo));
-        l.add(dato("Marca", v.getMarca().getNombre() + " (" + v.getMarca().getPaisOrigen() + ")",
-                estilo));
+        String sit = v.getCodigo() == null ? "Sin registrar"
+                : v.getSituacion().getEtiqueta();
+        String marcaSit = v.getSituacion() == Situacion.DISPONIBLE && v.getCodigo() != null
+                ? estilo.verde(sit) : estilo.tenue(sit);
+        l.add(" " + estilo.titulo(titulo) + "  " + estilo.tenue("·") + " " + marcaSit);
+        l.add("");
+
+        List<String> izquierda = new ArrayList<>();
+        izquierda.add("   " + estilo.negrita("Vehículo"));
+        izquierda.add(dato("Tipo", v.getTipo().getEtiqueta(), estilo));
+        izquierda.add(dato("Detalle", v.getDetalleTipo(), estilo));
+        izquierda.add(dato("Marca", v.getMarca().getNombre() + " ("
+                + v.getMarca().getPaisOrigen() + ")", estilo));
+        izquierda.add(dato("Año", String.valueOf(v.getAnio()), estilo));
+        izquierda.add(dato("Color", v.getColor().getEtiqueta(), estilo));
+
+        List<String> derecha = new ArrayList<>();
+        derecha.add(estilo.negrita("Registro"));
+        derecha.add(datoCorto("Estado", estado(v.getEstado(), estilo), estilo));
+        derecha.add(datoCorto("Kilometraje", v.getEstado() == Estado.USADO
+                ? Formatos.km(v.getKilometraje()) : "—", estilo));
+        derecha.add(datoCorto("Patente", v.getPatente() == null ? estilo.tenue("sin patentar")
+                : v.getPatente(), estilo));
         if (v.getCodigo() != null) {
-            String sit = situacion(v.getSituacion(), estilo);
-            if (v.getSituacion() == Situacion.BAJA) {
-                sit += " desde el " + Formatos.fecha(v.getFechaBaja()) + ": " + v.getMotivoBaja();
-            }
-            l.add(dato("Situación", sit, estilo));
-            l.add(dato("Ingreso", Formatos.fecha(v.getFechaIngreso()), estilo));
+            derecha.add(datoCorto("Ingreso", Formatos.fecha(v.getFechaIngreso()), estilo));
+        }
+        l.addAll(columnas(izquierda, derecha, 46));
+        if (v.getSituacion() == Situacion.BAJA) {
+            l.add("");
+            l.add("   " + estilo.tenue("Dado de baja el " + Formatos.fecha(v.getFechaBaja())
+                    + ": " + v.getMotivoBaja()));
         }
         return l;
+    }
+
+    /**
+     * Pone dos bloques de líneas uno al lado del otro.
+     *
+     * @param izquierda    líneas de la columna izquierda
+     * @param derecha      líneas de la columna derecha
+     * @param anchoIzquierda ancho visible de la columna izquierda
+     * @return las líneas combinadas
+     */
+    static List<String> columnas(List<String> izquierda, List<String> derecha,
+            int anchoIzquierda) {
+        List<String> l = new ArrayList<>();
+        for (int i = 0; i < Math.max(izquierda.size(), derecha.size()); i++) {
+            String a = i < izquierda.size() ? izquierda.get(i) : "";
+            String b = i < derecha.size() ? derecha.get(i) : "";
+            int falta = Math.max(1, anchoIzquierda - Estilo.largoVisible(a));
+            l.add((a + " ".repeat(falta) + b).stripTrailing());
+        }
+        return l;
+    }
+
+    private static String datoCorto(String etiqueta, String valor, Estilo estilo) {
+        return estilo.tenue(String.format("%-13s", etiqueta)) + valor;
     }
 
     private static String dato(String etiqueta, String valor, Estilo estilo) {

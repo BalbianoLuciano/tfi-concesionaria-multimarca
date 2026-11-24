@@ -48,28 +48,30 @@ final class PantallaVentas extends Pantalla {
 
     private void vender() throws ConcesionariaException, OperacionCancelada {
         lector.operacion("la venta");
-        t.info("Escribí el código del vehículo o una búsqueda (marca, modelo, patente). :q cancela.");
+        t.info("Son 3 pasos. :q en cualquier campo cancela sin vender nada.");
+        t.paso(1, 3, "Vehículo");
+        t.ayuda("Escribí el código (c4, A-0001) o una búsqueda: marca, modelo o patente.");
         Vehiculo v = elegirDisponible();
         t.blanco();
-        t.titulo(v.getCodigo() + " · " + v.getDescripcion());
-        t.info(v.getTipo().getEtiqueta() + " · " + v.getDetalleTipo() + " · "
-                + v.getEstado().getEtiqueta());
+        t.lineas(Vistas.ficha(v, estilo));
         t.blanco();
         t.lineas(Vistas.desglose(v.desglosarPrecio(Reloj.hoy()), v.getTipo(), estilo));
-        t.blanco();
-        t.titulo("Comprador");
+
+        t.paso(2, 3, "Comprador");
+        t.ayuda("Nombre y apellido como figuran en el DNI; el DNI, con o sin puntos.");
         String nombre = lector.leer("Nombre y apellido",
                 n -> Comprador.validarNombre("Nombre y apellido", n));
         String dni = lector.leer("DNI", Comprador::validarDni);
         Comprador comprador = new Comprador(nombre, dni);
-        t.blanco();
+
+        t.paso(3, 3, "Confirmación");
+        t.ayuda("El precio queda congelado en la venta: si después cambia, la venta no cambia.");
         if (!lector.confirmar("¿Confirmar la venta de " + v.getCodigo() + " a " + nombre + " por "
                 + Formatos.moneda(v.calcularPrecioFinal(Reloj.hoy())) + "?")) {
             t.info("No se vendió nada.");
             return;
         }
         Venta venta = e.ventas.vender(sesion, v.getCodigo(), comprador);
-        t.blanco();
         t.exito("Venta registrada.");
         t.blanco();
         t.lineas(Vistas.comprobante(venta, estilo));
