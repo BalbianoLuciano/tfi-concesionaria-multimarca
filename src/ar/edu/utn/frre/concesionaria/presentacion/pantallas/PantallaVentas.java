@@ -8,6 +8,8 @@ import ar.edu.utn.frre.concesionaria.modelo.Comprador;
 import ar.edu.utn.frre.concesionaria.modelo.Permiso;
 import ar.edu.utn.frre.concesionaria.modelo.Vehiculo;
 import ar.edu.utn.frre.concesionaria.modelo.Venta;
+import ar.edu.utn.frre.concesionaria.negocio.FiltroVehiculos;
+import ar.edu.utn.frre.concesionaria.negocio.OrdenVehiculos;
 import ar.edu.utn.frre.concesionaria.negocio.ServicioVentas;
 import ar.edu.utn.frre.concesionaria.negocio.Sesion;
 import ar.edu.utn.frre.concesionaria.presentacion.consola.Lector;
@@ -50,7 +52,6 @@ final class PantallaVentas extends Pantalla {
         lector.operacion("la venta");
         t.info("Son 3 pasos. :q en cualquier campo cancela sin vender nada.");
         t.paso(1, 3, "Vehículo");
-        t.ayuda("Escribí el código (c4, A-0001) o una búsqueda: marca, modelo o patente.");
         Vehiculo v = elegirDisponible();
         t.blanco();
         t.lineas(Vistas.ficha(v, estilo));
@@ -77,28 +78,10 @@ final class PantallaVentas extends Pantalla {
         t.lineas(Vistas.comprobante(venta, estilo));
     }
 
-    /** Código directo, o búsqueda entre los disponibles. */
+    /** Elige entre los disponibles con el selector de SPEC §5. */
     private Vehiculo elegirDisponible() throws ConcesionariaException, OperacionCancelada {
-        List<Vehiculo> candidatos = lector.leer("Vehículo", texto -> {
-            List<Vehiculo> encontrados;
-            try {
-                encontrados = e.vehiculos.buscarTexto(sesion, texto).stream()
-                        .filter(Vehiculo::estaDisponible).toList();
-            } catch (ConcesionariaException ex) {
-                throw new DatoInvalidoException("Vehículo", texto, ex.getMessage());
-            }
-            if (encontrados.isEmpty()) {
-                throw new DatoInvalidoException("Vehículo", texto, "No hay vehículos disponibles"
-                        + " con \"" + texto + "\". Probá con el código o con la marca.");
-            }
-            return encontrados;
-        });
-        if (candidatos.size() == 1) {
-            return candidatos.get(0);
-        }
-        t.blanco();
-        return lector.elegir("Vehículo", candidatos, v -> v.getCodigo() + "  "
-                + v.getDescripcion() + "  " + Formatos.moneda(v.calcularPrecioFinal(Reloj.hoy())));
+        return elegirVehiculo(e.vehiculos.listar(sesion, new FiltroVehiculos(),
+                OrdenVehiculos.TIPO_Y_MARCA));
     }
 
     private void historial() throws ConcesionariaException, OperacionCancelada {

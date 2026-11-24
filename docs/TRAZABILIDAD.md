@@ -36,8 +36,8 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 |---|---|---|
 | CU-01 Primer arranque | `PantallaInicio` | `ServicioAutenticacion`, `DatosDemo` |
 | CU-02 Sesión | `PantallaInicio`, `MenuPrincipal` (cerrar sesión) | `ServicioAutenticacion`, `Sesion` |
-| CU-03 a CU-09 Vehículos | `PantallaVehiculos` | `ServicioVehiculos`, `FiltroVehiculos`, `OrdenVehiculos`; `ServicioMarcas.paraAlta` |
-| CU-10, CU-11 Ventas | `PantallaVentas` (comprobante en `Vistas`) | `ServicioVentas` |
+| CU-03 a CU-09 Vehículos | `PantallaVehiculos`; selector común en `Pantalla.elegirVehiculo` (SPEC §5) | `ServicioVehiculos`, `FiltroVehiculos`, `OrdenVehiculos`; `ServicioMarcas.paraAlta` |
+| CU-10, CU-11 Ventas | `PantallaVentas` (comprobante en `Vistas`; vehículo con `Pantalla.elegirVehiculo`) | `ServicioVentas` |
 | CU-12 Marcas | `PantallaMarcas` | `ServicioMarcas` |
 | CU-13, CU-16 Usuarios | `PantallaUsuarios` | `ServicioAutenticacion`, `Claves` |
 | CU-14 Reportes | `PantallaReportes` | `ServicioReportes` (calcula) + `ServicioArchivos` (exporta a .txt) |

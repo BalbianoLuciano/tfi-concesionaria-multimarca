@@ -8,15 +8,19 @@ import ar.edu.utn.frre.concesionaria.excepciones.EntidadNoEncontradaException;
 import ar.edu.utn.frre.concesionaria.excepciones.PersistenciaException;
 import ar.edu.utn.frre.concesionaria.excepciones.ReglaNegocioException;
 import ar.edu.utn.frre.concesionaria.excepciones.SeguridadException;
+import ar.edu.utn.frre.concesionaria.modelo.Vehiculo;
 import ar.edu.utn.frre.concesionaria.negocio.Claves;
 import ar.edu.utn.frre.concesionaria.negocio.Sesion;
 import ar.edu.utn.frre.concesionaria.presentacion.consola.Estilo;
 import ar.edu.utn.frre.concesionaria.presentacion.consola.FinDeEntrada;
 import ar.edu.utn.frre.concesionaria.presentacion.consola.Lector;
 import ar.edu.utn.frre.concesionaria.presentacion.consola.OperacionCancelada;
+import ar.edu.utn.frre.concesionaria.presentacion.consola.Tabla;
 import ar.edu.utn.frre.concesionaria.presentacion.consola.Terminal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Base de las pantallas: encabezado, menús y el manejo de errores escalonado de
@@ -258,6 +262,100 @@ abstract class Pantalla {
      */
     protected static void seccion(List<Opcion> opciones, String nombre) {
         opciones.add(new Opcion("", nombre, "", false, null));
+    }
+
+    /** Cuántos vehículos muestra como máximo la tabla del selector (SPEC §5). */
+    private static final int MAX_CANDIDATOS = 15;
+
+    /**
+     * Elige un vehículo sin tener que saber su código (SPEC §5, "Elegir un vehículo"): se
+     * escribe parte de la marca, el modelo o la patente, y se elige de una tabla numerada.
+     * Enter vacío muestra todos los candidatos; si hay uno solo, se elige solo.
+     *
+     * @param candidatos los vehículos que admite la operación
+     * @return el elegido
+     * @throws ConcesionariaException si no tiene permiso para buscar
+     * @throws OperacionCancelada     si escribió {@code :q} o agotó los intentos
+     */
+    protected Vehiculo elegirVehiculo(List<Vehiculo> candidatos)
+            throws ConcesionariaException, OperacionCancelada {
+        if (candidatos.isEmpty()) {
+            throw new OperacionCancelada("No hay vehículos para esta operación.");
+        }
+        Set<String> admitidos = candidatos.stream().map(Vehiculo::getCodigo)
+                .collect(Collectors.toSet());
+        t.ayuda("Escribí parte de la marca, el modelo o la patente (o el código). "
+                + "Enter muestra todos.");
+        String texto = lector.leerOpcional("Vehículo", s -> s);
+        int fallidos = 0;
+        while (fallidos < Lector.INTENTOS) {
+            List<Vehiculo> encontrados = texto == null ? candidatos
+                    : e.vehiculos.buscarTexto(sesion, texto).stream()
+                            .filter(v -> admitidos.contains(v.getCodigo())).toList();
+            if (encontrados.isEmpty()) {
+                fallidos++;
+                t.error("Ningún vehículo coincide con \"" + texto + "\". Probá con menos letras,"
+                        + " o Enter para ver todos.");
+                if (fallidos < Lector.INTENTOS) {
+                    texto = lector.leerOpcional("Vehículo", s -> s);
+                }
+                continue;
+            }
+            if (encontrados.size() == 1) {
+                Vehiculo unico = encontrados.get(0);
+                t.info("→ " + unico.getCodigo() + " · " + unico.getDescripcion());
+                return unico;
+            }
+            List<Vehiculo> visibles = encontrados.subList(0,
+                    Math.min(MAX_CANDIDATOS, encontrados.size()));
+            mostrarCandidatos(visibles);
+            if (encontrados.size() > visibles.size()) {
+                t.aviso("Hay " + encontrados.size() + " coincidencias; se muestran las primeras "
+                        + MAX_CANDIDATOS + ". Escribí algo más para acotar.");
+            }
+            t.blanco();
+            // Un número elige de la tabla; cualquier otro texto es una búsqueda nueva.
+            String respuesta = lector.leerOpcional("N.º u otra búsqueda", r -> {
+                Integer n = numero(r);
+                if (n != null && (n < 1 || n > visibles.size())) {
+                    throw new DatoInvalidoException("N.º", r, "Elegí un número entre 1 y "
+                            + visibles.size() + ", o escribí otra búsqueda.");
+                }
+                return r;
+            });
+            Integer n = respuesta == null ? null : numero(respuesta);
+            if (n != null) {
+                return visibles.get(n - 1);
+            }
+            texto = respuesta;
+        }
+        throw new OperacionCancelada("Se canceló la operación: demasiados intentos en «Vehículo».");
+    }
+
+    /** Tabla numerada del selector de vehículos. */
+    private void mostrarCandidatos(List<Vehiculo> visibles) {
+        Tabla tabla = new Tabla().numero("#").fija("Código").texto("Vehículo")
+                .texto("Estado").numero("Precio final");
+        for (int i = 0; i < visibles.size(); i++) {
+            Vehiculo v = visibles.get(i);
+            String estado = v.getEstado().getEtiqueta();
+            if (!v.estaDisponible()) {
+                estado += " · " + v.getSituacion().getEtiqueta();
+            }
+            tabla.fila(String.valueOf(i + 1), v.getCodigo(), v.getDescripcion(), estado,
+                    Formatos.moneda(v.calcularPrecioFinal(Reloj.hoy())));
+        }
+        t.blanco();
+        t.lineas(tabla.renglones(t.ancho(), estilo));
+    }
+
+    /** @return el texto como número entero, o {@code null} si no lo es */
+    private static Integer numero(String texto) {
+        try {
+            return Integer.valueOf(texto.trim());
+        } catch (NumberFormatException ex) {
+            return null;
+        }
     }
 
     /**
