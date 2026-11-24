@@ -1,5 +1,6 @@
 package ar.edu.utn.frre.concesionaria.presentacion.pantallas;
 
+import ar.edu.utn.frre.concesionaria.comun.Textos;
 import ar.edu.utn.frre.concesionaria.comun.Formatos;
 import ar.edu.utn.frre.concesionaria.comun.Reloj;
 import ar.edu.utn.frre.concesionaria.excepciones.ConcesionariaException;
@@ -376,9 +377,22 @@ final class PantallaVehiculos extends Pantalla {
                 throw new OperacionCancelada("Un administrador tiene que cargar la marca en Marcas.");
             }
             List<Marca> coinciden = e.marcas.paraAlta(tipo, prefijo);
+            // SPEC §3: solo el nombre completo (o un apodo como "vw") se toma directo; lo
+            // parcial se confirma, aunque sea la única marca que empiece así.
+            String buscado = e.marcas.nombrePorApodo(prefijo) != null
+                    ? e.marcas.nombrePorApodo(prefijo) : prefijo;
+            Marca completa = coinciden.stream()
+                    .filter(m -> Textos.compacta(m.getNombre()).equals(Textos.compacta(buscado)))
+                    .findFirst().orElse(null);
+            if (completa != null) {
+                t.info("→ " + completa.getNombre());
+                return completa;
+            }
             if (coinciden.size() == 1) {
-                t.info("→ " + coinciden.get(0).getNombre());
-                return coinciden.get(0);
+                if (lector.confirmar("¿" + coinciden.get(0).getNombre() + "?", true)) {
+                    return coinciden.get(0);
+                }
+                continue;
             }
             if (!coinciden.isEmpty()) {
                 return lector.elegir("Marca", coinciden, Marca::getNombre);
@@ -430,7 +444,8 @@ final class PantallaVehiculos extends Pantalla {
                 : "Modelo: escribí las primeras letras, o Enter para ver los " + cantidad
                         + " de " + marca.getNombre() + ".");
         // La última lista mostrada: un número elige de ella; cualquier otro texto vuelve a
-        // buscar, y así un modelo que no está se puede agregar aunque se haya visto la lista.
+        // buscar. SPEC §3: solo el nombre completo se toma directo; nada parcial se elige solo.
+        List<Modelo> delTipo = marca.modelosDe(tipo);
         List<Modelo> listado = List.of();
         for (int intento = 1; true; intento++) {
             String texto = vigente == null ? lector.leerOpcional("Modelo", s -> s)
@@ -438,9 +453,14 @@ final class PantallaVehiculos extends Pantalla {
             if (texto == null && vigente != null) {
                 return vigente.getNombre();
             }
+            if (texto == null && !delTipo.isEmpty()) {
+                listado = mostrarModelos(delTipo, null);
+                continue;
+            }
             if (texto != null && texto.matches("\\d+") && !listado.isEmpty()) {
                 int n = Integer.parseInt(texto);
                 if (n >= 1 && n <= listado.size()) {
+                    t.info("→ " + listado.get(n - 1).getNombre());
                     return listado.get(n - 1).getNombre();
                 }
                 t.error("Elegí un número entre 1 y " + listado.size()
@@ -448,26 +468,40 @@ final class PantallaVehiculos extends Pantalla {
                 t.introduccion();
                 continue;
             }
-            List<Modelo> coinciden = e.marcas.modelosQueCoinciden(marca, tipo, texto);
-            if (texto != null && coinciden.size() == 1) {
-                t.info("→ " + coinciden.get(0).getNombre());
-                return coinciden.get(0).getNombre();
-            }
-            if (!coinciden.isEmpty()) {
-                listado = mostrarModelos(coinciden, texto == null ? null
-                        : "Hay " + coinciden.size() + " que coinciden con \"" + texto + "\":");
-                intento = 0;
-                continue;
-            }
             if (texto != null) {
+                Modelo completo = marca.buscarModelo(texto).filter(m -> m.getTipo() == tipo)
+                        .orElse(null);
+                if (completo != null) {
+                    t.info("→ " + completo.getNombre());
+                    return completo.getNombre();
+                }
+                List<Modelo> coinciden = e.marcas.modelosQueCoinciden(marca, tipo, texto);
+                if (coinciden.size() == 1) {
+                    if (lector.confirmar("¿" + coinciden.get(0).getNombre() + "?", true)) {
+                        return coinciden.get(0).getNombre();
+                    }
+                    continue;
+                }
+                if (coinciden.size() > 1) {
+                    listado = mostrarModelos(coinciden, "Hay " + coinciden.size()
+                            + " que coinciden con \"" + texto + "\":");
+                    continue;
+                }
                 List<Modelo> parecidos = e.marcas.modelosParecidos(marca, tipo, texto);
                 if (parecidos.size() == 1 && lector.confirmar("¿Quisiste decir "
-                        + parecidos.get(0).getNombre() + "?")) {
+                        + parecidos.get(0).getNombre() + "?", true)) {
                     return parecidos.get(0).getNombre();
                 }
                 if (parecidos.size() > 1) {
-                    listado = mostrarModelos(parecidos, "No hay ninguno que empiece con \""
-                            + texto + "\". Parecidos:");
+                    listado = mostrarModelos(parecidos, "Ninguno empieza con \"" + texto
+                            + "\". Parecidos:");
+                    continue;
+                }
+                if (listado.isEmpty() && !delTipo.isEmpty()) {
+                    // Ni empieza así ni se parece: se muestra todo antes de ofrecer agregarlo.
+                    listado = mostrarModelos(delTipo, "Ningún modelo de " + marca.getNombre()
+                            + " empieza con \"" + texto + "\". Estos son los " + delTipo.size()
+                            + ":");
                     continue;
                 }
             }

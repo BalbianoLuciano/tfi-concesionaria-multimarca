@@ -1,5 +1,6 @@
 package ar.edu.utn.frre.concesionaria.presentacion.pantallas;
 
+import ar.edu.utn.frre.concesionaria.comun.Textos;
 import ar.edu.utn.frre.concesionaria.comun.Formatos;
 import ar.edu.utn.frre.concesionaria.comun.Reloj;
 import ar.edu.utn.frre.concesionaria.excepciones.ConcesionariaException;
@@ -270,7 +271,8 @@ abstract class Pantalla {
     /**
      * Elige un vehículo sin tener que saber su código (SPEC §5, "Elegir un vehículo"): se
      * escribe parte de la marca, el modelo o la patente, y se elige de una tabla numerada.
-     * Enter vacío muestra todos los candidatos; si hay uno solo, se elige solo.
+     * Enter vacío muestra todos los candidatos; si hay uno solo, se confirma (salvo que se haya
+     * escrito su código o su patente exactos).
      *
      * @param candidatos los vehículos que admite la operación
      * @return el elegido
@@ -304,9 +306,23 @@ abstract class Pantalla {
                 continue;
             }
             if (encontrados.size() == 1) {
+                // SPEC §5: solo el código o la patente exactos se toman directo; lo demás se
+                // confirma, aunque sea el único que coincide.
                 Vehiculo unico = encontrados.get(0);
-                t.info("→ " + unico.getCodigo() + " · " + unico.getDescripcion());
-                return unico;
+                String descripcion = unico.getCodigo() + " · " + unico.getDescripcion();
+                String clave = texto == null ? "" : Textos.compacta(texto);
+                boolean exacto = clave.equals(Textos.compacta(unico.getCodigo()))
+                        || (unico.getPatente() != null
+                                && clave.equals(Textos.compacta(unico.getPatente())));
+                if (exacto) {
+                    t.info("→ " + descripcion);
+                    return unico;
+                }
+                if (lector.confirmar("¿" + descripcion + "?", true)) {
+                    return unico;
+                }
+                texto = lector.leerOpcional("Vehículo", s -> s);
+                continue;
             }
             List<Vehiculo> visibles = encontrados.subList(0,
                     Math.min(MAX_CANDIDATOS, encontrados.size()));

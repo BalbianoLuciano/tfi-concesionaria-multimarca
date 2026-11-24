@@ -309,7 +309,22 @@ public final class Lector {
      * @throws OperacionCancelada si agotó los intentos
      */
     public boolean confirmar(String pregunta) throws OperacionCancelada {
-        return leer(pregunta + " (s/n)", texto -> {
+        return confirmar(pregunta, null);
+    }
+
+    /**
+     * Confirmación con respuesta por defecto: Enter la toma. Se muestra como "(S/n)" si el
+     * defecto es sí, o "(s/N)" si es no. Sirve para confirmar una coincidencia parcial
+     * ("¿Toyota? (S/n)"), donde lo habitual es que sí (SPEC §3).
+     *
+     * @param pregunta   la pregunta
+     * @param porDefecto lo que vale Enter, o {@code null} si Enter no vale
+     * @return la respuesta
+     * @throws OperacionCancelada si escribió {@code :q} o no quiso seguir tras agotar los intentos
+     */
+    public boolean confirmar(String pregunta, Boolean porDefecto) throws OperacionCancelada {
+        String opciones = porDefecto == null ? " (s/n)" : porDefecto ? " (S/n)" : " (s/N)";
+        Conversor<Boolean> conversor = texto -> {
             String clave = Textos.clave(texto);
             if (clave.equals("s") || clave.equals("si")) {
                 return true;
@@ -318,7 +333,12 @@ public final class Lector {
                 return false;
             }
             throw new DatoInvalidoException("Confirmación", texto, "Respondé s o n.");
-        });
+        };
+        if (porDefecto == null) {
+            return leer(pregunta + opciones, conversor);
+        }
+        Boolean respuesta = leerOpcional(pregunta + opciones, conversor);
+        return respuesta == null ? porDefecto : respuesta;
     }
 
     /**
