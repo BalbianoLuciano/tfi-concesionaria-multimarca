@@ -239,12 +239,13 @@ public final class Lector {
      */
     public String opcion(List<String> opcionesValidas) {
         while (true) {
-            String texto = linea("Opción").toLowerCase();
+            String texto = linea("Elegí una opción").toLowerCase();
             if (opcionesValidas.contains(texto)) {
                 return texto;
             }
-            terminal.error("\"" + texto + "\" no es una opción. Elegí una de: "
-                    + String.join(", ", opcionesValidas) + ".");
+            String lista = String.join(", ", opcionesValidas).toUpperCase();
+            terminal.error(texto.isEmpty() ? "Escribí una de las opciones: " + lista + "."
+                    : "\"" + texto + "\" no es una opción. Elegí una de: " + lista + ".");
         }
     }
 
@@ -296,7 +297,18 @@ public final class Lector {
     /** Espera Enter. */
     public void pausa() {
         terminal.blanco();
-        linea("Enter para continuar");
+        terminal.escribir(" " + terminal.estilo().tenue("Enter para continuar ›") + " ");
+        try {
+            String leida = entrada.readLine();
+            if (leida == null) {
+                throw new FinDeEntrada();
+            }
+            if (!interactivo) {
+                terminal.linea(leida);
+            }
+        } catch (IOException e) {
+            throw new FinDeEntrada();
+        }
     }
 
     // ---------------------------------------------------------------- conversores comunes

@@ -49,18 +49,32 @@ final class PantallaVehiculos extends Pantalla {
 
     void mostrar() {
         List<Opcion> opciones = new ArrayList<>();
-        agregar(opciones, "Listar stock", false, this::listar);
-        agregar(opciones, "Buscar", true, this::buscar);
-        agregar(opciones, "Ver ficha", true, this::verFicha);
+        boolean gestiona = sesion.puede(Permiso.GESTIONAR_STOCK);
+        if (gestiona) {
+            seccion(opciones, "Consultar");
+        }
+        agregar(opciones, "Listar stock", "tabla con filtros, orden y páginas", false, this::listar);
+        agregar(opciones, "Buscar", "por código, patente, marca o modelo", true, this::buscar);
+        agregar(opciones, "Ver ficha", "datos completos y precio desglosado", true, this::verFicha);
         if (sesion.puede(Permiso.VENDER)) {
-            agregar(opciones, "Cotizar", true, this::cotizar);
+            agregar(opciones, "Cotizar", "precio final a hoy", true, this::cotizar);
         }
-        if (sesion.puede(Permiso.GESTIONAR_STOCK)) {
-            agregar(opciones, "Registrar vehículo", true, this::registrar);
-            agregar(opciones, "Modificar vehículo", true, this::modificar);
-            agregar(opciones, "Dar de baja", true, this::darDeBaja);
+        if (gestiona) {
+            seccion(opciones, "Gestionar");
+            agregar(opciones, "Registrar vehículo", "alta paso a paso", true, this::registrar);
+            agregar(opciones, "Modificar vehículo", "solo los disponibles", true, this::modificar);
+            agregar(opciones, "Dar de baja", "baja lógica con motivo", true, this::darDeBaja);
         }
-        menu("Vehículos", opciones);
+        menu("Vehículos", this::resumenStock, opciones);
+    }
+
+    /** Línea de contexto: cuántos disponibles hay y de qué estado. */
+    private String resumenStock() throws ConcesionariaException {
+        List<Vehiculo> disponibles = e.vehiculos.listar(sesion, new FiltroVehiculos(),
+                OrdenVehiculos.TIPO_Y_MARCA);
+        long nuevos = disponibles.stream().filter(v -> v.getEstado() == Estado.NUEVO).count();
+        return disponibles.size() + " disponibles · 0 km: " + nuevos + " · usados: "
+                + (disponibles.size() - nuevos);
     }
 
     // ---------------------------------------------------------------- CU-04 listar
@@ -74,7 +88,7 @@ final class PantallaVehiculos extends Pantalla {
             List<Vehiculo> visibles = lista.subList(pagina * FILAS_POR_PAGINA,
                     Math.min(lista.size(), (pagina + 1) * FILAS_POR_PAGINA));
 
-            cabecera("Vehículos › Stock");
+            cabecera("Vehículos › Listar stock");
             t.info("Filtro: " + filtro.describir() + "   Orden: " + orden.getEtiqueta());
             t.blanco();
             if (lista.isEmpty()) {
@@ -99,7 +113,7 @@ final class PantallaVehiculos extends Pantalla {
                 teclas.append("A anterior · ");
                 validas.add("a");
             }
-            t.pie(teclas + "F filtrar · O ordenar · L limpiar filtros · V ver ficha · 0 volver");
+            t.pie(teclas + "F filtrar · O ordenar · L limpiar filtros · V ver ficha · 0 Volver a Vehículos");
             String opcion = lector.opcion(validas);
             switch (opcion) {
                 case "s":

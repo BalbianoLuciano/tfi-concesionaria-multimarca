@@ -23,17 +23,20 @@ final class PantallaDatos extends Pantalla {
     void mostrar() {
         List<Opcion> opciones = new ArrayList<>();
         if (sesion.puede(Permiso.EXPORTAR)) {
-            agregar(opciones, "Exportar vehículos", true,
+            seccion(opciones, "Exportar a CSV");
+            agregar(opciones, "Exportar vehículos", "todo el stock, con su situación", true,
                     () -> t.exito("Se exportó a " + e.archivos.exportarVehiculos(sesion)));
-            agregar(opciones, "Exportar marcas", true,
+            agregar(opciones, "Exportar marcas", "el catálogo completo", true,
                     () -> t.exito("Se exportó a " + e.archivos.exportarMarcas(sesion)));
-            agregar(opciones, "Exportar ventas", true,
+            agregar(opciones, "Exportar ventas", "el historial con sus precios", true,
                     () -> t.exito("Se exportó a " + e.archivos.exportarVentas(sesion)));
         }
         if (sesion.puede(Permiso.IMPORTAR)) {
-            agregar(opciones, "Importar vehículos", true, this::importar);
+            seccion(opciones, "Importar");
+            agregar(opciones, "Importar vehículos", "todo o nada, con errores por línea", true,
+                    this::importar);
         }
-        menu("Datos", opciones);
+        menu("Datos", () -> "Carpeta: " + e.archivos.carpeta(), opciones);
     }
 
     private void importar() throws ConcesionariaException, OperacionCancelada {

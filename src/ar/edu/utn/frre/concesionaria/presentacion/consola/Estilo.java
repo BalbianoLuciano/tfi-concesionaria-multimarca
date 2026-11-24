@@ -1,8 +1,9 @@
 package ar.edu.utn.frre.concesionaria.presentacion.consola;
 
 /**
- * Color con significado, nunca de adorno (SPEC §5): cian para los títulos, amarillo para el
- * prompt, verde para el éxito y los 0 km, rojo para los errores y tenue para lo secundario.
+ * Color con significado, nunca de adorno (SPEC §5): cian para los títulos, verde para el éxito
+ * y los 0 km, rojo para los errores, amarillo para los avisos y tenue para lo secundario. El
+ * prompt va en negrita.
  *
  * <p>Si el color está apagado ({@code NO_COLOR}, {@code --sin-color} o la salida no es una
  * terminal), todos los métodos devuelven el texto tal cual. El color nunca es la única señal:
@@ -51,9 +52,17 @@ public final class Estilo {
 
     /**
      * @param texto el texto
-     * @return el texto como prompt (amarillo)
+     * @return el texto como prompt (negrita)
      */
     public String prompt(String texto) {
+        return aplicar(NEGRITA, texto);
+    }
+
+    /**
+     * @param texto el texto
+     * @return el texto como aviso (amarillo)
+     */
+    public String amarillo(String texto) {
         return aplicar(AMARILLO, texto);
     }
 

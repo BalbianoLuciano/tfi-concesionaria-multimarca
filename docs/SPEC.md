@@ -269,10 +269,11 @@ Todas las pantallas tienen el mismo esqueleto, así el usuario siempre sabe dón
 | Éxito | `✓` | verde | La operación se hizo |
 | Error | `✗` | rojo | Algo no se pudo hacer; el texto dice cómo corregirlo |
 | Aviso | `!` | amarillo | Algo para tener en cuenta antes de seguir |
-| Información | `·` | tenue | Ayuda o dato secundario |
+| Información | (ninguna) | tenue | Ayuda o dato secundario |
 | Prompt | `›` | negrita | Lo que se le pide al usuario |
 
-Cada mensaje de éxito o de error va separado del contenido por una línea en blanco.
+Cada mensaje de éxito, y cada error que termina una operación, va separado del contenido por
+una línea en blanco. Los errores de un campo que se vuelve a preguntar van pegados al campo.
 
 ### Detalles
 - **Tablas:** columnas calculadas según el contenido, números alineados a la derecha,

@@ -64,6 +64,7 @@ se tomó la opción recomendada.
 | `ResultadoImportacion` | En `modelo`, no en `datos`: lo recorren las tres capas y la consola no puede importar `datos` |
 | `Marca.clave` | Campo `transient` cacheado: el bench mostró 89 ms al ordenar 10.000 y bajó a 7 ms |
 | Clave nueva | `Pantalla.leerClaveNueva()` la comparten el primer arranque, el alta de usuarios y el cambio de clave |
+| Pantallas (2026-11-24) | Esqueleto común de SPEC §5: título y ruta, contexto, opciones con descripción y secciones, `0`/`C` alineados y "Volver a …", cada acción en su propia pantalla, prompt en negrita y avisos en amarillo |
 | Interactividad | `Lector` recibe `interactivo` explícito: con entrada redirigida hace eco de lo leído y no usa `readPassword` |
 
 ## Estado actual

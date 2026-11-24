@@ -29,11 +29,21 @@ final class PantallaVentas extends Pantalla {
     void mostrar() {
         List<Opcion> opciones = new ArrayList<>();
         if (sesion.puede(Permiso.VENDER)) {
-            agregar(opciones, "Vender", true, this::vender);
+            agregar(opciones, "Vender", "precio, comprador y comprobante", true, this::vender);
         }
-        agregar(opciones, sesion.puede(Permiso.VER_VENTAS) ? "Historial de ventas"
-                : "Mis ventas", true, this::historial);
-        menu("Ventas", opciones);
+        boolean todas = sesion.puede(Permiso.VER_VENTAS);
+        agregar(opciones, todas ? "Historial de ventas" : "Mis ventas",
+                todas ? "por período y vendedor, con total" : "las que registraste vos, con total",
+                true, this::historial);
+        menu("Ventas", () -> {
+            List<Venta> ventas = e.ventas.historial(sesion, null, null, null);
+            boolean una = ventas.size() == 1;
+            String cuantas = una ? "1 venta" : ventas.size() + " ventas";
+            String quienes = todas ? (una ? " registrada" : " registradas")
+                    : (una ? " tuya" : " tuyas");
+            return cuantas + quienes + " · total "
+                    + Formatos.moneda(ServicioVentas.total(ventas));
+        }, opciones);
     }
 
     private void vender() throws ConcesionariaException, OperacionCancelada {

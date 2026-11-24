@@ -22,33 +22,39 @@ final class PantallaUsuarios extends Pantalla {
 
     void mostrar() {
         List<Opcion> opciones = new ArrayList<>();
-        agregar(opciones, "Listar usuarios", true, this::listar);
-        agregar(opciones, "Nuevo usuario", true, this::crear);
-        agregar(opciones, "Desactivar", true, () -> {
+        seccion(opciones, "Cuentas");
+        agregar(opciones, "Listar usuarios", "rol y estado de cada uno", true, this::listar);
+        agregar(opciones, "Nuevo usuario", "con rol y clave inicial", true, this::crear);
+        agregar(opciones, "Desactivar", "ya no puede iniciar sesión", true, () -> {
             Usuario u = elegir();
             e.autenticacion.desactivar(sesion, u.getUsuario());
             t.exito(u.getUsuario() + " quedó desactivado: no puede iniciar sesión.");
         });
-        agregar(opciones, "Reactivar", true, () -> {
+        agregar(opciones, "Reactivar", "vuelve a poder entrar", true, () -> {
             Usuario u = elegir();
             e.autenticacion.reactivar(sesion, u.getUsuario());
             t.exito(u.getUsuario() + " está activo.");
         });
-        agregar(opciones, "Cambiar rol", true, () -> {
+        seccion(opciones, "Permisos y claves");
+        agregar(opciones, "Cambiar rol", "Administrador, Vendedor o Directivo", true, () -> {
             Usuario u = elegir();
             t.blanco();
             Rol rol = lector.elegir("Rol", Arrays.asList(Rol.values()), Rol::getEtiqueta, u.getRol());
             e.autenticacion.cambiarRol(sesion, u.getUsuario(), rol);
             t.exito(u.getUsuario() + " ahora es " + rol.getEtiqueta() + ".");
         });
-        agregar(opciones, "Blanquear clave", true, () -> {
+        agregar(opciones, "Blanquear clave", "si alguien se la olvidó", true, () -> {
             Usuario u = elegir();
             t.info("Asignale una clave nueva y pasásela por un medio seguro.");
             String clave = leerClaveNueva();
             e.autenticacion.blanquearClave(sesion, u.getUsuario(), clave);
             t.exito("Se cambió la clave de " + u.getUsuario() + ".");
         });
-        menu("Usuarios", opciones);
+        menu("Usuarios", () -> {
+            List<Usuario> usuarios = e.autenticacion.listar(sesion);
+            long activos = usuarios.stream().filter(Usuario::estaActivo).count();
+            return usuarios.size() + " usuarios · activos: " + activos;
+        }, opciones);
     }
 
     private void listar() throws ConcesionariaException {
