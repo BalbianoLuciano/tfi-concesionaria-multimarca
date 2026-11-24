@@ -288,6 +288,15 @@ una línea en blanco. Los errores de un campo que se vuelve a preguntar van pega
   "Registro" (estado, kilometraje, patente, ingreso) a la derecha, con la situación al lado
   del título (verde si está disponible).
 
+### Inicio y listados
+
+- **Resumen en el inicio:** debajo del saludo, tarjetas con lo que el rol puede ver: stock
+  disponible (todos), ventas del mes (las propias para el vendedor, todas para el resto) y
+  valor del stock a precio final (quien ve reportes).
+- **Stock agrupado por tipo:** en el orden natural, la tabla separa automóviles, camionetas y
+  motocicletas con un subtítulo que dice cuántas unidades y cuánto valen. Con otro orden la
+  tabla va sin grupos, porque el orden elegido manda.
+
 ### Detalles
 - **Tablas:** columnas calculadas según el contenido, números alineados a la derecha,
   separador de miles argentino (`$ 22.850.920`, `112.900 km`) y una sola línea de borde.
