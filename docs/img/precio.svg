@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 610" width="960" height="610" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+<defs><clipPath id="v"><rect width="960" height="610" rx="11"/></clipPath>
+<marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#7d848e"/></marker></defs>
+<g clip-path="url(#v)"><rect width="960" height="610" fill="#15181d"/><rect width="960" height="38" fill="#262a30"/>
+<circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
+<text x="480.0" y="23.5" font-size="12" fill="#a9adb3" text-anchor="middle">Precio final: método plantilla en Vehiculo</text>
+<line x1="0" y1="38" x2="960" y2="38" stroke="#000" stroke-opacity=".4"/>
+<g transform="translate(0 38)">
+<rect x="40" y="26" width="880" height="150" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<text x="64" y="54" font-size="11.5" fill="#c58af9" font-weight="700" letter-spacing="1.2">ABSTRACTA</text>
+<text x="158" y="54" font-size="15" fill="#e6e8eb" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Vehiculo</text>
+<text x="252" y="54" font-size="12.5" fill="#9aa1ab" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">implements Vendible, Identificable&lt;String&gt;, Comparable&lt;Vehiculo&gt;</text>
+<text x="64" y="84" font-size="13" fill="#e6e8eb" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">public <tspan font-weight="700" fill="#5ac8fa">final</tspan> DesglosePrecio desglosarPrecio()</text>
+<text x="560" y="84" font-size="12.5" fill="#9aa1ab">← el algoritmo es fijo: ninguna subclase lo cambia</text>
+<rect x="64" y="104" width="132" height="50" rx="7" fill="#262b33" stroke="#353b44" stroke-width="1.5"/>
+<text x="130.0" y="134" font-size="12.5" fill="#e6e8eb" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="middle">precio de lista</text>
+<line x1="196" y1="129" x2="214" y2="129" stroke="#7d848e" stroke-width="1.5" marker-end="url(#f)"/>
+<rect x="216" y="104" width="116" height="50" rx="7" fill="#262b33" stroke="#353b44" stroke-width="1.5"/>
+<text x="274.0" y="134" font-size="12.5" fill="#e6e8eb" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="middle">− antigüedad</text>
+<line x1="332" y1="129" x2="350" y2="129" stroke="#7d848e" stroke-width="1.5" marker-end="url(#f)"/>
+<rect x="352" y="104" width="124" height="50" rx="7" fill="#262b33" stroke="#353b44" stroke-width="1.5"/>
+<text x="414.0" y="134" font-size="12.5" fill="#e6e8eb" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="middle">− kilometraje</text>
+<line x1="476" y1="129" x2="494" y2="129" stroke="#7d848e" stroke-width="1.5" marker-end="url(#f)"/>
+<rect x="496" y="104" width="104" height="50" rx="7" fill="#262b33" stroke="#353b44" stroke-width="1.5"/>
+<text x="548.0" y="134" font-size="12.5" fill="#e6e8eb" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="middle">+ recargos</text>
+<line x1="600" y1="129" x2="618" y2="129" stroke="#7d848e" stroke-width="1.5" marker-end="url(#f)"/>
+<rect x="620" y="104" width="140" height="50" rx="7" fill="#262b33" stroke="#353b44" stroke-width="1.5"/>
+<text x="690.0" y="134" font-size="12.5" fill="#e6e8eb" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="middle">+ patentamiento</text>
+<line x1="760" y1="129" x2="778" y2="129" stroke="#7d848e" stroke-width="1.5" marker-end="url(#f)"/>
+<rect x="780" y="104" width="100" height="50" rx="7" fill="#262b33" stroke="#353b44" stroke-width="1.5"/>
+<text x="830.0" y="134" font-size="12.5" fill="#e6e8eb" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="middle">= redondeo</text>
+<line x1="180" y1="226" x2="180" y2="180" stroke="#c58af9" stroke-width="1.5" marker-end="url(#f)"/>
+<rect x="40" y="228" width="280" height="150" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<text x="60" y="256" font-size="14.5" fill="#e6e8eb" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Automovil</text>
+<text x="60" y="276" font-size="12" fill="#9aa1ab">carrocería · puertas</text>
+<text x="60" y="306" font-size="12.5" fill="#e6e8eb">6 % por año, tope 45 %</text>
+<text x="60" y="328" font-size="12.5" fill="#e6e8eb">1 % c/10.000 km, tope 15 %</text>
+<text x="60" y="350" font-size="12.5" fill="#f5c451">patentamiento 3 %</text>
+<line x1="480" y1="226" x2="480" y2="180" stroke="#c58af9" stroke-width="1.5" marker-end="url(#f)"/>
+<rect x="340" y="228" width="280" height="150" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<text x="360" y="256" font-size="14.5" fill="#e6e8eb" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Camioneta</text>
+<text x="360" y="276" font-size="12" fill="#9aa1ab">carrocería · 4x4 · carga</text>
+<text x="360" y="306" font-size="12.5" fill="#e6e8eb">5 % por año, tope 40 %</text>
+<text x="360" y="328" font-size="12.5" fill="#e6e8eb">0,8 % c/10.000 km, tope 12 %</text>
+<text x="360" y="350" font-size="12.5" fill="#f5c451">4x4: +7 % · patent. 3 %</text>
+<line x1="780" y1="226" x2="780" y2="180" stroke="#c58af9" stroke-width="1.5" marker-end="url(#f)"/>
+<rect x="640" y="228" width="280" height="150" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<text x="660" y="256" font-size="14.5" fill="#e6e8eb" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">Motocicleta</text>
+<text x="660" y="276" font-size="12" fill="#9aa1ab">tipo · cilindrada</text>
+<text x="660" y="306" font-size="12.5" fill="#e6e8eb">8 % por año, tope 50 %</text>
+<text x="660" y="328" font-size="12.5" fill="#e6e8eb">1 % c/5.000 km, tope 20 %</text>
+<text x="660" y="350" font-size="12.5" fill="#f5c451">patent. 2 %, mín. $ 150.000</text>
+<text x="480" y="402" font-size="12.5" fill="#9aa1ab" text-anchor="middle" font-style="italic">cada subclase solo aporta sus porcentajes: el polimorfismo decide cuánto, la clase base decide cómo</text>
+<rect x="40" y="420" width="880" height="128" rx="10" fill="#191c21" stroke="#353b44" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="64" y="448" font-size="11.5" fill="#4cd07d" font-weight="700" letter-spacing="1.2">EJEMPLO · PRUEBA PR-PRECIO</text>
+<text x="64" y="472" font-size="13.5" fill="#e6e8eb" font-weight="600">Toyota Hilux 2019 usada, 112.900 km, 4x4, en 2026</text>
+<text x="64" y="500" font-size="12.5" fill="#9aa1ab">Precio de lista</text>
+<text x="334" y="500" font-size="12.5" fill="#e6e8eb" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="end">$ 38.000.000</text>
+<text x="364" y="500" font-size="12.5" fill="#9aa1ab">Antigüedad 7 años (35 %)</text>
+<text x="634" y="500" font-size="12.5" fill="#ff6b6b" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="end">−$ 13.300.000</text>
+<text x="64" y="522" font-size="12.5" fill="#9aa1ab">Kilometraje (8,8 %)</text>
+<text x="334" y="522" font-size="12.5" fill="#ff6b6b" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="end">−$ 3.344.000</text>
+<text x="364" y="522" font-size="12.5" fill="#9aa1ab">Recargo 4x4 (7 %)</text>
+<text x="634" y="522" font-size="12.5" fill="#f5c451" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="end">+$ 1.494.920</text>
+<text x="896" y="500" font-size="12.5" fill="#9aa1ab" text-anchor="end">Precio final</text>
+<text x="896" y="526" font-size="22" fill="#4cd07d" font-weight="700" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="end">$ 22.850.920</text>
+</g></g></svg>

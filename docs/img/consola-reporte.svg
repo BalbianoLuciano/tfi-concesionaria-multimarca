@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 827 434" width="827" height="434">
+<defs><clipPath id="v"><rect width="827" height="434" rx="11"/></clipPath></defs>
+<g clip-path="url(#v)">
+<rect width="827" height="434" fill="#15181d"/>
+<rect width="827" height="38" fill="#262a30"/>
+<circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
+<text x="413.5" y="23.5" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" fill="#a9adb3" text-anchor="middle">java -jar concesionaria.jar</text>
+<line x1="0" y1="38" x2="827" y2="38" stroke="#000" stroke-opacity=".4"/>
+<g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" xml:space="preserve">
+<text x="29.8" y="69" fill="#5ac8fa" font-weight="700">CONCESIONARIA MULTIMARCA</text>
+<text x="507.5" y="69" fill="#7d848e">admin · Administrador · mar 24/11/2026</text>
+<text x="29.8" y="87" fill="#7d848e">───────────────────────────────────────────────────────────────────────────────────────────────────</text>
+<text x="29.8" y="105" fill="#5ac8fa" font-weight="700">STOCK POR TIPO Y ESTADO</text>
+<text x="468.3" y="105" fill="#7d848e">Inicio › Reportes › Stock por tipo y estado</text>
+<text x="29.8" y="123" fill="#7d848e">Al 24/11/2026</text>
+<text x="29.8" y="159" fill="#d6d9de" font-weight="700">Automóvil</text>
+<text x="45.5" y="177" fill="#d6d9de">0 km</text>
+<text x="100.3" y="177" fill="#4cd07d">███████████████<tspan fill="#3a4049">░░░░░░░░░░░░░░░</tspan></text>
+<text x="366.5" y="177" fill="#d6d9de">1</text>
+<text x="45.5" y="195" fill="#d6d9de">Usado</text>
+<text x="100.3" y="195" fill="#d6d9de">██████████████████████████████</text>
+<text x="366.5" y="195" fill="#d6d9de">2</text>
+<text x="29.8" y="213" fill="#d6d9de" font-weight="700">Camioneta</text>
+<text x="45.5" y="231" fill="#d6d9de">0 km</text>
+<text x="100.3" y="231" fill="#4cd07d">███████████████<tspan fill="#3a4049">░░░░░░░░░░░░░░░</tspan></text>
+<text x="366.5" y="231" fill="#d6d9de">1</text>
+<text x="45.5" y="249" fill="#d6d9de">Usado</text>
+<text x="100.3" y="249" fill="#d6d9de">██████████████████████████████</text>
+<text x="366.5" y="249" fill="#d6d9de">2</text>
+<text x="29.8" y="267" fill="#d6d9de" font-weight="700">Motocicleta</text>
+<text x="45.5" y="285" fill="#d6d9de">0 km</text>
+<text x="100.3" y="285" fill="#4cd07d">███████████████<tspan fill="#3a4049">░░░░░░░░░░░░░░░</tspan></text>
+<text x="366.5" y="285" fill="#d6d9de">1</text>
+<text x="45.5" y="303" fill="#d6d9de">Usado</text>
+<text x="100.3" y="303" fill="#d6d9de">███████████████<tspan fill="#3a4049">░░░░░░░░░░░░░░░</tspan></text>
+<text x="366.5" y="303" fill="#d6d9de">1</text>
+<text x="29.8" y="339" fill="#d6d9de" font-weight="700">Total disponible: 8 vehículos</text>
+<text x="29.8" y="375" fill="#7d848e">───────────────────────────────────────────────────────────────────────────────────────────────────</text>
+<text x="29.8" y="393" fill="#7d848e">E exportar a .txt · Enter Volver a Reportes</text>
+<text x="29.8" y="411" fill="#d6d9de" font-weight="700">Elegí una opción ›</text>
+</g></g></svg>

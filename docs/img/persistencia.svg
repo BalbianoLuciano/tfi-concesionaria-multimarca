@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 528" width="960" height="528" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+<defs><clipPath id="v"><rect width="960" height="528" rx="11"/></clipPath>
+<marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#7d848e"/></marker></defs>
+<g clip-path="url(#v)"><rect width="960" height="528" fill="#15181d"/><rect width="960" height="38" fill="#262a30"/>
+<circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
+<text x="480.0" y="23.5" font-size="12" fill="#a9adb3" text-anchor="middle">Persistencia: escritura atómica con respaldo</text>
+<line x1="0" y1="38" x2="960" y2="38" stroke="#000" stroke-opacity=".4"/>
+<g transform="translate(0 38)">
+<text x="40" y="44" font-size="15" fill="#e6e8eb" font-weight="700">Guardar</text>
+<text x="112" y="44" font-size="12.5" fill="#9aa1ab">· todo el sistema es una sola foto (Almacen) en un solo archivo: una venta queda entera o no queda</text>
+<rect x="40" y="64" width="270" height="96" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<circle cx="70" cy="94" r="13" fill="#5ac8fa"/>
+<text x="70" y="99" font-size="13" fill="#0d1117" font-weight="700" text-anchor="middle">1</text>
+<text x="94" y="99" font-size="14" fill="#e6e8eb" font-weight="600">escribir</text>
+<text x="64" y="128" font-size="13" fill="#5ac8fa" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">datos.ser.tmp</text>
+<text x="64" y="148" font-size="12" fill="#9aa1ab">y forzar a disco (sync)</text>
+<line x1="310" y1="112" x2="338" y2="112" stroke="#7d848e" stroke-width="1.5" marker-end="url(#f)"/>
+<rect x="340" y="64" width="270" height="96" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<circle cx="370" cy="94" r="13" fill="#5ac8fa"/>
+<text x="370" y="99" font-size="13" fill="#0d1117" font-weight="700" text-anchor="middle">2</text>
+<text x="394" y="99" font-size="14" fill="#e6e8eb" font-weight="600">respaldar</text>
+<text x="364" y="128" font-size="13" fill="#5ac8fa" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">datos.ser → .bak</text>
+<text x="364" y="148" font-size="12" fill="#9aa1ab">copia del anterior</text>
+<line x1="610" y1="112" x2="638" y2="112" stroke="#7d848e" stroke-width="1.5" marker-end="url(#f)"/>
+<rect x="640" y="64" width="270" height="96" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<circle cx="670" cy="94" r="13" fill="#5ac8fa"/>
+<text x="670" y="99" font-size="13" fill="#0d1117" font-weight="700" text-anchor="middle">3</text>
+<text x="694" y="99" font-size="14" fill="#e6e8eb" font-weight="600">reemplazar</text>
+<text x="664" y="128" font-size="13" fill="#5ac8fa" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">ATOMIC_MOVE</text>
+<text x="664" y="148" font-size="12" fill="#9aa1ab">tmp → datos.ser de una</text>
+<text x="480" y="186" font-size="12.5" fill="#9aa1ab" text-anchor="middle" font-style="italic">si se corta la luz en el medio, en disco queda el archivo viejo o el nuevo: nunca uno a medias</text>
+<line x1="40" y1="210" x2="920" y2="210" stroke="#353b44"/>
+<text x="40" y="244" font-size="15" fill="#e6e8eb" font-weight="700">Arrancar</text>
+<rect x="40" y="262" width="200" height="60" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<text x="140" y="298" font-size="13.5" fill="#e6e8eb" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="middle">leer datos.ser</text>
+<line x1="240" y1="292" x2="318" y2="292" stroke="#7d848e" stroke-width="1.5" marker-end="url(#f)"/>
+<text x="256" y="284" font-size="12" fill="#4cd07d">ok</text>
+<rect x="320" y="262" width="250" height="60" rx="10" fill="#1f2329" stroke="#353b44" stroke-width="1.5"/>
+<text x="445" y="297" font-size="13.5" fill="#e6e8eb" text-anchor="middle">reconstruir índices</text>
+<text x="445" y="346" font-size="11.5" fill="#9aa1ab" text-anchor="middle">HashMap por código y patente</text>
+<text x="445" y="362" font-size="11.5" fill="#9aa1ab" text-anchor="middle">TreeMap de marcas</text>
+<line x1="140" y1="322" x2="140" y2="388" stroke="#ff6b6b" stroke-width="1.5" marker-end="url(#f)"/>
+<text x="152" y="360" font-size="12" fill="#ff6b6b">dañado</text>
+<rect x="40" y="390" width="250" height="76" rx="10" fill="#1f2329" stroke="#ff6b6b" stroke-width="1.5"/>
+<text x="60" y="418" font-size="13" fill="#ff6b6b" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">datos.ser → .corrupto</text>
+<text x="60" y="444" font-size="12" fill="#9aa1ab">se guarda para inspeccionarlo</text>
+<line x1="290" y1="428" x2="368" y2="428" stroke="#7d848e" stroke-width="1.5" marker-end="url(#f)"/>
+<rect x="370" y="390" width="250" height="76" rx="10" fill="#1f2329" stroke="#f5c451" stroke-width="1.5"/>
+<text x="390" y="418" font-size="13" fill="#f5c451" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">recuperar .bak</text>
+<text x="390" y="444" font-size="12" fill="#9aa1ab">y seguir con la copia anterior</text>
+<line x1="600" y1="390" x2="560" y2="324" stroke="#f5c451" stroke-width="1.5" marker-end="url(#f)" stroke-dasharray="4 4"/>
+<rect x="660" y="262" width="260" height="204" rx="10" fill="#191c21" stroke="#353b44" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="680" y="290" font-size="11.5" fill="#c58af9" font-weight="700" letter-spacing="1.2">ADEMÁS</text>
+<text x="680" y="318" font-size="12.5" fill="#9aa1ab">serialVersionUID y versión de</text>
+<text x="680" y="338" font-size="12.5" fill="#9aa1ab">esquema: un .jar nuevo lee</text>
+<text x="680" y="358" font-size="12.5" fill="#9aa1ab">datos viejos</text>
+<text x="680" y="378" font-size="12.5" fill="#9aa1ab"></text>
+<text x="680" y="398" font-size="12.5" fill="#9aa1ab">CSV: exportar stock, marcas</text>
+<text x="680" y="418" font-size="12.5" fill="#9aa1ab">y ventas; importar es todo o</text>
+<text x="680" y="438" font-size="12.5" fill="#9aa1ab">nada, con errores por línea</text>
+</g></g></svg>
