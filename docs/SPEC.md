@@ -275,6 +275,19 @@ Todas las pantallas tienen el mismo esqueleto, así el usuario siempre sabe dón
 Cada mensaje de éxito, y cada error que termina una operación, va separado del contenido por
 una línea en blanco. Los errores de un campo que se vuelve a preguntar van pegados al campo.
 
+### Formularios y fichas
+
+- **Formularios por pasos:** el alta de un vehículo (4 pasos), la modificación (3), la venta
+  (3) y el alta de usuario (3) dicen al principio cuántos pasos son, y cada paso arranca con
+  "Paso 2 de 4 · Datos generales".
+- **Ayuda antes del campo:** en tenue y con sangría, se explica el formato esperado antes de
+  pedirlo ("Formatos de patente: ABC123 o AB123CD."), no recién después del error.
+- **Resumen antes de confirmar:** separado del formulario por una línea, con la ficha y el
+  desglose del precio.
+- **Ficha en dos columnas:** "Vehículo" (tipo, detalle, marca, año, color) a la izquierda y
+  "Registro" (estado, kilometraje, patente, ingreso) a la derecha, con la situación al lado
+  del título (verde si está disponible).
+
 ### Detalles
 - **Tablas:** columnas calculadas según el contenido, números alineados a la derecha,
   separador de miles argentino (`$ 22.850.920`, `112.900 km`) y una sola línea de borde.
