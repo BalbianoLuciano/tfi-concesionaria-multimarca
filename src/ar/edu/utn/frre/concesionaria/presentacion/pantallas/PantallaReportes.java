@@ -41,34 +41,35 @@ final class PantallaReportes extends Pantalla {
 
     void mostrar() {
         List<Opcion> opciones = new ArrayList<>();
-        agregar(opciones, "Stock por tipo y estado", false,
-                () -> ver("Stock por tipo y estado", "stock-por-tipo", this::porTipo));
-        agregar(opciones, "Stock por marca", false,
+        seccion(opciones, "Stock");
+        agregar(opciones, "Stock por tipo y estado", "0 km y usados de cada tipo, con gráfico",
+                false, () -> ver("Stock por tipo y estado", "stock-por-tipo", this::porTipo));
+        agregar(opciones, "Stock por marca", "unidades y valor de cada marca", false,
                 () -> ver("Stock por marca", "stock-por-marca", this::porMarca));
-        agregar(opciones, "Usados", false, () -> ver("Usados", "usados", this::usados));
-        agregar(opciones, "Ventas por período", false, () -> {
+        agregar(opciones, "Usados", "kilometraje y antigüedad promedio", false,
+                () -> ver("Usados", "usados", this::usados));
+        agregar(opciones, "Valorización del stock", "precio de lista contra precio final", false,
+                () -> ver("Valorización del stock", "valorizacion", this::valorizacion));
+        seccion(opciones, "Ventas");
+        agregar(opciones, "Ventas por período", "unidades y recaudación por mes", false, () -> {
             LocalDate[] periodo = leerPeriodo();
             ver("Ventas por período", "ventas-por-mes", es -> porMes(es, periodo));
         });
-        agregar(opciones, "Ranking de vendedores", false, () -> {
+        agregar(opciones, "Ranking de vendedores", "quién vendió más en el período", false, () -> {
             LocalDate[] periodo = leerPeriodo();
             ver("Ranking de vendedores", "ranking-vendedores", es -> ranking(es, periodo));
         });
-        agregar(opciones, "Valorización del stock", false,
-                () -> ver("Valorización del stock", "valorizacion", this::valorizacion));
-        menu("Reportes", opciones);
+        menu("Reportes", () -> "Datos al " + Formatos.fecha(Reloj.hoy())
+                + " · cada reporte se puede exportar a .txt", opciones);
     }
 
     /** Muestra el reporte y ofrece exportarlo. */
     private void ver(String titulo, String archivo, Reporte reporte)
             throws ConcesionariaException {
-        cabecera("Reportes › " + titulo);
-        t.titulo(titulo);
-        t.info("Al " + Formatos.fecha(Reloj.hoy()));
-        t.blanco();
+        cabecera("Reportes › " + titulo, "Al " + Formatos.fecha(Reloj.hoy()));
         t.lineas(reporte.armar(estilo));
-        t.pie("E exportar a .txt · Enter volver");
-        String opcion = lector.linea("Opción").toLowerCase();
+        t.pie("E exportar a .txt · Enter Volver a Reportes");
+        String opcion = lector.linea("Elegí una opción").toLowerCase();
         if (opcion.equals("e")) {
             List<String> texto = new ArrayList<>();
             texto.add(" CONCESIONARIA MULTIMARCA · " + titulo);

@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Salida a la terminal con la estructura fija de cada pantalla (SPEC §5): encabezado con el
- * sistema, el usuario, el rol y la fecha; ruta de navegación; contenido; pie con las teclas.
+ * sistema, el usuario, el rol y la fecha; título y ruta; contexto; contenido; pie.
  */
 public final class Terminal {
 
@@ -70,26 +70,80 @@ public final class Terminal {
     }
 
     /**
-     * Encabezado fijo y ruta de navegación.
+     * Encabezado fijo (SPEC §5): sistema, usuario y fecha; una línea; el título de la pantalla a
+     * la izquierda y la ruta a la derecha.
      *
-     * @param derecha texto de la derecha ("lbalbiano · Vendedor · mié 18/11/2026"), o vacío
-     * @param ruta    la ruta ("Inicio › Vehículos › Registrar")
+     * @param derecha texto de la derecha ("lbalbiano · Vendedor · mié 18/11/2026")
+     * @param titulo  título de la pantalla ("Vehículos")
+     * @param ruta    la ruta ("Inicio › Vehículos")
      */
-    public void encabezado(String derecha, String ruta) {
-        int espacio = Math.max(1, ancho - 1 - SISTEMA.length() - derecha.length());
-        out.println(" " + estilo.titulo(SISTEMA) + " ".repeat(espacio) + estilo.tenue(derecha));
-        out.println(" " + estilo.tenue(ruta));
+    public void encabezado(String derecha, String titulo, String ruta) {
+        out.println(" " + estilo.titulo(SISTEMA) + relleno(SISTEMA, derecha)
+                + estilo.tenue(derecha));
+        regla();
+        String mayusculas = titulo.toUpperCase();
+        out.println(" " + estilo.titulo(mayusculas)
+                + (ruta.isEmpty() ? "" : relleno(mayusculas, ruta) + estilo.tenue(ruta)));
+    }
+
+    /** Espacios para que {@code derecha} quede pegada al margen derecho. */
+    private String relleno(String izquierda, String derecha) {
+        return " ".repeat(Math.max(2, ancho - 1 - izquierda.length() - derecha.length()));
+    }
+
+    /** Línea separadora tenue de todo el ancho. */
+    public void regla() {
         out.println(" " + estilo.tenue("─".repeat(ancho - 1)));
     }
 
     /**
-     * Pie con las teclas disponibles.
+     * Línea de contexto debajo del título: datos de la sección, en tenue.
      *
-     * @param teclas por ejemplo "0 Volver · Enter confirma"
+     * @param texto por ejemplo "10 disponibles · 0 km: 4 · usados: 6"
+     */
+    public void contexto(String texto) {
+        out.println(" " + estilo.tenue(texto));
+    }
+
+    /**
+     * Título de un grupo de opciones de menú.
+     *
+     * @param nombre por ejemplo "Consultar"
+     */
+    public void seccion(String nombre) {
+        out.println("   " + estilo.negrita(nombre));
+    }
+
+    /**
+     * Una opción de menú: tecla en negrita, etiqueta y descripción tenue, siempre en la misma
+     * columna (también {@code 0} y {@code C}).
+     *
+     * @param tecla         la tecla ("1", "C", "0")
+     * @param etiqueta      la etiqueta
+     * @param detalle       descripción corta, o vacía
+     * @param anchoEtiqueta ancho de la columna de etiquetas
+     */
+    public void opcion(String tecla, String etiqueta, String detalle, int anchoEtiqueta) {
+        String texto = "     " + estilo.negrita(String.format("%2s", tecla)) + "  ";
+        if (detalle == null || detalle.isEmpty()) {
+            out.println(texto + etiqueta);
+        } else {
+            out.println(texto + String.format("%-" + anchoEtiqueta + "s", etiqueta) + "  "
+                    + estilo.tenue(detalle));
+        }
+    }
+
+    /**
+     * Pie fijo: una línea y, debajo, las teclas de la pantalla.
+     *
+     * @param teclas por ejemplo "S siguiente · 0 volver", o vacío si sigue un prompt
      */
     public void pie(String teclas) {
         out.println();
-        out.println(" " + estilo.tenue(teclas));
+        regla();
+        if (teclas != null && !teclas.isEmpty()) {
+            out.println(" " + estilo.tenue(teclas));
+        }
     }
 
     /**
@@ -119,9 +173,12 @@ public final class Terminal {
     }
 
     /**
+     * Mensaje de éxito, separado por una línea en blanco (SPEC §5).
+     *
      * @param mensaje mensaje de éxito, con {@code ✓}
      */
     public void exito(String mensaje) {
+        out.println();
         out.println(" " + estilo.verde("✓ " + mensaje));
     }
 
@@ -139,7 +196,9 @@ public final class Terminal {
      * @param mensaje aviso importante que no es error, con {@code !}
      */
     public void aviso(String mensaje) {
-        out.println(" " + estilo.negrita("! " + mensaje));
+        for (String parte : partir("! " + mensaje, ancho - 2)) {
+            out.println(" " + estilo.amarillo(parte));
+        }
     }
 
     /**

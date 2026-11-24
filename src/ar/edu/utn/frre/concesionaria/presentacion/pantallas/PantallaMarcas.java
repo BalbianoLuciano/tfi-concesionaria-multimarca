@@ -25,12 +25,18 @@ final class PantallaMarcas extends Pantalla {
 
     void mostrar() {
         List<Opcion> opciones = new ArrayList<>();
-        agregar(opciones, "Listar marcas", true, this::listar);
-        agregar(opciones, "Nueva marca", true, () -> crear(null, null));
-        agregar(opciones, "Modificar país o tipos", true, this::modificar);
-        agregar(opciones, "Activar o desactivar", true, this::cambiarActiva);
-        agregar(opciones, "Borrar (solo sin vehículos)", true, this::eliminar);
-        menu("Marcas", opciones);
+        agregar(opciones, "Listar marcas", "país, tipos y vehículos de cada una", true,
+                this::listar);
+        agregar(opciones, "Nueva marca", "avisa si hay una parecida", true, () -> crear(null, null));
+        agregar(opciones, "Modificar país o tipos", "el nombre no cambia", true, this::modificar);
+        agregar(opciones, "Activar o desactivar", "una desactivada no se ofrece en las altas", true,
+                this::cambiarActiva);
+        agregar(opciones, "Borrar", "solo si no tiene vehículos", true, this::eliminar);
+        menu("Marcas", () -> {
+            List<Marca> marcas = e.marcas.listar(sesion);
+            long activas = marcas.stream().filter(Marca::estaActiva).count();
+            return marcas.size() + " marcas · activas: " + activas;
+        }, opciones);
     }
 
     private void listar() throws ConcesionariaException {
