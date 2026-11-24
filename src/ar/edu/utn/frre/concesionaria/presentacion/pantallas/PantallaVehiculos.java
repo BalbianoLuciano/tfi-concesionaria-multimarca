@@ -259,8 +259,8 @@ final class PantallaVehiculos extends Pantalla {
 
     private void registrar() throws ConcesionariaException, OperacionCancelada {
         lector.operacion("el registro");
-        t.info("Escribí :q en cualquier campo para cancelar.");
-        t.blanco();
+        t.info("Son 4 pasos. Escribí :q en cualquier campo para cancelar sin guardar nada.");
+        t.paso(1, 4, "Tipo y estado");
         TipoVehiculo tipo = lector.elegir("Tipo", Arrays.asList(TipoVehiculo.values()),
                 TipoVehiculo::getEtiqueta);
         Vehiculo v = tipo == TipoVehiculo.AUTOMOVIL ? new Automovil()
@@ -268,7 +268,10 @@ final class PantallaVehiculos extends Pantalla {
         t.blanco();
         Estado estado = lector.elegir("Estado", Arrays.asList(Estado.values()), Estado::getEtiqueta);
         v.setEstado(estado);
-        t.blanco();
+
+        t.paso(2, 4, "Datos generales");
+        t.ayuda("Marca: escribí las primeras letras; solo aparecen las activas que fabrican "
+                + tipo.getPlural() + ".");
         Marca marca = elegirMarca(tipo, null);
         v.setMarca(marca);
 
@@ -276,34 +279,43 @@ final class PantallaVehiculos extends Pantalla {
             v.setModelo(m);
             return m;
         });
+        t.ayuda(estado == Estado.NUEVO ? "Un 0 km es del año actual o del siguiente."
+                : "Año entre " + Vehiculo.ANIO_MINIMO + " y " + (Reloj.anioActual() + 1) + ".");
         lector.leer("Año", a -> {
             v.setAnio(Lector.entero("Año", AYUDA_ANIO).convertir(a));
             return a;
         });
         t.blanco();
         v.setColor(lector.elegir("Color", Arrays.asList(Color.values()), Color::getEtiqueta));
+        t.ayuda("Precio de lista en pesos, sin depreciación ni patentamiento: el precio final"
+                + " se calcula solo.");
         lector.leer("Precio de lista $", p -> {
             v.setPrecioLista(Lector.monto("Precio de lista").convertir(p));
             return p;
         });
+
+        t.paso(3, 4, "Uso y patente");
+        String formatos = tipo == TipoVehiculo.MOTOCICLETA ? "123ABC o A123BCD"
+                : "ABC123 o AB123CD";
         if (estado == Estado.USADO) {
             lector.leer("Kilometraje", k -> {
                 v.setKilometraje(Lector.entero("Kilometraje",
                         "Escribí solo números, por ejemplo 84500 u 84.500.").convertir(k));
                 return k;
             });
+            t.ayuda("Formatos de patente: " + formatos + ".");
             lector.leer("Patente", p -> asignarPatente(v, p));
         } else {
+            t.ayuda("Un 0 km no tiene kilometraje. La patente (" + formatos
+                    + ") es opcional hasta que se patente.");
             lector.leerOpcional("Patente (Enter si todavía no está patentado)",
                     p -> asignarPatente(v, p));
         }
+        t.paso(4, 4, "Datos de la " + (tipo == TipoVehiculo.AUTOMOVIL ? "carrocería"
+                : tipo == TipoVehiculo.CAMIONETA ? "camioneta" : "moto"));
         leerDatosPropios(v, false);
 
-        t.blanco();
-        t.lineas(Vistas.ficha(v, estilo));
-        t.blanco();
-        t.lineas(Vistas.desglose(v.desglosarPrecio(Reloj.hoy()), tipo, estilo));
-        t.blanco();
+        resumen(v);
         if (!lector.confirmar("¿Registrar este vehículo?")) {
             t.info("No se registró nada.");
             return;
@@ -364,7 +376,6 @@ final class PantallaVehiculos extends Pantalla {
      * mantiene.
      */
     private void leerDatosPropios(Vehiculo v, boolean modificando) throws OperacionCancelada {
-        t.blanco();
         if (v instanceof Automovil) {
             Automovil a = (Automovil) v;
             CarroceriaAutomovil c = lector.elegir("Carrocería",
@@ -442,8 +453,8 @@ final class PantallaVehiculos extends Pantalla {
         t.titulo(v.getCodigo() + " · " + v.getTipo().getEtiqueta() + " · "
                 + v.getEstado().getEtiqueta());
         t.info("Enter deja el valor actual, que se muestra entre corchetes. :q cancela.");
-        t.blanco();
 
+        t.paso(1, 3, "Datos generales");
         v.setMarca(elegirMarca(v.getTipo(), v.getMarca()));
         lector.leer("Modelo", v.getModelo(), m -> {
             v.setModelo(m);
@@ -462,6 +473,7 @@ final class PantallaVehiculos extends Pantalla {
                     v.setPrecioLista(Lector.monto("Precio de lista").convertir(p));
                     return p;
                 });
+        t.paso(2, 3, "Uso y patente");
         if (v.getEstado() == Estado.USADO) {
             lector.leer("Kilometraje", Formatos.miles(v.getKilometraje()), k -> {
                 v.setKilometraje(Lector.entero("Kilometraje",
@@ -471,19 +483,28 @@ final class PantallaVehiculos extends Pantalla {
         }
         lector.leer("Patente", v.getPatente() == null ? "sin patente" : v.getPatente(),
                 p -> asignarPatente(v, p));
+        t.paso(3, 3, "Datos propios del tipo");
         leerDatosPropios(v, true);
 
-        t.blanco();
-        t.lineas(Vistas.ficha(v, estilo));
-        t.blanco();
-        t.lineas(Vistas.desglose(v.desglosarPrecio(Reloj.hoy()), v.getTipo(), estilo));
-        t.blanco();
+        resumen(v);
         if (!lector.confirmar("¿Guardar los cambios?")) {
             t.info("No se cambió nada.");
             return;
         }
         e.vehiculos.modificar(sesion, v);
         t.exito("Se guardaron los cambios de " + v.getCodigo() + ".");
+    }
+
+    /** Resumen antes de confirmar: ficha y precio, separados del formulario por una línea. */
+    private void resumen(Vehiculo v) {
+        t.blanco();
+        t.regla();
+        t.titulo("Resumen");
+        t.blanco();
+        t.lineas(Vistas.ficha(v, estilo));
+        t.blanco();
+        t.lineas(Vistas.desglose(v.desglosarPrecio(Reloj.hoy()), v.getTipo(), estilo));
+        t.blanco();
     }
 
     // ---------------------------------------------------------------- CU-08 baja

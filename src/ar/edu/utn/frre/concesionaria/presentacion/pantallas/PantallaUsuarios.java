@@ -75,14 +75,19 @@ final class PantallaUsuarios extends Pantalla {
 
     private void crear() throws ConcesionariaException, OperacionCancelada {
         lector.operacion("el alta del usuario");
-        t.info("Usuario: 4 a 20 caracteres, minúsculas, números, punto y guion bajo.");
+        t.paso(1, 3, "Identificación");
+        t.ayuda("Usuario: 4 a 20 caracteres, minúsculas, números, punto y guion bajo.");
         String usuario = lector.leer("Usuario", u -> {
             e.autenticacion.validarUsuarioDisponible(u);
             return u.toLowerCase();
         });
         String nombre = lector.leer("Nombre y apellido", n -> Comprador.validarNombre("Nombre", n));
-        t.blanco();
+        t.paso(2, 3, "Rol");
+        t.ayuda("Vendedor: stock y ventas. Directivo: consulta, reportes y exportar."
+                + " Administrador: todo.");
         Rol rol = lector.elegir("Rol", Arrays.asList(Rol.values()), Rol::getEtiqueta);
+        t.paso(3, 3, "Clave inicial");
+        t.ayuda("Pasásela por un medio seguro; la puede cambiar desde Mi cuenta.");
         String clave = leerClaveNueva();
         e.autenticacion.crearUsuario(sesion, usuario, nombre, rol, clave);
         t.exito("Se creó el usuario " + usuario + " (" + rol.getEtiqueta() + ").");
