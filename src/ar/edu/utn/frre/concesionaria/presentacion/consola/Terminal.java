@@ -17,9 +17,18 @@ public final class Terminal {
 
     private static final String SISTEMA = "CONCESIONARIA MULTIMARCA";
 
+    /** Lo último impreso fue una línea en blanco. */
+    private static final int BLANCO = 0;
+    /** Lo último impreso presenta al campo que viene (paso, ayuda, lista de opciones). */
+    private static final int INTRODUCCION = 1;
+    /** Lo último impreso fue cualquier otra cosa (un campo ya respondido, un mensaje). */
+    private static final int TEXTO = 2;
+
     private final PrintStream out;
     private final Estilo estilo;
     private final int ancho;
+    /** Qué fue lo último impreso, para separar los campos sin duplicar renglones en blanco. */
+    private int ultimo = BLANCO;
 
     /**
      * @param out    dónde escribir
@@ -157,6 +166,7 @@ public final class Terminal {
         out.println();
         out.println(" " + estilo.tenue("Paso " + numero + " de " + total + " ·") + " "
                 + estilo.titulo(nombre));
+        ultimo = INTRODUCCION;
     }
 
     /**
@@ -165,7 +175,28 @@ public final class Terminal {
      * @param texto la ayuda ("Entre 1990 y 2027.")
      */
     public void ayuda(String texto) {
-        out.println("   " + estilo.tenue(texto));
+        separarCampo();
+        for (String parte : partir(texto, ancho - 4)) {
+            out.println("   " + estilo.tenue(parte));
+        }
+        ultimo = INTRODUCCION;
+    }
+
+    /**
+     * Deja un renglón en blanco antes de un campo nuevo, para que cada dato se lea separado
+     * del anterior (SPEC §5, "Aire entre campos"). No lo agrega si ya hay uno, ni entre un
+     * campo y su ayuda o su lista de opciones.
+     */
+    public void separarCampo() {
+        if (ultimo == TEXTO) {
+            out.println();
+        }
+        ultimo = BLANCO;
+    }
+
+    /** Marca que lo recién impreso (una lista de opciones) presenta al campo que sigue. */
+    public void introduccion() {
+        ultimo = INTRODUCCION;
     }
 
     /**
@@ -173,11 +204,13 @@ public final class Terminal {
      */
     public void linea(String texto) {
         out.println(texto);
+        ultimo = texto.isBlank() ? BLANCO : TEXTO;
     }
 
     /** Línea en blanco. */
     public void blanco() {
         out.println();
+        ultimo = BLANCO;
     }
 
     /**
@@ -185,6 +218,7 @@ public final class Terminal {
      */
     public void lineas(List<String> lineas) {
         lineas.forEach(out::println);
+        ultimo = TEXTO;
     }
 
     /**
@@ -192,6 +226,7 @@ public final class Terminal {
      */
     public void titulo(String texto) {
         out.println(" " + estilo.titulo(texto));
+        ultimo = TEXTO;
     }
 
     /**
@@ -202,6 +237,7 @@ public final class Terminal {
     public void exito(String mensaje) {
         out.println();
         out.println(" " + estilo.verde("✓ " + mensaje));
+        ultimo = TEXTO;
     }
 
     /**
@@ -212,6 +248,7 @@ public final class Terminal {
         for (int i = 0; i < partes.size(); i++) {
             out.println(" " + estilo.rojo((i == 0 ? "✗ " : "  ") + partes.get(i)));
         }
+        ultimo = TEXTO;
     }
 
     /**
@@ -221,13 +258,17 @@ public final class Terminal {
         for (String parte : partir("! " + mensaje, ancho - 2)) {
             out.println(" " + estilo.amarillo(parte));
         }
+        ultimo = TEXTO;
     }
 
     /**
      * @param mensaje información secundaria
      */
     public void info(String mensaje) {
-        out.println(" " + estilo.tenue(mensaje));
+        for (String parte : partir(mensaje, ancho - 2)) {
+            out.println(" " + estilo.tenue(parte));
+        }
+        ultimo = TEXTO;
     }
 
     /**
@@ -238,6 +279,8 @@ public final class Terminal {
     public void escribir(String texto) {
         out.print(texto);
         out.flush();
+        // lo que siga (la respuesta del usuario y su Enter) ya es texto
+        ultimo = TEXTO;
     }
 
     /**

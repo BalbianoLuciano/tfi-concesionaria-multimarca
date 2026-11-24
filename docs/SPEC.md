@@ -60,12 +60,22 @@ Cada caso tiene un identificador que se usa en la trazabilidad y en los nombres 
 3. Elegir la marca del catálogo. Se escriben las primeras letras ("toy") y se elige de la lista
    de coincidencias. Solo aparecen las marcas activas que fabrican ese tipo de vehículo. Si
    la marca no existe, el administrador la puede crear en ese momento.
-4. Modelo, año, color y precio de lista.
-5. Si es usado: kilometraje y patente (obligatoria). Si es nuevo: patente opcional y km = 0,
+4. Elegir el modelo del **catálogo de la marca** (CU-12), filtrado por el tipo: nunca se
+   escribe libre. Se elige como la marca (primeras letras, número de la lista, o Enter para
+   verlos todos), y la búsqueda tolera errores de escritura (ver §3, "Tolerancia al error
+   humano"). Si el modelo no está, el administrador lo puede agregar en ese momento; el
+   vendedor recibe la indicación de pedírselo.
+5. Año, color y precio de lista.
+6. Si es usado: kilometraje y patente (obligatoria). Si es nuevo: patente opcional y km = 0,
    que no se pregunta.
-6. Los datos propios del tipo (ver [MODELO.md §3](MODELO.md#3-reglas-del-dominio)).
-7. Se muestra un resumen con el precio final calculado y se pide confirmar.
-8. El sistema asigna el código (`C-0004`), guarda y lo informa.
+7. Los datos propios del tipo (ver [MODELO.md §3](MODELO.md#3-reglas-del-dominio)).
+8. Se muestra un resumen con el precio final calculado y se pide confirmar.
+9. El sistema asigna el código (`C-0004`), guarda y lo informa.
+
+El negocio vuelve a controlar que el modelo pertenezca al catálogo de la marca para ese tipo,
+también en la modificación y en la importación CSV: un modelo desconocido se rechaza con la
+sugerencia del más parecido ("«Korola» no está en el catálogo de Toyota. ¿Quisiste decir
+Corolla?").
 
 ### CU-04 · Listar stock
 - Por defecto muestra los vehículos **disponibles**, ordenados por tipo y marca.
@@ -116,6 +126,15 @@ Lista de ventas filtrable por rango de fechas y vendedor, con el total recaudado
 - Antes de crear una marca se muestran las parecidas que ya existen, para evitar duplicados
   como "Tollota".
 - Una marca con vehículos no se borra: se desactiva (deja de ofrecerse en las altas).
+- **Catálogo de modelos:** cada marca tiene sus modelos, cada uno con el tipo de vehículo al
+  que corresponde (Corolla → Automóvil, Hilux → Camioneta). Se listan agrupados por tipo, se
+  agregan y se quitan desde Marcas › Modelos (solo el administrador).
+  - El nombre del modelo tiene entre 2 y 40 caracteres (letras, números, espacio, `-` y `.`);
+    escrito todo en minúsculas se guarda con inicial mayúscula.
+  - No se repite dentro de la marca (comparado sin mayúsculas, acentos ni espacios), y antes
+    de agregarlo se avisa si hay uno parecido.
+  - Un modelo con vehículos no se quita.
+  - El tipo tiene que ser uno de los que fabrica la marca.
 
 ### CU-13 · ABM de usuarios
 Alta, desactivar, reactivar, cambiar rol y blanquear clave. Un administrador no se puede
@@ -171,6 +190,7 @@ corrido, en lugar de exigir el formato exacto:
 | Patente | "ab 123 cd", "ab-123-cd", "AB.123.CD" | AB123CD |
 | Confirmación | s, si, sí, n, no, en mayúsculas o minúsculas | sí o no |
 | Marca mal escrita | "toyta" (sin ninguna marca que empiece así) | "¿Quisiste decir Toyota?" antes de ofrecer crear una marca nueva |
+| Modelo del catálogo | "cor", "COROLLA", "korola", "korollà", "Hilx" | Primero por nombre o comienzo, sin mayúsculas ni acentos; si no hay, por parecido fonético (k/c/q, z/s, v/b, sin h, letras dobles) o por hasta 2 letras de diferencia. Una coincidencia exacta se toma directo; una aproximada se confirma: "¿Quisiste decir Corolla?" |
 
 | Campo | Regla | Mensaje de ejemplo |
 |---|---|---|
@@ -181,7 +201,7 @@ corrido, en lugar de exigir el formato exacto:
 | Patente auto/camioneta | `AAA999` (1995–2016) o `AA999AA` (Mercosur) | "AB12CD" no es una patente válida. Formatos: ABC123 o AB123CD. |
 | Patente moto | `999AAA` (anterior) o `A999AAA` (Mercosur) | "AB123CD" no es una patente de moto. Formatos: 123ABC o A123BCD. |
 | Patente | Única en todo el stock (incluye vendidos y bajas) | La patente AB123CD ya está registrada en C-0002. |
-| Modelo | 1 a 40 caracteres: letras, números, espacio, `-` y `.` | El modelo admite letras, números, espacios, guiones y puntos. |
+| Modelo | Uno del catálogo de la marca para ese tipo (CU-12) | «Korola» no está en el catálogo de Toyota. ¿Quisiste decir Corolla? |
 | Precio de lista | Mayor a 0 y hasta 2.000.000.000. Acepta "38.000.000" o "38000000" | El precio tiene que ser mayor a $ 0. |
 | Puertas | 2 a 5 | Un automóvil tiene entre 2 y 5 puertas. |
 | Carga útil | 300 a 3.500 kg | La carga útil va de 300 a 3.500 kg. |
@@ -297,6 +317,10 @@ una línea en blanco. Los errores de un campo que se vuelve a preguntar van pega
   "Paso 2 de 4 · Datos generales".
 - **Ayuda antes del campo:** en tenue y con sangría, se explica el formato esperado antes de
   pedirlo ("Formatos de patente: ABC123 o AB123CD."), no recién después del error.
+- **Aire entre campos:** cada campo es un bloque separado del anterior por una línea en
+  blanco, con su ayuda o su lista de opciones pegada arriba del pedido. Los reintentos
+  después de un error van pegados al error, sin separación. La ayuda larga se parte en
+  renglones al ancho de la terminal, nunca se corta en el borde.
 - **Resumen antes de confirmar:** separado del formulario por una línea, con la ficha y el
   desglose del precio.
 - **Ficha en dos columnas:** "Vehículo" (tipo, detalle, marca, año, color) a la izquierda y
@@ -413,9 +437,9 @@ Runner propio (`PruebasRunner`), sin JUnit: cada prueba es un método que lanza
 | PR-VALID | Cada fila de la tabla de §3: el límite válido, el inválido y el formato |
 | PR-PATENTE | Formatos de auto y de moto, unicidad entre vehículos vendidos y dados de baja |
 | PR-VENTA | Venta exitosa, vender algo ya vendido, vender algo dado de baja, precio congelado |
-| PR-MARCA | Normalización, duplicado con otra capitalización, desactivar marca en uso |
+| PR-MARCA | Normalización, duplicado con otra capitalización, desactivar marca en uso; catálogo de modelos: duplicado, tipo que la marca no fabrica, búsqueda fonética, quitar un modelo en uso, alta e importación con un modelo fuera del catálogo |
 | PR-PERMISO | Cada rol contra cada operación de la matriz de §1 |
-| PR-PERSIST | Guardar y cargar, archivo corrupto → se recupera del `.bak`, versión de esquema distinta |
+| PR-PERSIST | Guardar y cargar, archivo corrupto → se recupera del `.bak`, versión de esquema distinta, migración del esquema 1 al 2 (arma el catálogo de modelos con los vehículos existentes) |
 | PR-CSV | Importación válida, importación con una fila mala → no se importa nada |
 | PR-COLECCION | `equals`, `hashCode` y `compareTo` de cada entidad |
 
@@ -450,3 +474,4 @@ java -Dconcesionaria.dir=/tmp/demo -jar dist/concesionaria.jar
 | PM-15 | Con el programa cerrado, truncar `/tmp/demo/datos.ser` (`: > /tmp/demo/datos.ser`) y abrir. | Aviso en amarillo: se recuperó la copia anterior; queda `datos.ser.corrupto`. |
 | PM-16 | `java -jar dist/concesionaria.jar < /dev/null`. | Sale con "Hasta luego." sin excepciones (fin de entrada). |
 | PM-17 | Registrar un auto escribiendo `auto`, `usado`, `toyta`, `rojo`, `85.000 km`, `ab.123.cd`, `sedan` y `4 puertas`; en el año, tres errores seguidos. | Acepta todo; sugiere "¿Quisiste decir Toyota?"; tras el tercer error en el año pregunta "¿Seguir con «Año»?" y, con Enter, sigue sin perder lo cargado. |
+| PM-18 | Registrar un auto Toyota escribiendo en el modelo `korola`; después, como vendedor, escribir un modelo que no existe. | "¿Quisiste decir Corolla?"; con `s` sigue. Al vendedor no le ofrece crear el modelo: le indica pedírselo al administrador. |

@@ -8,7 +8,9 @@ import ar.edu.utn.frre.concesionaria.excepciones.ConcesionariaException;
 import ar.edu.utn.frre.concesionaria.excepciones.MarcaDuplicadaException;
 import ar.edu.utn.frre.concesionaria.excepciones.MarcaEnUsoException;
 import ar.edu.utn.frre.concesionaria.excepciones.MarcaNoEncontradaException;
+import ar.edu.utn.frre.concesionaria.excepciones.ReglaNegocioException;
 import ar.edu.utn.frre.concesionaria.modelo.Marca;
+import ar.edu.utn.frre.concesionaria.modelo.Modelo;
 import ar.edu.utn.frre.concesionaria.modelo.Permiso;
 import ar.edu.utn.frre.concesionaria.modelo.TipoVehiculo;
 import java.util.List;
@@ -182,6 +184,128 @@ public class ServicioMarcas extends ServicioBase {
      */
     public long cantidadVehiculos(Marca marca) {
         return vehiculos.listar().stream().filter(v -> marca.equals(v.getMarca())).count();
+    }
+
+    // ---------------------------------------------------------------- catálogo de modelos
+
+    /**
+     * Modelos del catálogo que coinciden con lo escrito, por nombre o por su comienzo, sin
+     * importar mayúsculas ni acentos (SPEC §3). Texto vacío: todos los del tipo.
+     *
+     * @param marca la marca
+     * @param tipo  el tipo de vehículo
+     * @param texto lo que escribió el usuario, o {@code null}
+     * @return los que coinciden, en orden alfabético
+     */
+    public List<Modelo> modelosQueCoinciden(Marca marca, TipoVehiculo tipo, String texto) {
+        List<Modelo> delTipo = marca.modelosDe(tipo);
+        if (texto == null || texto.isBlank()) {
+            return delTipo;
+        }
+        List<String> nombres = delTipo.stream().map(Modelo::getNombre).toList();
+        return Textos.coincidencias(texto, nombres).stream().map(delTipo::get).toList();
+    }
+
+    /**
+     * Modelos parecidos a lo escrito cuando no coincide ninguno: errores de tipeo y de
+     * ortografía ("korola" → Corolla), SPEC §3.
+     *
+     * @param marca la marca
+     * @param tipo  el tipo de vehículo, o {@code null} para todos
+     * @param texto lo que escribió el usuario
+     * @return los parecidos, del más al menos parecido
+     */
+    public List<Modelo> modelosParecidos(Marca marca, TipoVehiculo tipo, String texto) {
+        List<Modelo> candidatos = tipo == null ? marca.getModelos() : marca.modelosDe(tipo);
+        List<String> nombres = candidatos.stream().map(Modelo::getNombre).toList();
+        return Textos.parecidas(texto, nombres).stream().map(candidatos::get).toList();
+    }
+
+    /**
+     * Controla que un modelo pertenezca al catálogo de la marca para su tipo (CU-03). Lo usan
+     * el alta, la modificación y la importación.
+     *
+     * @param marca  la marca
+     * @param tipo   el tipo del vehículo
+     * @param modelo el nombre del modelo
+     * @throws ReglaNegocioException si no está, con la sugerencia del más parecido
+     */
+    public void exigirModeloDelCatalogo(Marca marca, TipoVehiculo tipo, String modelo)
+            throws ReglaNegocioException {
+        Optional<Modelo> encontrado = marca.buscarModelo(modelo);
+        if (encontrado.isPresent() && encontrado.get().getTipo() == tipo) {
+            return;
+        }
+        String mensaje = "«" + modelo + "» no está en el catálogo de " + marca.getNombre()
+                + " para " + tipo.getPlural() + ".";
+        List<Modelo> parecidos = modelosParecidos(marca, tipo, modelo);
+        if (!parecidos.isEmpty()) {
+            mensaje += " ¿Quisiste decir " + parecidos.get(0).getNombre() + "?";
+        } else {
+            mensaje += " Un administrador lo puede agregar en Marcas › Modelos.";
+        }
+        throw new ReglaNegocioException(mensaje);
+    }
+
+    /**
+     * Agrega un modelo al catálogo de una marca (CU-12).
+     *
+     * @param sesion sesión de un administrador
+     * @param marca  la marca
+     * @param nombre nombre del modelo
+     * @param tipo   tipo de vehículo
+     * @return el modelo agregado
+     * @throws ConcesionariaException si no tiene permiso, el nombre no es válido, la marca no
+     *                                fabrica ese tipo, ya existe o no se pudo guardar
+     */
+    public Modelo agregarModelo(Sesion sesion, Marca marca, String nombre, TipoVehiculo tipo)
+            throws ConcesionariaException {
+        sesion.exigir(Permiso.GESTIONAR_MARCAS);
+        Modelo nuevo = new Modelo(nombre, tipo);
+        if (!marca.fabrica(tipo)) {
+            throw new ReglaNegocioException(marca.getNombre() + " no fabrica "
+                    + tipo.getPlural() + ". Agregá el tipo en Marcas › Modificar país o tipos.");
+        }
+        Optional<Modelo> existente = marca.buscarModelo(nuevo.getNombre());
+        if (existente.isPresent()) {
+            throw new ReglaNegocioException(marca.getNombre() + " ya tiene el modelo "
+                    + existente.get() + ".");
+        }
+        marca.agregarModelo(nuevo);
+        guardarCambios();
+        return nuevo;
+    }
+
+    /**
+     * Quita un modelo del catálogo, si ningún vehículo lo usa.
+     *
+     * @param sesion sesión de un administrador
+     * @param marca  la marca
+     * @param modelo el modelo
+     * @throws ConcesionariaException si no tiene permiso, está en uso o no se pudo guardar
+     */
+    public void quitarModelo(Sesion sesion, Marca marca, Modelo modelo)
+            throws ConcesionariaException {
+        sesion.exigir(Permiso.GESTIONAR_MARCAS);
+        long enUso = cantidadVehiculos(marca, modelo);
+        if (enUso > 0) {
+            throw new ReglaNegocioException("El " + modelo.getNombre() + " tiene " + enUso
+                    + " vehículo(s) y no se puede quitar del catálogo.");
+        }
+        marca.quitarModelo(modelo);
+        guardarCambios();
+    }
+
+    /**
+     * @param marca  la marca
+     * @param modelo un modelo de su catálogo
+     * @return cuántos vehículos (de cualquier situación) son de ese modelo
+     */
+    public long cantidadVehiculos(Marca marca, Modelo modelo) {
+        return vehiculos.listar().stream()
+                .filter(v -> marca.equals(v.getMarca())
+                        && modelo.getClave().equals(Textos.compacta(v.getModelo())))
+                .count();
     }
 
     private Marca buscar(int id) throws MarcaNoEncontradaException {

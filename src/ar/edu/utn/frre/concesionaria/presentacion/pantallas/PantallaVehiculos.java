@@ -14,6 +14,7 @@ import ar.edu.utn.frre.concesionaria.modelo.Color;
 import ar.edu.utn.frre.concesionaria.modelo.ConEtiqueta;
 import ar.edu.utn.frre.concesionaria.modelo.Estado;
 import ar.edu.utn.frre.concesionaria.modelo.Marca;
+import ar.edu.utn.frre.concesionaria.modelo.Modelo;
 import ar.edu.utn.frre.concesionaria.modelo.Motocicleta;
 import ar.edu.utn.frre.concesionaria.modelo.Permiso;
 import ar.edu.utn.frre.concesionaria.modelo.Situacion;
@@ -277,19 +278,17 @@ final class PantallaVehiculos extends Pantalla {
         Vehiculo v = tipo == TipoVehiculo.AUTOMOVIL ? new Automovil()
                 : tipo == TipoVehiculo.CAMIONETA ? new Camioneta() : new Motocicleta();
         t.blanco();
-        Estado estado = lector.elegir("Estado", Arrays.asList(Estado.values()), Estado::getEtiqueta);
+        // "0 km (nuevo)": así también se puede responder "nuevo" (SPEC §3, tolerancia).
+        Estado estado = lector.elegir("Estado", Arrays.asList(Estado.values()),
+                x -> x == Estado.NUEVO ? x.getEtiqueta() + " (nuevo)" : x.getEtiqueta());
         v.setEstado(estado);
 
         t.paso(2, 4, "Datos generales");
-        t.ayuda("Marca: escribí las primeras letras; solo aparecen las activas que fabrican "
+        t.ayuda("Marca: escribí las primeras letras, o Enter para ver las que fabrican "
                 + tipo.getPlural() + ".");
         Marca marca = elegirMarca(tipo, null);
         v.setMarca(marca);
-
-        lector.leer("Modelo", m -> {
-            v.setModelo(m);
-            return m;
-        });
+        v.setModelo(elegirModelo(marca, tipo, null));
         t.ayuda(estado == Estado.NUEVO ? "Un 0 km es del año actual o del siguiente."
                 : "Año entre " + Vehiculo.ANIO_MINIMO + " y " + (Reloj.anioActual() + 1) + ".");
         lector.leer("Año", a -> {
@@ -359,10 +358,22 @@ final class PantallaVehiculos extends Pantalla {
             throws ConcesionariaException, OperacionCancelada {
         for (int intento = 1; true; intento++) {
             String prefijo = actual == null
-                    ? lector.leer("Marca (primeras letras)", s -> s)
+                    ? lector.leerOpcional("Marca (primeras letras)", s -> s)
                     : lector.leer("Marca (primeras letras)", actual.getNombre(), s -> s);
-            if (prefijo == null) {
+            if (prefijo == null && actual != null) {
                 return actual;
+            }
+            if (prefijo == null) {
+                // Enter vacío: la lista completa de las que se pueden elegir (SPEC §3).
+                List<Marca> todas = e.marcas.paraAlta(tipo, "");
+                if (!todas.isEmpty()) {
+                    return lector.elegir("Marca", todas, Marca::getNombre);
+                }
+                t.error("No hay marcas activas que fabriquen " + tipo.getPlural() + ".");
+                if (sesion.puede(Permiso.GESTIONAR_MARCAS)) {
+                    return new PantallaMarcas(e, sesion).crear(null, EnumSet.of(tipo));
+                }
+                throw new OperacionCancelada("Un administrador tiene que cargar la marca en Marcas.");
             }
             List<Marca> coinciden = e.marcas.paraAlta(tipo, prefijo);
             if (coinciden.size() == 1) {
@@ -396,6 +407,149 @@ final class PantallaVehiculos extends Pantalla {
                 intento = 0;
             }
         }
+    }
+
+    /**
+     * Elige el modelo del catálogo de la marca (CU-03, paso 4): nunca se escribe libre. Acepta
+     * el comienzo del nombre, el número de la lista o Enter para verlos todos, y reconoce los
+     * errores de escritura ("korola" → Corolla) con una sugerencia (SPEC §3). El administrador
+     * puede agregar un modelo que falta; el resto recibe la indicación de pedirlo.
+     *
+     * @param marca  la marca ya elegida
+     * @param tipo   el tipo del vehículo
+     * @param actual el modelo actual (modificación), o {@code null}
+     * @return el nombre del modelo, tal como figura en el catálogo
+     */
+    private String elegirModelo(Marca marca, TipoVehiculo tipo, String actual)
+            throws ConcesionariaException, OperacionCancelada {
+        Modelo vigente = actual == null ? null : marca.buscarModelo(actual)
+                .filter(m -> m.getTipo() == tipo).orElse(null);
+        int cantidad = marca.modelosDe(tipo).size();
+        t.ayuda(cantidad == 0
+                ? marca.getNombre() + " todavía no tiene " + tipo.getPlural() + " en el catálogo."
+                : "Modelo: escribí las primeras letras, o Enter para ver los " + cantidad
+                        + " de " + marca.getNombre() + ".");
+        // La última lista mostrada: un número elige de ella; cualquier otro texto vuelve a
+        // buscar, y así un modelo que no está se puede agregar aunque se haya visto la lista.
+        List<Modelo> listado = List.of();
+        for (int intento = 1; true; intento++) {
+            String texto = vigente == null ? lector.leerOpcional("Modelo", s -> s)
+                    : lector.leer("Modelo", vigente.getNombre(), s -> s);
+            if (texto == null && vigente != null) {
+                return vigente.getNombre();
+            }
+            if (texto != null && texto.matches("\\d+") && !listado.isEmpty()) {
+                int n = Integer.parseInt(texto);
+                if (n >= 1 && n <= listado.size()) {
+                    return listado.get(n - 1).getNombre();
+                }
+                t.error("Elegí un número entre 1 y " + listado.size()
+                        + ", o escribí el nombre del modelo.");
+                t.introduccion();
+                continue;
+            }
+            List<Modelo> coinciden = e.marcas.modelosQueCoinciden(marca, tipo, texto);
+            if (texto != null && coinciden.size() == 1) {
+                t.info("→ " + coinciden.get(0).getNombre());
+                return coinciden.get(0).getNombre();
+            }
+            if (!coinciden.isEmpty()) {
+                listado = mostrarModelos(coinciden, texto == null ? null
+                        : "Hay " + coinciden.size() + " que coinciden con \"" + texto + "\":");
+                intento = 0;
+                continue;
+            }
+            if (texto != null) {
+                List<Modelo> parecidos = e.marcas.modelosParecidos(marca, tipo, texto);
+                if (parecidos.size() == 1 && lector.confirmar("¿Quisiste decir "
+                        + parecidos.get(0).getNombre() + "?")) {
+                    return parecidos.get(0).getNombre();
+                }
+                if (parecidos.size() > 1) {
+                    listado = mostrarModelos(parecidos, "No hay ninguno que empiece con \""
+                            + texto + "\". Parecidos:");
+                    continue;
+                }
+            }
+            if (texto == null) {
+                // Enter con el catálogo vacío para este tipo: no hay lista que mostrar.
+                texto = sesion.puede(Permiso.GESTIONAR_MARCAS)
+                        ? lector.leer("Nombre del modelo nuevo", s -> s) : "";
+                if (texto.isEmpty()) {
+                    t.error(marca.getNombre() + " no tiene " + tipo.getPlural()
+                            + " en el catálogo. Pedile a un administrador que los cargue en"
+                            + " Marcas › Modelos.");
+                    throw new OperacionCancelada("No se registró nada.");
+                }
+            }
+            String nombre = agregarModeloSiCorresponde(marca, tipo, texto);
+            if (nombre != null) {
+                return nombre;
+            }
+            if (intento == Lector.INTENTOS) {
+                lector.exigirSeguir("Modelo");
+                intento = 0;
+            }
+        }
+    }
+
+    /**
+     * Muestra modelos numerados, en columnas si son muchos, para elegir con el número.
+     *
+     * @param modelos los modelos
+     * @param titulo  una línea antes de la lista, o {@code null}
+     * @return la lista mostrada, en el mismo orden que los números
+     */
+    private List<Modelo> mostrarModelos(List<Modelo> modelos, String titulo) {
+        if (titulo != null) {
+            t.info(titulo);
+        }
+        int columnas = modelos.size() > 6 ? 3 : 1;
+        int anchoColumna = modelos.stream().mapToInt(m -> m.getNombre().length()).max()
+                .orElse(0) + 6;
+        StringBuilder fila = new StringBuilder();
+        for (int i = 0; i < modelos.size(); i++) {
+            fila.append(String.format("%-" + anchoColumna + "s",
+                    String.format("%3d  %s", i + 1, modelos.get(i).getNombre())));
+            if ((i + 1) % columnas == 0 || i == modelos.size() - 1) {
+                t.linea(" " + fila.toString().stripTrailing());
+                fila.setLength(0);
+            }
+        }
+        t.info("Escribí el número, o el nombre si no está en la lista.");
+        t.introduccion();
+        return modelos;
+    }
+
+    /**
+     * Un modelo que no está en el catálogo: el administrador lo puede agregar en el momento;
+     * al resto se le explica a quién pedírselo.
+     *
+     * @return el nombre agregado, o {@code null} si no se agregó
+     */
+    private String agregarModeloSiCorresponde(Marca marca, TipoVehiculo tipo, String texto)
+            throws ConcesionariaException, OperacionCancelada {
+        t.error("«" + texto + "» no está en el catálogo de " + marca.getNombre() + " para "
+                + tipo.getPlural() + ".");
+        if (!sesion.puede(Permiso.GESTIONAR_MARCAS)) {
+            t.info("Elegí uno de la lista (Enter) o pedile a un administrador que lo agregue en"
+                    + " Marcas › Modelos.");
+            return null;
+        }
+        String nombre;
+        try {
+            nombre = Modelo.normalizar(texto);
+        } catch (DatoInvalidoException ex) {
+            t.error(ex.getMessage());
+            return null;
+        }
+        if (!lector.confirmar("¿Agregar «" + nombre + "» al catálogo de " + marca.getNombre()
+                + " como " + tipo.getEtiqueta().toLowerCase() + "?")) {
+            return null;
+        }
+        Modelo nuevo = e.marcas.agregarModelo(sesion, marca, nombre, tipo);
+        t.exito("Se agregó " + nuevo.getNombre() + " al catálogo de " + marca.getNombre() + ".");
+        return nuevo.getNombre();
     }
 
     /**
@@ -483,10 +637,7 @@ final class PantallaVehiculos extends Pantalla {
 
         t.paso(1, 3, "Datos generales");
         v.setMarca(elegirMarca(v.getTipo(), v.getMarca()));
-        lector.leer("Modelo", v.getModelo(), m -> {
-            v.setModelo(m);
-            return m;
-        });
+        v.setModelo(elegirModelo(v.getMarca(), v.getTipo(), v.getModelo()));
         lector.leer("Año", String.valueOf(v.getAnio()), a -> {
             v.setAnio(Lector.entero("Año", AYUDA_ANIO).convertir(a));
             return a;

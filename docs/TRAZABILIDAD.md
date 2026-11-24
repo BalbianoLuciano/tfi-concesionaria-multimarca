@@ -8,7 +8,7 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 
 | # | Requisito | Dónde se cumple | Prueba |
 |---|---|---|---|
-| 1 | Dominio del problema, abstracción, modelado, tipos de datos | `modelo/`: `Vehiculo` y subclases, `Marca`, `Venta`, `Usuario`. [MODELO.md](MODELO.md) | PR-COLECCION |
+| 1 | Dominio del problema, abstracción, modelado, tipos de datos | `modelo/`: `Vehiculo` y subclases, `Marca` con su catálogo de `Modelo`, `Venta`, `Usuario`. [MODELO.md](MODELO.md) | PR-COLECCION |
 | 2 | Diseño vs. Negocio | Paquetes `presentacion` / `negocio` / `datos` con dependencias en un solo sentido. [ARQUITECTURA.md §1–2](ARQUITECTURA.md#1-vista-general-diseño-vs-negocio) | — (revisión de imports) |
 | 3 | Remarks y JavaDoc | JavaDoc en todas las clases y métodos públicos; comentarios que explican el porqué. `./build.sh docs` | — |
 | 4 | Clases abstractas, herencia, polimorfismo | `Vehiculo` abstracta; `Automovil`, `Camioneta`, `Motocicleta`; template method `calcularPrecioFinal()` y `getDetalleTipo()` | PR-PRECIO |
@@ -24,7 +24,7 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 
 | Punto | Dónde se cumple |
 |---|---|
-| Vehículos multimarca en un único sistema | `Vehiculo` + catálogo `Marca` |
+| Vehículos multimarca en un único sistema | `Vehiculo` + catálogo `Marca`, cada una con su catálogo de `Modelo` |
 | Clasificación por estado (0 km / usado con km) | Enum `Estado` y la regla de `setKilometraje()`. [MODELO.md §3](MODELO.md#nuevo-y-usado) |
 | Atributos obligatorios: marca, modelo, año, color, carrocería | Atributos de `Vehiculo` y subclases, validados en los setters |
 | Esquema en capas: interfaz, negocio, datos | Requisito 2 |
@@ -36,9 +36,9 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 |---|---|---|
 | CU-01 Primer arranque | `PantallaInicio` | `ServicioAutenticacion`, `DatosDemo` |
 | CU-02 Sesión | `PantallaInicio`, `MenuPrincipal` (cerrar sesión) | `ServicioAutenticacion`, `Sesion` |
-| CU-03 a CU-09 Vehículos | `PantallaVehiculos`; selector común en `Pantalla.elegirVehiculo` (SPEC §5) | `ServicioVehiculos`, `FiltroVehiculos`, `OrdenVehiculos`; `ServicioMarcas.paraAlta` |
+| CU-03 a CU-09 Vehículos | `PantallaVehiculos` (modelo con `elegirModelo`); selector común en `Pantalla.elegirVehiculo` (SPEC §5) | `ServicioVehiculos`, `FiltroVehiculos`, `OrdenVehiculos`; `ServicioMarcas.paraAlta` y `exigirModeloDelCatalogo` |
 | CU-10, CU-11 Ventas | `PantallaVentas` (comprobante en `Vistas`; vehículo con `Pantalla.elegirVehiculo`) | `ServicioVentas` |
-| CU-12 Marcas | `PantallaMarcas` | `ServicioMarcas` |
+| CU-12 Marcas y modelos | `PantallaMarcas` (opción Modelos) | `ServicioMarcas` (`agregarModelo`, `quitarModelo`, `modelosParecidos`); `modelo/Modelo`; `Textos.fonetica` y `Textos.parecidas` (pruebas PR-MARCA-09 a 12, PR-COMUN-12) |
 | CU-13, CU-16 Usuarios | `PantallaUsuarios` | `ServicioAutenticacion`, `Claves` |
 | CU-14 Reportes | `PantallaReportes` | `ServicioReportes` (calcula) + `ServicioArchivos` (exporta a .txt) |
 | CU-15 CSV | `PantallaDatos` | `ServicioArchivos` + `datos/ArchivosCsv` |
@@ -49,4 +49,5 @@ relativas a `src/ar/edu/utn/frre/concesionaria/`. Cuando el código exista, la c
 | Requisito | Dónde se cumple | Verificación |
 |---|---|---|
 | Rendimiento (ARQUITECTURA §7) | Índices en `RepositorioVehiculosMemoria` y `RepositorioMarcasMemoria`; clave cacheada en `Marca` | `rendimiento/MedicionRendimiento` (`./build.sh bench`) |
-| Consola trabajada (SPEC §5) | `presentacion/consola/` y `presentacion/pantallas/` | Plan manual PM-01 a PM-17 (SPEC §8); PR-COMUN-10 y PR-COMUN-11 |
+| Consola trabajada (SPEC §5) | `presentacion/consola/` y `presentacion/pantallas/`; aire entre campos con `Terminal.separarCampo` | Plan manual PM-01 a PM-18 (SPEC §8); PR-COMUN-10 a PR-COMUN-12 |
+| Compatibilidad de datos (ARQUITECTURA §4) | `MigradorAlmacen`: esquema 1 → 2 arma el catálogo de modelos | PR-PERSIST-09 |

@@ -123,8 +123,58 @@ public final class Textos {
     }
 
     /** @return la clave sin espacios, guiones ni signos: "Pick-up" → "pickup" */
-    private static String compacta(String texto) {
+    public static String compacta(String texto) {
         return clave(texto).replaceAll("[^a-z0-9]", "");
+    }
+
+    /**
+     * Clave fonética para reconocer un nombre mal escrito como lo escribiría una persona: sin
+     * acentos ni signos, con las letras que suenan igual unificadas (k, q y qu → c; z → s;
+     * v → b; y → i), sin h y sin letras dobles. "korollà", "korola" y "Corolla" dan "corola".
+     *
+     * @param texto el texto
+     * @return la clave fonética
+     */
+    public static String fonetica(String texto) {
+        String s = compacta(texto)
+                .replace("qu", "c").replace("q", "c").replace("k", "c")
+                .replace("z", "s").replace("v", "b").replace("y", "i")
+                .replace("h", "");
+        return s.replaceAll("(.)\\1+", "$1");
+    }
+
+    /**
+     * Opciones parecidas a un texto que no coincide con ninguna (SPEC §3): misma clave
+     * fonética, una clave fonética que empieza igual, o letras de diferencia: hasta 1 con 3
+     * letras y hasta 2 con 4 o más (con menos no se compara, para no emparejar cualquier sigla).
+     *
+     * @param texto     lo que escribió el usuario
+     * @param etiquetas el texto de cada opción
+     * @return las posiciones (desde 0) de las parecidas, de la más a la menos parecida
+     */
+    public static List<Integer> parecidas(String texto, List<String> etiquetas) {
+        String buscado = fonetica(texto);
+        if (buscado.isEmpty()) {
+            return List.of();
+        }
+        List<Integer> posiciones = new ArrayList<>();
+        List<Integer> distancias = new ArrayList<>();
+        for (int i = 0; i < etiquetas.size(); i++) {
+            String etiqueta = fonetica(etiquetas.get(i));
+            int d = distancia(buscado, etiqueta);
+            boolean parecida = d == 0
+                    || (buscado.length() >= 3 && etiqueta.startsWith(buscado))
+                    || (buscado.length() >= 3 && d <= 1)
+                    || (buscado.length() >= 4 && d <= 2);
+            if (parecida) {
+                posiciones.add(i);
+                distancias.add(d);
+            }
+        }
+        List<Integer> orden = new ArrayList<>(posiciones);
+        orden.sort((a, b) -> Integer.compare(distancias.get(posiciones.indexOf(a)),
+                distancias.get(posiciones.indexOf(b))));
+        return orden;
     }
 
     /**

@@ -70,5 +70,15 @@ public final class PruebasComun implements GrupoPruebas {
             Verificar.igual(List.of(1), Textos.coincidencias("usado", List.of("Usados", "Usado")));
             Verificar.igual(List.of(), Textos.coincidencias("rojo", tipos));
         });
+        r.prueba("PR-COMUN-12", "clave fonética: korola y korollà son Corolla", () -> {
+            Verificar.igual(Textos.fonetica("Corolla"), Textos.fonetica("korola"));
+            Verificar.igual(Textos.fonetica("Corolla"), Textos.fonetica(" KOROLLÀ "));
+            Verificar.igual(Textos.fonetica("Vento"), Textos.fonetica("bento"));
+            List<String> modelos = List.of("Corolla", "Hilux", "Yaris");
+            Verificar.igual(List.of(1), Textos.parecidas("Hilx", modelos));
+            Verificar.igual(List.of(2), Textos.parecidas("llaris", modelos));
+            Verificar.igual(List.of(), Textos.parecidas("C", modelos));
+            Verificar.igual(List.of(), Textos.parecidas("Ranger", modelos));
+        });
     }
 }

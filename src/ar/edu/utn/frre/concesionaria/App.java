@@ -94,12 +94,14 @@ public final class App {
         RepositorioVentasMemoria ventas = new RepositorioVentasMemoria(almacen);
         RepositorioUsuariosMemoria usuarios = new RepositorioUsuariosMemoria(almacen);
 
-        ServicioVehiculos servicioVehiculos = new ServicioVehiculos(vehiculos, archivo);
+        ServicioMarcas servicioMarcas = new ServicioMarcas(marcas, vehiculos, archivo);
+        ServicioVehiculos servicioVehiculos = new ServicioVehiculos(vehiculos, servicioMarcas,
+                archivo);
         Entorno entorno = new Entorno(terminal, lector,
                 new ServicioAutenticacion(usuarios, archivo, new DatosDemo(marcas, vehiculos)),
                 servicioVehiculos,
                 new ServicioVentas(vehiculos, ventas, archivo),
-                new ServicioMarcas(marcas, vehiculos, archivo),
+                servicioMarcas,
                 new ServicioReportes(vehiculos, ventas),
                 new ServicioArchivos(new ArchivosCsv(carpeta), vehiculos, marcas, ventas,
                         servicioVehiculos, archivo),

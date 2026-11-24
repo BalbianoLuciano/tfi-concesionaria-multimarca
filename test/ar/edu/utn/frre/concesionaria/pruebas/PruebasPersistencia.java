@@ -6,13 +6,19 @@ import ar.edu.utn.frre.concesionaria.datos.DatosDemo;
 import ar.edu.utn.frre.concesionaria.datos.RepositorioMarcasMemoria;
 import ar.edu.utn.frre.concesionaria.datos.RepositorioVehiculosMemoria;
 import ar.edu.utn.frre.concesionaria.excepciones.PersistenciaException;
+import ar.edu.utn.frre.concesionaria.modelo.Automovil;
+import ar.edu.utn.frre.concesionaria.modelo.CarroceriaAutomovil;
+import ar.edu.utn.frre.concesionaria.modelo.Color;
+import ar.edu.utn.frre.concesionaria.modelo.Estado;
 import ar.edu.utn.frre.concesionaria.modelo.Marca;
 import ar.edu.utn.frre.concesionaria.modelo.TipoVehiculo;
 import ar.edu.utn.frre.concesionaria.modelo.Vehiculo;
 import java.io.ObjectOutputStream;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.stream.Stream;
 
 /**
@@ -133,6 +139,35 @@ public final class PruebasPersistencia implements GrupoPruebas {
             Almacen leido = archivo.cargar();
             Verificar.igual(AlmacenArchivo.EstadoCarga.MIGRADO, archivo.getEstadoCarga());
             Verificar.igual(Almacen.VERSION_ESQUEMA_ACTUAL, leido.getVersionEsquema());
+        });
+        r.prueba("PR-PERSIST-09", "esquema 1 → 2: el catálogo se arma con los vehículos", () -> {
+            Fabrica.fijarHoy();
+            Path carpeta = carpetaTemporal();
+            Almacen viejo = new Almacen();
+            viejo.setVersionEsquema(1);
+            Marca fiat = new Marca("Fiat", "Italia", EnumSet.of(TipoVehiculo.AUTOMOVIL));
+            fiat.setId(1);
+            viejo.getMarcas().put(1, fiat);
+            Automovil cronos = new Automovil(Estado.NUEVO, fiat, "cronos", 2026, Color.ROJO,
+                    new BigDecimal("25000000"), null, null, CarroceriaAutomovil.SEDAN, 4);
+            cronos.setCodigo("A-0001");
+            Automovil raro = new Automovil(Estado.NUEVO, fiat, "X", 2026, Color.ROJO,
+                    new BigDecimal("25000000"), null, null, CarroceriaAutomovil.SEDAN, 4);
+            raro.setCodigo("A-0002");
+            viejo.getVehiculos().put("A-0001", cronos);
+            viejo.getVehiculos().put("A-0002", raro);
+            try (ObjectOutputStream salida = new ObjectOutputStream(
+                    Files.newOutputStream(carpeta.resolve("datos.ser")))) {
+                salida.writeObject(viejo);
+            }
+            AlmacenArchivo archivo = new AlmacenArchivo(carpeta);
+            Almacen leido = archivo.cargar();
+            Verificar.igual(AlmacenArchivo.EstadoCarga.MIGRADO, archivo.getEstadoCarga());
+            Marca migrada = leido.getMarcas().get(1);
+            Verificar.igual("Cronos", migrada.buscarModelo("CRONOS").get().getNombre());
+            // un modelo que no cumple la regla nueva no entra, pero el vehículo se conserva
+            Verificar.igual(1, migrada.getModelos().size());
+            Verificar.igual(2, leido.getVehiculos().size());
         });
         r.prueba("PR-PERSIST-08", "índices de patente y de prefijo de marca", () -> {
             Almacen a = conDemo(new AlmacenArchivo(carpetaTemporal()));

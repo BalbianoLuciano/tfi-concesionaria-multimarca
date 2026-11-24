@@ -1,6 +1,10 @@
 package ar.edu.utn.frre.concesionaria.datos;
 
+import ar.edu.utn.frre.concesionaria.excepciones.DatoInvalidoException;
 import ar.edu.utn.frre.concesionaria.excepciones.PersistenciaException;
+import ar.edu.utn.frre.concesionaria.modelo.Marca;
+import ar.edu.utn.frre.concesionaria.modelo.Modelo;
+import ar.edu.utn.frre.concesionaria.modelo.Vehiculo;
 
 /**
  * Único lugar donde se adaptan datos guardados por versiones anteriores del programa
@@ -31,8 +35,29 @@ public final class MigradorAlmacen {
         if (version == Almacen.VERSION_ESQUEMA_ACTUAL) {
             return false;
         }
-        // Acá van los pasos: if (version < 2) { ...; version = 2; }
+        if (version < 2) {
+            armarCatalogoDeModelos(almacen);
+        }
         almacen.setVersionEsquema(Almacen.VERSION_ESQUEMA_ACTUAL);
         return true;
+    }
+
+    /**
+     * Esquema 1 → 2: las marcas no tenían catálogo de modelos (CU-12). Se arma con los modelos
+     * de los vehículos que ya existen, así nada queda fuera del catálogo.
+     */
+    private static void armarCatalogoDeModelos(Almacen almacen) {
+        for (Vehiculo v : almacen.getVehiculos().values()) {
+            Marca marca = v.getMarca();
+            if (marca.buscarModelo(v.getModelo()).isEmpty()) {
+                try {
+                    marca.agregarModelo(new Modelo(v.getModelo(), v.getTipo()));
+                } catch (DatoInvalidoException e) {
+                    // Un modelo viejo que no cumple la regla nueva (por ejemplo, de una sola
+                    // letra) no entra al catálogo, pero el vehículo se conserva tal cual: al
+                    // modificarlo se elige un modelo válido. Nunca se bloquea el arranque.
+                }
+            }
+        }
     }
 }

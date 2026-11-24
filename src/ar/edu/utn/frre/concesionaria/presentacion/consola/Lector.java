@@ -136,6 +136,7 @@ public final class Lector {
 
     private <T> T leerInterno(String prompt, String etiqueta, boolean vacioPermitido,
             Conversor<T> conversor) throws OperacionCancelada {
+        terminal.separarCampo();
         for (int intento = 1; true; intento++) {
             String texto = linea(prompt);
             if (texto.equalsIgnoreCase(":q")) {
@@ -219,6 +220,7 @@ public final class Lector {
         int anchoOpcion = opciones.stream().mapToInt(o -> mostrar.apply(o).length()).max()
                 .orElse(0) + 6;
         StringBuilder fila = new StringBuilder();
+        terminal.separarCampo();
         for (int i = 0; i < opciones.size(); i++) {
             String item = String.format("%3d  %s", i + 1, mostrar.apply(opciones.get(i)));
             fila.append(String.format("%-" + anchoOpcion + "s", item));
@@ -227,6 +229,7 @@ public final class Lector {
                 fila.setLength(0);
             }
         }
+        terminal.introduccion();
         String textoActual = actual == null ? null : mostrar.apply(actual);
         Integer elegido = leer(etiqueta, textoActual, texto -> {
             if (texto.equals("0")) {

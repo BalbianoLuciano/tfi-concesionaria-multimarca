@@ -269,6 +269,10 @@ flowchart TD
   la lectura de archivos viejos: el campo nuevo llega en `null`, y por eso se usan wrappers.
 - `versionEsquema` cubre los cambios que sí rompen. La migración se hace en código, en un
   único lugar (`MigradorAlmacen`).
+  - **Esquema 2** (catálogo de modelos, CU-12): las marcas de un archivo del esquema 1 llegan
+    sin catálogo (`null`). El migrador lo arma con los modelos de los vehículos existentes, así
+    ninguno queda fuera; un modelo viejo que no cumple la regla nueva no entra al catálogo,
+    pero el vehículo se conserva igual.
 - Como respaldo independiente del formato binario, existe la exportación a CSV (CU-15).
 
 ---
