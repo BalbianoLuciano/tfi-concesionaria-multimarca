@@ -44,8 +44,10 @@ Cada caso tiene un identificador que se usa en la trazabilidad y en los nombres 
 
 ### CU-01 · Primer arranque
 1. Si no existe `~/.concesionaria/datos.ser`, el sistema crea la carpeta.
-2. Pide crear el usuario administrador (usuario, nombre y clave dos veces).
-3. Ofrece cargar los datos de demostración: 8 marcas y 10 vehículos de ejemplo.
+2. Carga el **catálogo de referencia** de marcas y modelos del mercado argentino 2026 (CU-12):
+   52 marcas y unos 490 modelos de autos, camionetas y motos, vigentes y habituales en usados.
+3. Pide crear el usuario administrador (usuario, nombre y clave dos veces).
+4. Ofrece cargar los datos de demostración: 10 vehículos de ejemplo de marcas del catálogo.
 
 ### CU-02 · Iniciar y cerrar sesión
 1. Pide usuario y clave. La clave no se muestra mientras se escribe (`System.console().readPassword()`;
@@ -130,11 +132,17 @@ Lista de ventas filtrable por rango de fechas y vendedor, con el total recaudado
   que corresponde (Corolla → Automóvil, Hilux → Camioneta). Se listan agrupados por tipo, se
   agregan y se quitan desde Marcas › Modelos (solo el administrador).
   - El nombre del modelo tiene entre 2 y 40 caracteres (letras, números, espacio, `-` y `.`);
-    escrito todo en minúsculas se guarda con inicial mayúscula.
+    escrito todo en minúsculas y sin números se guarda con inicial mayúscula ("corolla" →
+    "Corolla", pero "i10" queda igual).
   - No se repite dentro de la marca (comparado sin mayúsculas, acentos ni espacios), y antes
     de agregarlo se avisa si hay uno parecido.
   - Un modelo con vehículos no se quita.
   - El tipo tiene que ser uno de los que fabrica la marca.
+- **Catálogo de referencia:** viaja dentro del `.jar` como `catalogo-ar-2026.csv` (una línea
+  por marca y tipo: `marca;país;tipo;modelos separados por coma`). Se incorpora en el primer
+  arranque y al abrir datos de una versión anterior (esquema 3). Incorporar solo **agrega** las
+  marcas, los tipos y los modelos que faltan: nunca borra, renombra ni reactiva lo que el
+  administrador cambió.
 
 ### CU-13 · ABM de usuarios
 Alta, desactivar, reactivar, cambiar rol y blanquear clave. Un administrador no se puede
@@ -190,6 +198,7 @@ corrido, en lugar de exigir el formato exacto:
 | Patente | "ab 123 cd", "ab-123-cd", "AB.123.CD" | AB123CD |
 | Confirmación | s, si, sí, n, no, en mayúsculas o minúsculas | sí o no |
 | Marca mal escrita | "toyta" (sin ninguna marca que empiece así) | "¿Quisiste decir Toyota?" antes de ofrecer crear una marca nueva |
+| Apodo de una marca | "vw", "chevy", "mb", "harley" | Se busca por el nombre oficial (Volkswagen, Chevrolet, Mercedes-Benz, Harley-Davidson); se guarda siempre el oficial |
 | Modelo del catálogo | "cor", "COROLLA", "korola", "korollà", "Hilx" | Primero por nombre o comienzo, sin mayúsculas ni acentos; si no hay, por parecido fonético (k/c/q, z/s, v/b, sin h, letras dobles) o por hasta 2 letras de diferencia. Una coincidencia exacta se toma directo; una aproximada se confirma: "¿Quisiste decir Corolla?" |
 
 | Campo | Regla | Mensaje de ejemplo |
@@ -422,6 +431,7 @@ completa. Cada ítem tiene un comentario en el código que remite acá.
 | `System.console().readPassword()` | Login | Que la clave no se vea en pantalla |
 | `Normalizer` | Búsquedas | Comparar sin acentos ("Peugeot" = "peugeot", "Citroën" = "citroen") |
 | `TreeMap.subMap` | Catálogo de marcas | Buscar marcas por prefijo en O(log n) |
+| `Class.getResourceAsStream` | `CatalogoReferencia` | Leer el catálogo de marcas y modelos empaquetado dentro del `.jar`, sin depender de un archivo suelto |
 
 ---
 
@@ -437,9 +447,9 @@ Runner propio (`PruebasRunner`), sin JUnit: cada prueba es un método que lanza
 | PR-VALID | Cada fila de la tabla de §3: el límite válido, el inválido y el formato |
 | PR-PATENTE | Formatos de auto y de moto, unicidad entre vehículos vendidos y dados de baja |
 | PR-VENTA | Venta exitosa, vender algo ya vendido, vender algo dado de baja, precio congelado |
-| PR-MARCA | Normalización, duplicado con otra capitalización, desactivar marca en uso; catálogo de modelos: duplicado, tipo que la marca no fabrica, búsqueda fonética, quitar un modelo en uso, alta e importación con un modelo fuera del catálogo |
+| PR-MARCA | Normalización, duplicado con otra capitalización, desactivar marca en uso; catálogo de modelos: duplicado, tipo que la marca no fabrica, búsqueda fonética, quitar un modelo en uso, alta e importación con un modelo fuera del catálogo; catálogo de referencia sin modelos repetidos e idempotente |
 | PR-PERMISO | Cada rol contra cada operación de la matriz de §1 |
-| PR-PERSIST | Guardar y cargar, archivo corrupto → se recupera del `.bak`, versión de esquema distinta, migración del esquema 1 al 2 (arma el catálogo de modelos con los vehículos existentes) |
+| PR-PERSIST | Guardar y cargar, archivo corrupto → se recupera del `.bak`, versión de esquema distinta, migración del esquema 1 al 3 (arma el catálogo de modelos con los vehículos existentes y suma el de referencia sin pisar lo que había) |
 | PR-CSV | Importación válida, importación con una fila mala → no se importa nada |
 | PR-COLECCION | `equals`, `hashCode` y `compareTo` de cada entidad |
 

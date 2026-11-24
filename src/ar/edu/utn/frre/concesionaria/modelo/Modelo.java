@@ -39,7 +39,8 @@ public final class Modelo implements Serializable, Comparable<Modelo> {
 
     /**
      * Valida y normaliza el nombre de un modelo: 2 a 40 caracteres entre letras, números,
-     * espacios, guiones y puntos. Escrito todo en minúsculas, se guarda con inicial mayúscula.
+     * espacios, guiones y puntos. Escrito todo en minúsculas y sin números, se guarda con
+     * inicial mayúscula.
      *
      * @param nombre el nombre escrito por el usuario
      * @return el nombre normalizado
@@ -55,7 +56,9 @@ public final class Modelo implements Serializable, Comparable<Modelo> {
             throw new DatoInvalidoException("Modelo", nombre,
                     "El modelo admite letras, números, espacios, guiones y puntos.");
         }
-        if (limpio.equals(limpio.toLowerCase()) && Character.isLetter(limpio.charAt(0))) {
+        // "corolla" → "Corolla", pero "i10" o "e-208" quedan como están: con números, la
+        // minúscula suele ser parte del nombre.
+        if (limpio.equals(limpio.toLowerCase()) && !limpio.matches(".*\\d.*")) {
             return Character.toUpperCase(limpio.charAt(0)) + limpio.substring(1);
         }
         return limpio;

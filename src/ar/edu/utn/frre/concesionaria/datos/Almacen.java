@@ -23,7 +23,7 @@ public class Almacen implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** Versión del formato. Cambia solo cuando un cambio rompe la lectura de datos viejos. */
-    public static final int VERSION_ESQUEMA_ACTUAL = 2;
+    public static final int VERSION_ESQUEMA_ACTUAL = 3;
 
     private int versionEsquema = VERSION_ESQUEMA_ACTUAL;
     private LocalDateTime guardadoEn;

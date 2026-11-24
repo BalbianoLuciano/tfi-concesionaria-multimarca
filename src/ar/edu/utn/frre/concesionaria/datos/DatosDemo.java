@@ -2,6 +2,7 @@ package ar.edu.utn.frre.concesionaria.datos;
 
 import ar.edu.utn.frre.concesionaria.comun.Reloj;
 import ar.edu.utn.frre.concesionaria.excepciones.ConcesionariaException;
+import ar.edu.utn.frre.concesionaria.excepciones.PersistenciaException;
 import ar.edu.utn.frre.concesionaria.modelo.Automovil;
 import ar.edu.utn.frre.concesionaria.modelo.Camioneta;
 import ar.edu.utn.frre.concesionaria.modelo.CarroceriaAutomovil;
@@ -9,24 +10,19 @@ import ar.edu.utn.frre.concesionaria.modelo.CarroceriaCamioneta;
 import ar.edu.utn.frre.concesionaria.modelo.Color;
 import ar.edu.utn.frre.concesionaria.modelo.Estado;
 import ar.edu.utn.frre.concesionaria.modelo.Marca;
-import ar.edu.utn.frre.concesionaria.modelo.Modelo;
 import ar.edu.utn.frre.concesionaria.modelo.Motocicleta;
 import ar.edu.utn.frre.concesionaria.modelo.TipoMotocicleta;
-import ar.edu.utn.frre.concesionaria.modelo.TipoVehiculo;
 import ar.edu.utn.frre.concesionaria.modelo.Vehiculo;
 import java.math.BigDecimal;
-import java.util.EnumSet;
 import java.util.List;
 
 /**
- * Datos de demostración del primer arranque (CU-01): 8 marcas y 10 vehículos, mezclando tipos,
- * 0 km y usados. Los 0 km toman el año actual, así siguen siendo válidos con el paso del
+ * Datos de demostración del primer arranque (CU-01): 10 vehículos de marcas del catálogo de
+ * referencia ({@link CatalogoReferencia}), mezclando tipos, 0 km y usados. Los 0 km toman el año actual, así siguen siendo válidos con el paso del
  * tiempo.
  */
 public class DatosDemo implements CargadorDemo {
 
-    private static final EnumSet<TipoVehiculo> AUTOS_Y_CAMIONETAS =
-            EnumSet.of(TipoVehiculo.AUTOMOVIL, TipoVehiculo.CAMIONETA);
 
     private final RepositorioMarcas marcas;
     private final RepositorioVehiculos vehiculos;
@@ -42,34 +38,17 @@ public class DatosDemo implements CargadorDemo {
 
     @Override
     public void cargar() throws ConcesionariaException {
-        Marca toyota = marca("Toyota", "Japón", AUTOS_Y_CAMIONETAS);
-        Marca ford = marca("Ford", "Estados Unidos", AUTOS_Y_CAMIONETAS);
-        Marca volkswagen = marca("Volkswagen", "Alemania", AUTOS_Y_CAMIONETAS);
-        Marca chevrolet = marca("Chevrolet", "Estados Unidos", AUTOS_Y_CAMIONETAS);
-        Marca fiat = marca("Fiat", "Italia", EnumSet.of(TipoVehiculo.AUTOMOVIL));
-        Marca peugeot = marca("Peugeot", "Francia", AUTOS_Y_CAMIONETAS);
-        Marca honda = marca("Honda", "Japón",
-                EnumSet.of(TipoVehiculo.AUTOMOVIL, TipoVehiculo.MOTOCICLETA));
-        Marca yamaha = marca("Yamaha", "Japón", EnumSet.of(TipoVehiculo.MOTOCICLETA));
-
-        // Catálogo de modelos (CU-12): los del stock de ejemplo y otros habituales en el país.
-        TipoVehiculo auto = TipoVehiculo.AUTOMOVIL;
-        TipoVehiculo camioneta = TipoVehiculo.CAMIONETA;
-        TipoVehiculo moto = TipoVehiculo.MOTOCICLETA;
-        modelos(toyota, auto, "Corolla", "Etios", "Yaris");
-        modelos(toyota, camioneta, "Hilux", "SW4", "Corolla Cross", "RAV4");
-        modelos(ford, auto, "Ka", "Fiesta", "Focus", "Mustang");
-        modelos(ford, camioneta, "Ranger", "Territory", "Bronco", "Maverick");
-        modelos(volkswagen, auto, "Gol Trend", "Polo", "Virtus", "Vento");
-        modelos(volkswagen, camioneta, "Amarok", "Taos", "T-Cross", "Nivus");
-        modelos(chevrolet, auto, "Onix", "Cruze", "Prisma");
-        modelos(chevrolet, camioneta, "Tracker", "S10", "Equinox");
-        modelos(fiat, auto, "Cronos", "Argo", "Mobi", "Uno", "Pulse");
-        modelos(peugeot, auto, "208", "308", "408");
-        modelos(peugeot, camioneta, "2008", "3008", "Partner");
-        modelos(honda, auto, "Civic", "City", "Fit");
-        modelos(honda, moto, "CB 500F", "CB 190R", "Wave", "XR 150L", "Navi");
-        modelos(yamaha, moto, "FZ", "YBR 125", "XTZ 250", "MT-03");
+        // Las marcas y los modelos salen del catálogo de referencia (CU-12); acá solo se
+        // agregan los vehículos de ejemplo.
+        CatalogoReferencia.incorporar(marcas);
+        Marca toyota = marca("Toyota");
+        Marca volkswagen = marca("Volkswagen");
+        Marca chevrolet = marca("Chevrolet");
+        Marca ford = marca("Ford");
+        Marca fiat = marca("Fiat");
+        Marca peugeot = marca("Peugeot");
+        Marca honda = marca("Honda");
+        Marca yamaha = marca("Yamaha");
 
         int anio = Reloj.anioActual();
         List<Vehiculo> lista = List.of(
@@ -94,7 +73,7 @@ public class DatosDemo implements CargadorDemo {
                         pesos(27_500_000), 31_200, "AF112GH", CarroceriaCamioneta.SUV, false, 400),
                 new Motocicleta(Estado.NUEVO, honda, "CB 500F", anio, Color.ROJO,
                         pesos(12_500_000), null, null, TipoMotocicleta.NAKED, 471),
-                new Motocicleta(Estado.USADO, yamaha, "FZ", 2020, Color.AZUL,
+                new Motocicleta(Estado.USADO, yamaha, "FZ-S", 2020, Color.AZUL,
                         pesos(3_900_000), 21_000, "A123BCD", TipoMotocicleta.CALLE, 150));
 
         for (Vehiculo v : lista) {
@@ -104,26 +83,9 @@ public class DatosDemo implements CargadorDemo {
         }
     }
 
-    private Marca marca(String nombre, String pais, EnumSet<TipoVehiculo> tipos)
-            throws ConcesionariaException {
-        Marca existente = marcas.buscarPorNombre(nombre).orElse(null);
-        if (existente != null) {
-            return existente;
-        }
-        Marca m = new Marca(nombre, pais, tipos);
-        m.setId(marcas.siguienteId());
-        marcas.guardar(m);
-        return m;
-    }
-
-    /** Agrega al catálogo de la marca los modelos que todavía no tiene. */
-    private static void modelos(Marca marca, TipoVehiculo tipo, String... nombres)
-            throws ConcesionariaException {
-        for (String nombre : nombres) {
-            if (marca.buscarModelo(nombre).isEmpty()) {
-                marca.agregarModelo(new Modelo(nombre, tipo));
-            }
-        }
+    private Marca marca(String nombre) throws PersistenciaException {
+        return marcas.buscarPorNombre(nombre).orElseThrow(() -> new PersistenciaException(
+                "El catálogo de referencia no tiene la marca " + nombre + "."));
     }
 
     private static BigDecimal pesos(long monto) {

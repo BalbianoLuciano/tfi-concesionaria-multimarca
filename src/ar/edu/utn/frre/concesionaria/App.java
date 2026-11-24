@@ -2,6 +2,7 @@ package ar.edu.utn.frre.concesionaria;
 
 import ar.edu.utn.frre.concesionaria.datos.Almacen;
 import ar.edu.utn.frre.concesionaria.datos.AlmacenArchivo;
+import ar.edu.utn.frre.concesionaria.datos.CatalogoReferencia;
 import ar.edu.utn.frre.concesionaria.datos.ArchivosCsv;
 import ar.edu.utn.frre.concesionaria.datos.DatosDemo;
 import ar.edu.utn.frre.concesionaria.datos.RegistroErrores;
@@ -91,6 +92,15 @@ public final class App {
 
         RepositorioVehiculosMemoria vehiculos = new RepositorioVehiculosMemoria(almacen);
         RepositorioMarcasMemoria marcas = new RepositorioMarcasMemoria(almacen);
+        if (archivo.getEstadoCarga() == AlmacenArchivo.EstadoCarga.NUEVO) {
+            // Primer arranque (CU-01): el catálogo de marcas y modelos ya viene cargado. Se
+            // guarda junto con el administrador inicial.
+            try {
+                CatalogoReferencia.incorporar(marcas);
+            } catch (PersistenciaException e) {
+                terminal.aviso(e.getMessage() + " Las marcas se pueden cargar a mano.");
+            }
+        }
         RepositorioVentasMemoria ventas = new RepositorioVentasMemoria(almacen);
         RepositorioUsuariosMemoria usuarios = new RepositorioUsuariosMemoria(almacen);
 

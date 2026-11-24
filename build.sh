@@ -25,6 +25,8 @@ compilar_fuentes() {
   find src -name '*.java' > "$OUT/fuentes.txt"
   javac --release "$RELEASE" -encoding UTF-8 -Xlint:all -Xlint:-serial -Xlint:-this-escape \
     -d "$OUT/classes" @"$OUT/fuentes.txt"
+  # Recursos (el catálogo de referencia): todo lo que no es .java viaja junto a las clases.
+  (cd src && find . -type f ! -name '*.java' | tar -cf - -T -) | tar -xf - -C "$OUT/classes"
 }
 
 compilar_pruebas() {

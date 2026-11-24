@@ -61,10 +61,14 @@ public final class Textos {
         return sinAcentos(texto).toLowerCase();
     }
 
+    /** Palabras que van en minúscula dentro de un nombre: "Corea del Sur", "Juan de la Cruz". */
+    private static final List<String> CONECTORES = List.of("de", "del", "la", "las", "los", "y");
+
     /**
      * Escribe un nombre propio con mayúscula inicial en cada palabra: "  toyota " → "Toyota",
-     * "MERCEDES-BENZ" → "Mercedes-Benz". Las siglas cortas que ya vienen en mayúsculas
-     * ("BMW", "KTM") se respetan.
+     * "MERCEDES-BENZ" → "Mercedes-Benz", "corea del sur" → "Corea del Sur". Se respetan las
+     * siglas que ya vienen en mayúsculas, de hasta 4 letras ("BMW", "BAIC"), y las palabras que
+     * ya vienen con mayúsculas y minúsculas mezcladas a propósito ("CFMoto").
      *
      * @param texto el nombre tal como lo escribió el usuario
      * @return el nombre normalizado
@@ -72,12 +76,23 @@ public final class Textos {
     public static String nombrePropio(String texto) {
         String limpio = limpiar(texto);
         StringBuilder resultado = new StringBuilder(limpio.length());
+        // Varias palabras todas en mayúsculas ("COREA DEL SUR") no son siglas: se escribió así.
+        boolean todoMayusculas = limpio.contains(" ") && limpio.equals(limpio.toUpperCase());
         for (String palabra : limpio.split(" ")) {
+            String minuscula = palabra.toLowerCase();
+            String mayuscula = palabra.toUpperCase();
+            boolean esSigla = !todoMayusculas && palabra.length() <= 4 && palabra.equals(mayuscula)
+                    && !palabra.equals(minuscula);
+            boolean mezclada = !palabra.equals(minuscula) && !palabra.equals(mayuscula)
+                    && !palabra.equals(capitalizarConGuiones(palabra));
             if (resultado.length() > 0) {
                 resultado.append(' ');
+                if (CONECTORES.contains(minuscula)) {
+                    resultado.append(minuscula);
+                    continue;
+                }
             }
-            boolean esSigla = palabra.length() <= 3 && palabra.equals(palabra.toUpperCase());
-            resultado.append(esSigla ? palabra : capitalizarConGuiones(palabra));
+            resultado.append(esSigla || mezclada ? palabra : capitalizarConGuiones(palabra));
         }
         return resultado.toString();
     }

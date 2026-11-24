@@ -88,7 +88,7 @@ public final class PruebasPermisos implements GrupoPruebas {
         r.prueba("PR-PERMISO-05", "reportes: admin y directivo", () ->
                 fila((c, s) -> c.reportes.valorizacion(s), true, false, true));
         r.prueba("PR-PERMISO-06", "ABM de marcas: solo admin", () ->
-                fila((c, s) -> c.marcas.crear(s, "Renault", "Francia",
+                fila((c, s) -> c.marcas.crear(s, "Lada", "Rusia",
                         EnumSet.of(TipoVehiculo.AUTOMOVIL)), true, false, false));
         r.prueba("PR-PERMISO-07", "ABM de usuarios: solo admin", () ->
                 fila((c, s) -> c.autenticacion.listar(s), true, false, false));

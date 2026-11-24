@@ -14,6 +14,7 @@ import ar.edu.utn.frre.concesionaria.modelo.Modelo;
 import ar.edu.utn.frre.concesionaria.modelo.Permiso;
 import ar.edu.utn.frre.concesionaria.modelo.TipoVehiculo;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -48,14 +49,32 @@ public class ServicioMarcas extends ServicioBase {
     }
 
     /**
-     * Marcas para elegir en el alta: activas, que fabrican el tipo y empiezan con el prefijo.
+     * Cómo se nombra a algunas marcas en la calle (SPEC §3, tolerancia): "vw" es Volkswagen y
+     * "chevy", Chevrolet. Solo se usan para buscar; el nombre guardado es siempre el oficial.
+     */
+    private static final Map<String, String> APODOS = Map.of(
+            "vw", "Volkswagen",
+            "chevy", "Chevrolet",
+            "mb", "Mercedes-Benz",
+            "benz", "Mercedes-Benz",
+            "hd", "Harley-Davidson",
+            "harley", "Harley-Davidson",
+            "lr", "Land Rover",
+            "alfa", "Alfa Romeo",
+            "citroen", "Citroën");
+
+    /**
+     * Marcas para elegir en el alta: activas, que fabrican el tipo y empiezan con el prefijo
+     * (o con el nombre oficial, si se escribió un apodo como "vw").
      *
      * @param tipo    el tipo de vehículo
      * @param prefijo las primeras letras ("toy"), o vacío para todas
      * @return las marcas que coinciden
      */
     public List<Marca> paraAlta(TipoVehiculo tipo, String prefijo) {
-        return marcas.buscarPorPrefijo(prefijo == null ? "" : prefijo).stream()
+        String buscado = prefijo == null ? "" : prefijo;
+        String apodo = APODOS.get(Textos.compacta(buscado));
+        return marcas.buscarPorPrefijo(apodo != null ? apodo : buscado).stream()
                 .filter(Marca::estaActiva)
                 .filter(m -> m.fabrica(tipo))
                 .toList();

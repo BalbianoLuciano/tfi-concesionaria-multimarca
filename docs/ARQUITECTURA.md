@@ -85,7 +85,7 @@ ar.edu.utn.frre.concesionaria
 │                          Archivos), Sesion, Claves, FiltroVehiculos, OrdenVehiculos
 ├── datos                  interfaces Repositorio*, Persistencia, ArchivosExportacion,
 │                          CargadorDemo; implementaciones en memoria, AlmacenArchivo,
-│                          MigradorAlmacen, ArchivosCsv, DatosDemo, RegistroErrores
+│                          MigradorAlmacen, ArchivosCsv, DatosDemo, CatalogoReferencia, RegistroErrores
 ├── modelo                 Vehiculo y subclases, Marca, Venta, Usuario, enums
 ├── excepciones            jerarquía ConcesionariaException
 └── comun                  Textos (normalizar, sin acentos), Formatos (moneda, km, fecha)
@@ -273,6 +273,10 @@ flowchart TD
     sin catálogo (`null`). El migrador lo arma con los modelos de los vehículos existentes, así
     ninguno queda fuera; un modelo viejo que no cumple la regla nueva no entra al catálogo,
     pero el vehículo se conserva igual.
+  - **Esquema 3** (catálogo de referencia): se incorporan las marcas y los modelos de
+    `catalogo-ar-2026.csv`, que viaja dentro del `.jar`. Solo se agrega lo que falta; lo que
+    el usuario ya tenía (nombres, países, marcas desactivadas, modelos quitados antes de la
+    actualización) no se toca.
 - Como respaldo independiente del formato binario, existe la exportación a CSV (CU-15).
 
 ---
