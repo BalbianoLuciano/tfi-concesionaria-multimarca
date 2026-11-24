@@ -285,8 +285,6 @@ final class PantallaVehiculos extends Pantalla {
         v.setEstado(estado);
 
         t.paso(2, 4, "Datos generales");
-        t.ayuda("Marca: escribí las primeras letras, o Enter para ver las que fabrican "
-                + tipo.getPlural() + ".");
         Marca marca = elegirMarca(tipo, null);
         v.setMarca(marca);
         v.setModelo(elegirModelo(marca, tipo, null));
@@ -357,14 +355,18 @@ final class PantallaVehiculos extends Pantalla {
      */
     private Marca elegirMarca(TipoVehiculo tipo, Marca actual)
             throws ConcesionariaException, OperacionCancelada {
+        t.ayuda("Escribí la marca, o pedí la lista:");
+        t.opcion("L", "Listar marcas", e.marcas.paraAlta(tipo, "").size() + " fabrican "
+                + tipo.getPlural(), "Listar marcas".length());
+        t.introduccion();
         for (int intento = 1; true; intento++) {
             String prefijo = actual == null
-                    ? lector.leerOpcional("Marca (primeras letras)", s -> s)
-                    : lector.leer("Marca (primeras letras)", actual.getNombre(), s -> s);
+                    ? lector.leerOpcional("Marca", s -> s)
+                    : lector.leer("Marca", actual.getNombre(), s -> s);
             if (prefijo == null && actual != null) {
                 return actual;
             }
-            if (prefijo == null) {
+            if (prefijo == null || esPedidoDeLista(prefijo)) {
                 // Enter vacío: la lista completa de las que se pueden elegir (SPEC §3).
                 List<Marca> todas = e.marcas.paraAlta(tipo, "");
                 if (!todas.isEmpty()) {
@@ -439,10 +441,18 @@ final class PantallaVehiculos extends Pantalla {
         Modelo vigente = actual == null ? null : marca.buscarModelo(actual)
                 .filter(m -> m.getTipo() == tipo).orElse(null);
         int cantidad = marca.modelosDe(tipo).size();
-        t.ayuda(cantidad == 0
-                ? marca.getNombre() + " todavía no tiene " + tipo.getPlural() + " en el catálogo."
-                : "Modelo: escribí las primeras letras, o Enter para ver los " + cantidad
-                        + " de " + marca.getNombre() + ".");
+        if (cantidad == 0) {
+            t.ayuda(marca.getNombre() + " todavía no tiene " + tipo.getPlural()
+                    + " en el catálogo.");
+        } else {
+            // SPEC CU-03 paso 4: las dos formas a la vista, escribirlo o pedir la lista.
+            t.ayuda("Escribí el modelo, o pedí la lista:");
+            String etiqueta = "Listar modelos de " + marca.getNombre();
+            t.opcion("L", etiqueta, cantidad + " "
+                    + (cantidad == 1 ? tipo.getEtiqueta().toLowerCase() : tipo.getPlural()),
+                    etiqueta.length());
+            t.introduccion();
+        }
         // La última lista mostrada: un número elige de ella; cualquier otro texto vuelve a
         // buscar. SPEC §3: solo el nombre completo se toma directo; nada parcial se elige solo.
         List<Modelo> delTipo = marca.modelosDe(tipo);
@@ -453,7 +463,8 @@ final class PantallaVehiculos extends Pantalla {
             if (texto == null && vigente != null) {
                 return vigente.getNombre();
             }
-            if (texto == null && !delTipo.isEmpty()) {
+            boolean pideLista = texto == null || esPedidoDeLista(texto);
+            if (pideLista && !delTipo.isEmpty()) {
                 listado = mostrarModelos(delTipo, null);
                 continue;
             }
@@ -525,6 +536,16 @@ final class PantallaVehiculos extends Pantalla {
                 intento = 0;
             }
         }
+    }
+
+    /**
+     * @param texto lo que escribió el usuario
+     * @return si pidió la lista: "L" o "?" (ningún modelo ni marca se llama así: tienen 2
+     *         letras o más)
+     */
+    private static boolean esPedidoDeLista(String texto) {
+        String clave = Textos.compacta(texto);
+        return clave.equals("l") || texto.strip().equals("?");
     }
 
     /**
