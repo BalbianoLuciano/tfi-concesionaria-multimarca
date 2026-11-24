@@ -61,13 +61,15 @@ superior.
 
 ![Listado de stock: tres grupos (Automóviles, Camionetas, Motocicletas) con su cantidad y valor total, y por cada vehículo código, marca, modelo, año, estado, kilómetros, detalle y precio final alineado a la derecha.](docs/img/consola-stock.svg)
 
-**Alta en cuatro pasos.** Antes de cada campo se indica el formato esperado. Ante un dato
-inválido, el mensaje de error explica cómo corregirlo y el campo se solicita nuevamente,
-hasta tres veces. La marca no se escribe libremente: se ingresan sus primeras letras y se
-selecciona del catálogo, lo que evita que variantes como "Toyota", "TOYOTA" y "Toyta" se
-registren como marcas distintas.
+**Alta en cuatro pasos, tolerante al error humano.** Antes de cada campo se indica el
+formato esperado. El sistema interpreta lo que una persona escribe de corrido: las listas
+aceptan el número o el nombre ("moto", "usado", "azul", "naked"), los números admiten su
+unidad ("15.000 km", "190cc") y una marca mal escrita se corrige con una sugerencia
+("¿Quisiste decir Honda?") en lugar de registrarse como una marca nueva. Ante un dato
+inválido, el mensaje de error explica cómo corregirlo; tras tres errores en un mismo campo
+se pregunta si continuar, sin descartar lo ya cargado.
 
-![Alta de una moto: paso 2 de 4 con marca elegida por prefijo, un año escrito como "dos mil" que se rechaza con un mensaje que pide cuatro dígitos, el color elegido de una grilla, y en el paso 3 una patente de auto rechazada porque las motos tienen otro formato.](docs/img/consola-alta.svg)
+![Alta de una moto usada escrita de corrido: "moto" y "usado" elegidos por nombre, "hoda" corregido a Honda con una sugerencia, un año escrito como "dos mil" rechazado con un mensaje que pide cuatro dígitos, "azul" y "naked" elegidos por nombre, "15.000 km" y "190cc" aceptados con su unidad, y una patente de auto rechazada porque las motos tienen otro formato.](docs/img/consola-alta.svg)
 
 **Selección de vehículos sin códigos.** Para ver una ficha, cotizar, modificar, dar de baja
 o vender no es necesario conocer el código: se escribe parte de la marca, el modelo o la

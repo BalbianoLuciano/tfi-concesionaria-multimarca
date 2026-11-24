@@ -105,7 +105,7 @@
     <ul>
       <li><b>Asignatura:</b> Programación II</li>
       <li><b>Año:</b> 2026</li>
-      <li><b>Entrega:</b> noviembre de 2026 · versión 1.0.0</li>
+      <li><b>Entrega:</b> noviembre de 2026 · versión 1.1.0</li>
     </ul>
 
     <div class="alumno">
@@ -175,7 +175,7 @@
 
   <h2>2. Cómo ejecutarlo</h2>
   <p>Hace falta un JDK 25 o posterior. El <code>.jar</code> se descarga del release
-  <code>v1.0.0</code> del repositorio, o se compila con el script del proyecto:</p>
+  <code>v1.1.0</code> del repositorio, o se compila con el script del proyecto:</p>
   <table>
     <tr><th>Comando</th><th>Qué hace</th></tr>
     <tr><td><code>java -jar concesionaria.jar</code></td><td>Ejecuta el sistema; los datos quedan en <code>~/.concesionaria/</code></td></tr>
@@ -353,9 +353,9 @@
 
 <section>
   <figure>
-<pre class="consola"> CONCESIONARIA MULTIMARCA                                 admin · Administrador · mar 24/11/2026
- ───────────────────────────────────────────────────────────────────────────────────────────────
- REGISTRAR VEHÍCULO                                      Inicio › Vehículos › Registrar vehículo
+<pre class="consola"> CONCESIONARIA MULTIMARCA                                     admin · Administrador · mar 24/11/2026
+ ───────────────────────────────────────────────────────────────────────────────────────────────────
+ REGISTRAR VEHÍCULO                                          Inicio › Vehículos › Registrar vehículo
 
  Son 4 pasos. Escribí :q en cualquier campo para cancelar sin guardar nada.
 
@@ -363,16 +363,16 @@
    1  Automóvil
    2  Camioneta
    3  Motocicleta
- Tipo › 3
+ Tipo › moto
 
    1  0 km
    2  Usado
- Estado › 2
+ Estado › usado
 
  Paso 2 de 4 · Datos generales
    Marca: escribí las primeras letras; solo aparecen las activas que fabrican motocicletas.
- Marca (primeras letras) › hon
- → Honda
+ Marca (primeras letras) › hoda
+ ¿Quisiste decir Honda? (s/n) › s
  Modelo › CB 190R
    Año entre 1990 y 2027.
  Año › dos mil
@@ -383,12 +383,12 @@
    1  Blanco   2  Negro    3  Gris
    4  Plata    5  Rojo     6  Azul
    7  Verde    8  Bordó    9  Beige
- Color › 4
+ Color › azul
    Precio de lista en pesos, sin depreciación ni patentamiento: el precio final se calcula solo.
  Precio de lista $ › 4.200.000
 
  Paso 3 de 4 · Uso y patente
- Kilometraje › 15000
+ Kilometraje › 15.000 km
    Formatos de patente: 123ABC o A123BCD.
  Patente › AB123CD
  ✗ "AB123CD" no es una patente de moto. Formatos: 123ABC o A123BCD. Te quedan 2 intentos.
@@ -398,20 +398,20 @@
    1  Calle       2  Naked       3  Deportiva
    4  Touring     5  Enduro      6  Scooter
    7  Custom
- Tipo de moto › 5
- Cilindrada (cc) › 190
+ Tipo de moto › naked
+ Cilindrada (cc) › 190cc
 
- ───────────────────────────────────────────────────────────────────────────────────────────────
+ ───────────────────────────────────────────────────────────────────────────────────────────────────
  Resumen
 
  Honda CB 190R 2022  · Sin registrar
 
    Vehículo                                   Registro
    Tipo       Motocicleta                     Estado       Usado
-   Detalle    Enduro · 190 cc                 Kilometraje  15.000 km
+   Detalle    Naked · 190 cc                  Kilometraje  15.000 km
    Marca      Honda (Japón)                   Patente      123ABC
    Año        2022
-   Color      Plata
+   Color      Azul
 
    Precio de lista                               $ 4.200.000
    Depreciación por antigüedad (32 %)           -$ 1.344.000
@@ -419,10 +419,10 @@
    ─────────────────────────────────────────────────────────
    Precio final                                  $ 2.730.000
 
- ¿Registrar este vehículo? (s/n) › n
- No se registró nada.</pre>
-    <figcaption>Figura 3. Alta de una moto usada en 4 pasos: ayuda antes de cada campo, errores
-    que dicen cómo corregir y resumen con el precio antes de confirmar.</figcaption>
+ ¿Registrar este vehículo? (s/n) › n</pre>
+    <figcaption>Figura 3. Alta de una moto usada escrita de corrido: opciones elegidas por nombre,
+    marca mal escrita corregida con una sugerencia, números con su unidad, errores que dicen cómo
+    corregir y resumen con el precio antes de confirmar.</figcaption>
   </figure>
 </section>
 
@@ -679,7 +679,7 @@
   </table>
   <p>Los commits siguen un formato fijo (<code>tipo(ámbito): descripción</code>) con un
   cuerpo que explica por qué y para qué. La versión entregada está publicada como release
-  <code>v1.0.0</code> con el <code>.jar</code> y su hash SHA-256.</p>
+  <code>v1.1.0</code> con el <code>.jar</code> y su hash SHA-256.</p>
 
   <h2>12. Conclusiones</h2>
   <p>El sistema integra los once contenidos que pide la consigna en un caso concreto, en
@@ -694,7 +694,7 @@
   se vio "tirada", fijar el esqueleto común en la spec hizo que el rediseño se resolviera
   una vez para todas las pantallas.</p>
   <div class="nota">Repositorio: <b>github.com/BalbianoLuciano/tfi-concesionaria-multimarca</b>
-  · Release: <b>v1.0.0</b> · Documentación técnica completa en <code>docs/</code>.</div>
+  · Release: <b>v1.1.0</b> · Documentación técnica completa en <code>docs/</code>.</div>
 </section>
 
 </body>
