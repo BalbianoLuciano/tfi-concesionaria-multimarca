@@ -150,12 +150,27 @@ Guarda si hay cambios pendientes y cierra. Ctrl+C también guarda (shutdown hook
 ## 3. Validaciones del data-entry
 
 Reglas generales:
-- Cada campo tiene **3 intentos**. Al tercer error se cancela la operación completa, con el
-  mensaje "Se canceló el registro: demasiados intentos en «Año»." y vuelve al menú.
+- Cada campo tiene **3 intentos**. Al tercer error **no se pierde lo cargado**: se pregunta
+  "¿Seguir con «Año»? (s/n)". Enter o `s` da 3 intentos más; `n` cancela la operación con
+  el mensaje "Se canceló el registro: demasiados intentos en «Año»." y vuelve al menú. (El
+  login no entra en esta regla: sus 3 intentos son un límite de seguridad, CU-02.)
 - El texto se recorta (`trim`) y los espacios internos repetidos se colapsan.
 - Escribir `0` en una selección de menú, o `:q` en un campo de texto, cancela y vuelve sin
   guardar nada.
 - Cada error dice qué estuvo mal y cómo corregirlo, y muestra los intentos que quedan.
+
+**Tolerancia al error humano.** El sistema interpreta lo que una persona escribe de
+corrido, en lugar de exigir el formato exacto:
+
+| Situación | Se acepta | Se interpreta como |
+|---|---|---|
+| Elegir de una lista (tipo, estado, color, carrocería…) | El número, el nombre o su comienzo, sin importar mayúsculas ni acentos | "auto" → Automóvil, "usado" → Usado, "sedan" → Sedán |
+| El texto coincide con varias opciones | — | Error que las nombra: "«c» puede ser Coupé, Convertible o Crossover." |
+| Número con su unidad | "85.000 km", "190cc", "4 puertas", "1.000 kg" | 85000, 190, 4, 1000 |
+| Monto | "$ 20.000.000", "20000000", "20.000.000,50" | el monto en pesos |
+| Patente | "ab 123 cd", "ab-123-cd", "AB.123.CD" | AB123CD |
+| Confirmación | s, si, sí, n, no, en mayúsculas o minúsculas | sí o no |
+| Marca mal escrita | "toyta" (sin ninguna marca que empiece así) | "¿Quisiste decir Toyota?" antes de ofrecer crear una marca nueva |
 
 | Campo | Regla | Mensaje de ejemplo |
 |---|---|---|
@@ -393,7 +408,7 @@ Runner propio (`PruebasRunner`), sin JUnit: cada prueba es un método que lanza
 
 | Grupo | Qué cubre |
 |---|---|
-| PR-COMUN | Utilidades de `comun`: limpieza y normalización de texto, formatos argentinos de moneda, km y fecha, lectura de números con puntos de miles |
+| PR-COMUN | Utilidades de `comun`: limpieza y normalización de texto, formatos argentinos de moneda, km y fecha, lectura de números con puntos de miles y unidad, elección de una opción por su nombre |
 | PR-PRECIO | Los dos ejemplos de §4, topes de depreciación, 0 km sin depreciación, mínimo de patentamiento |
 | PR-VALID | Cada fila de la tabla de §3: el límite válido, el inválido y el formato |
 | PR-PATENTE | Formatos de auto y de moto, unicidad entre vehículos vendidos y dados de baja |
