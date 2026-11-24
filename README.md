@@ -69,6 +69,13 @@ registren como marcas distintas.
 
 ![Alta de una moto: paso 2 de 4 con marca elegida por prefijo, un año escrito como "dos mil" que se rechaza con un mensaje que pide cuatro dígitos, el color elegido de una grilla, y en el paso 3 una patente de auto rechazada porque las motos tienen otro formato.](docs/img/consola-alta.svg)
 
+**Selección de vehículos sin códigos.** Para ver una ficha, cotizar, modificar, dar de baja
+o vender no es necesario conocer el código: se escribe parte de la marca, el modelo o la
+patente y se elige de una tabla numerada. Una única coincidencia se selecciona
+automáticamente, y Enter muestra todos los candidatos.
+
+![Selector de vehículos: una búsqueda sin resultados indica cómo continuar; la búsqueda "toyota" muestra dos vehículos numerados y se elige el segundo.](docs/img/consola-selector.svg)
+
 <table>
 <tr>
 <td width="50%" valign="top">

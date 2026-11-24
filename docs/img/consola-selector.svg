@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 827 380" width="827" height="380">
+<defs><clipPath id="v"><rect width="827" height="380" rx="11"/></clipPath></defs>
+<g clip-path="url(#v)">
+<rect width="827" height="380" fill="#15181d"/>
+<rect width="827" height="38" fill="#262a30"/>
+<circle cx="22" cy="19" r="6" fill="#ff5f57"/><circle cx="42" cy="19" r="6" fill="#febc2e"/><circle cx="62" cy="19" r="6" fill="#28c840"/>
+<text x="413.5" y="23.5" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" fill="#a9adb3" text-anchor="middle">java -jar concesionaria.jar</text>
+<line x1="0" y1="38" x2="827" y2="38" stroke="#000" stroke-opacity=".4"/>
+<g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" xml:space="preserve">
+<text x="29.8" y="69" fill="#5ac8fa" font-weight="700">CONCESIONARIA MULTIMARCA</text>
+<text x="507.5" y="69" fill="#7d848e">admin · Administrador · mar 24/11/2026</text>
+<text x="29.8" y="87" fill="#7d848e">───────────────────────────────────────────────────────────────────────────────────────────────────</text>
+<text x="29.8" y="105" fill="#5ac8fa" font-weight="700">VER FICHA</text>
+<text x="570.1" y="105" fill="#7d848e">Inicio › Vehículos › Ver ficha</text>
+<text x="45.5" y="141" fill="#7d848e">Escribí parte de la marca, el modelo o la patente (o el código). Enter muestra todos.</text>
+<text x="29.8" y="159" fill="#d6d9de" font-weight="700">Vehículo ›</text>
+<text x="116.0" y="159" fill="#d6d9de">vw</text>
+<text x="29.8" y="177" fill="#ff6b6b">✗ Ningún vehículo coincide con &quot;vw&quot;. Probá con menos letras, o Enter para ver todos.</text>
+<text x="29.8" y="195" fill="#d6d9de" font-weight="700">Vehículo ›</text>
+<text x="116.0" y="195" fill="#d6d9de">toyota</text>
+<text x="29.8" y="231" fill="#d6d9de" font-weight="700">#</text>
+<text x="53.3" y="231" fill="#d6d9de" font-weight="700">Código</text>
+<text x="116.0" y="231" fill="#d6d9de" font-weight="700">Vehículo</text>
+<text x="280.4" y="231" fill="#d6d9de" font-weight="700">Estado</text>
+<text x="405.7" y="231" fill="#d6d9de" font-weight="700">Precio final</text>
+<text x="29.8" y="249" fill="#7d848e">────────────────────────────────────────────────────────────</text>
+<text x="29.8" y="267" fill="#d6d9de">1</text>
+<text x="53.3" y="267" fill="#d6d9de">A-0001</text>
+<text x="116.0" y="267" fill="#d6d9de">Toyota Corolla 2026</text>
+<text x="280.4" y="267" fill="#d6d9de">0 km · Vendido</text>
+<text x="405.7" y="267" fill="#d6d9de">$ 33.475.000</text>
+<text x="29.8" y="285" fill="#d6d9de">2</text>
+<text x="53.3" y="285" fill="#d6d9de">C-0001</text>
+<text x="116.0" y="285" fill="#d6d9de">Toyota Hilux 2019</text>
+<text x="280.4" y="285" fill="#d6d9de">Usado</text>
+<text x="405.7" y="285" fill="#d6d9de">$ 22.850.920</text>
+<text x="29.8" y="321" fill="#d6d9de" font-weight="700">N.º u otra búsqueda ›</text>
+<text x="202.1" y="321" fill="#d6d9de">2</text>
+<text x="29.8" y="357" fill="#5ac8fa" font-weight="700">C-0001</text>
+<text x="92.5" y="357" fill="#5ac8fa" font-weight="700">Toyota Hilux 2019</text>
+<text x="241.2" y="357" fill="#7d848e">·</text>
+<text x="256.9" y="357" fill="#4cd07d">Disponible</text>
+</g></g></svg>
