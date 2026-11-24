@@ -94,7 +94,8 @@ final class PantallaVehiculos extends Pantalla {
             if (lista.isEmpty()) {
                 t.linea(" No hay vehículos con ese filtro. Probá con L para limpiarlo.");
             } else {
-                t.lineas(Vistas.tablaStock(visibles, estilo, filtro.getSituacion() == null)
+                t.lineas(Vistas.tablaStock(visibles, estilo, filtro.getSituacion() == null,
+                        orden == OrdenVehiculos.TIPO_Y_MARCA ? lista : null)
                         .renglones(t.ancho(), estilo));
             }
             long nuevos = lista.stream().filter(v -> v.getEstado() == Estado.NUEVO).count();
