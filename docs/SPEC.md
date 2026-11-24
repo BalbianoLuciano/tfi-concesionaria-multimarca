@@ -63,9 +63,16 @@ Cada caso tiene un identificador que se usa en la trazabilidad y en los nombres 
    de coincidencias. Solo aparecen las marcas activas que fabrican ese tipo de vehículo. Si
    la marca no existe, el administrador la puede crear en ese momento.
 4. Elegir el modelo del **catálogo de la marca** (CU-12), filtrado por el tipo: nunca se
-   escribe libre. Se elige como la marca (primeras letras, número de la lista, o Enter para
-   verlos todos), y la búsqueda tolera errores de escritura (ver §3, "Tolerancia al error
-   humano"). Si el modelo no está, el administrador lo puede agregar en ese momento; el
+   escribe libre. Apenas se elige la marca, el formulario ofrece las dos formas, a la vista:
+   ```
+      Escribí el modelo, o pedí la lista:
+       L  Listar modelos de Toyota      7 automóviles
+    Modelo ›
+   ```
+   Se puede escribir el modelo (completo o sus primeras letras) o apretar `L` (también Enter)
+   para ver la lista numerada y elegir por número. La marca se elige igual: escribiéndola o
+   con `L` para listar las que fabrican el tipo. La búsqueda tolera errores de escritura (ver
+   §3, "Tolerancia al error humano"). Si el modelo no está, el administrador lo puede agregar en ese momento; el
    vendedor recibe la indicación de pedírselo.
 5. Año, color y precio de lista.
 6. Si es usado: kilometraje y patente (obligatoria). Si es nuevo: patente opcional y km = 0,
@@ -503,3 +510,4 @@ java -Dconcesionaria.dir=/tmp/demo -jar dist/concesionaria.jar
 | PM-17 | Registrar un auto escribiendo `auto`, `usado`, `toyta`, `rojo`, `85.000 km`, `ab.123.cd`, `sedan` y `4 puertas`; en el año, tres errores seguidos. | Acepta todo; sugiere "¿Quisiste decir Toyota?"; tras el tercer error en el año pregunta "¿Seguir con «Año»?" y, con Enter, sigue sin perder lo cargado. |
 | PM-18 | Registrar un auto Toyota escribiendo en el modelo `korola`; después, como vendedor, escribir un modelo que no existe. | "¿Quisiste decir Corolla?"; con `s` sigue. Al vendedor no le ofrece crear el modelo: le indica pedírselo al administrador. |
 | PM-19 | En el alta de un auto 0 km escribir `t` en la marca y después `t` en el modelo. | Marca: "¿Toyota? (S/n)" y con Enter sigue. Modelo: "Ningún modelo de Toyota empieza con «t»" y la lista numerada de los 7; no elige nada solo. |
+| PM-20 | En el alta, elegir Toyota y en el modelo apretar `L`; repetir escribiendo `corolla`. | Con `L` aparece la lista numerada de los modelos de Toyota de ese tipo; escribiendo `corolla` se toma directo ("→ Corolla"). En Marca, `L` lista las marcas. |
