@@ -3,6 +3,7 @@ package ar.edu.utn.frre.concesionaria.pruebas;
 import ar.edu.utn.frre.concesionaria.comun.Formatos;
 import ar.edu.utn.frre.concesionaria.comun.Textos;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * PR-COMUN: textos y formatos argentinos que usan todas las capas.
@@ -48,5 +49,26 @@ public final class PruebasComun implements GrupoPruebas {
         });
         r.prueba("PR-COMUN-09", "recortar con puntos suspensivos", () ->
                 Verificar.igual("Mercedes…", Textos.recortar("Mercedes-Benz", 9)));
+        r.prueba("PR-COMUN-10", "leer enteros con la unidad escrita al final", () -> {
+            Verificar.igual(85000L, Formatos.leerEntero("85.000 km"));
+            Verificar.igual(190L, Formatos.leerEntero("190cc"));
+            Verificar.igual(4L, Formatos.leerEntero(" 4 puertas "));
+            Verificar.igual(1000L, Formatos.leerEntero("1.000 kg."));
+            Verificar.lanza(NumberFormatException.class, () -> Formatos.leerEntero("km 85"));
+        });
+        r.prueba("PR-COMUN-11", "elegir una opción por su nombre o su comienzo", () -> {
+            List<String> tipos = List.of("Automóvil", "Camioneta", "Motocicleta");
+            Verificar.igual(List.of(0), Textos.coincidencias("auto", tipos));
+            Verificar.igual(List.of(2), Textos.coincidencias("MOTO", tipos));
+            List<String> carrocerias = List.of("Sedán", "Hatchback", "Rural", "Coupé",
+                    "Convertible");
+            Verificar.igual(List.of(0), Textos.coincidencias("sedan", carrocerias));
+            Verificar.igual(List.of(3, 4), Textos.coincidencias("c", carrocerias));
+            Verificar.igual(List.of(0), Textos.coincidencias("pickup",
+                    List.of("Pick-up cabina simple", "Doble cabina")));
+            // la coincidencia exacta gana sobre el comienzo: "Usado" no es ambiguo
+            Verificar.igual(List.of(1), Textos.coincidencias("usado", List.of("Usados", "Usado")));
+            Verificar.igual(List.of(), Textos.coincidencias("rojo", tipos));
+        });
     }
 }

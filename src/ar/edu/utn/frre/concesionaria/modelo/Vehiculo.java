@@ -392,10 +392,11 @@ public abstract class Vehiculo
 
     /**
      * @param patente texto escrito por el usuario
-     * @return la patente en mayúsculas, sin espacios ni guiones
+     * @return la patente en mayúsculas, sin espacios, guiones ni puntos
      */
     public static String normalizarPatente(String patente) {
-        return Textos.limpiar(patente).replace(" ", "").replace("-", "").toUpperCase();
+        return Textos.limpiar(patente).replace(" ", "").replace("-", "").replace(".", "")
+                .toUpperCase();
     }
 
     /** @return la marca */

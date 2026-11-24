@@ -23,6 +23,8 @@ public final class PruebasPatente implements GrupoPruebas {
             Verificar.igual("ABC123", a.getPatente());
             a.setPatente("ab-123-cd");
             Verificar.igual("AB123CD", a.getPatente());
+            a.setPatente("ab.123.cd");
+            Verificar.igual("AB123CD", a.getPatente());
         });
         r.prueba("PR-PATENTE-02", "auto: rechaza formatos inválidos y de moto", () -> {
             Automovil a = Fabrica.autoUsado(2015, 50_000, "1000000");

@@ -99,7 +99,7 @@ public final class Lector {
      * @param etiqueta  nombre del campo ("Año")
      * @param conversor cómo convertir y validar
      * @return el valor
-     * @throws OperacionCancelada si escribió {@code :q} o agotó los intentos
+     * @throws OperacionCancelada si escribió {@code :q} o no quiso seguir tras agotar los intentos
      */
     public <T> T leer(String etiqueta, Conversor<T> conversor) throws OperacionCancelada {
         return leer(etiqueta, null, conversor);
@@ -113,7 +113,7 @@ public final class Lector {
      * @param actual    valor actual para mostrar, o {@code null} si el dato es obligatorio
      * @param conversor cómo convertir y validar
      * @return el valor nuevo, o {@code null} si dejó el actual
-     * @throws OperacionCancelada si escribió {@code :q} o agotó los intentos
+     * @throws OperacionCancelada si escribió {@code :q} o no quiso seguir tras agotar los intentos
      */
     public <T> T leer(String etiqueta, String actual, Conversor<T> conversor)
             throws OperacionCancelada {
@@ -128,7 +128,7 @@ public final class Lector {
      * @param etiqueta  nombre del campo (conviene aclarar "Enter si no tiene")
      * @param conversor cómo convertir y validar
      * @return el valor, o {@code null} si lo dejó vacío
-     * @throws OperacionCancelada si escribió {@code :q} o agotó los intentos
+     * @throws OperacionCancelada si escribió {@code :q} o no quiso seguir tras agotar los intentos
      */
     public <T> T leerOpcional(String etiqueta, Conversor<T> conversor) throws OperacionCancelada {
         return leerInterno(etiqueta, etiqueta, true, conversor);
@@ -136,7 +136,7 @@ public final class Lector {
 
     private <T> T leerInterno(String prompt, String etiqueta, boolean vacioPermitido,
             Conversor<T> conversor) throws OperacionCancelada {
-        for (int intento = 1; intento <= INTENTOS; intento++) {
+        for (int intento = 1; true; intento++) {
             String texto = linea(prompt);
             if (texto.equalsIgnoreCase(":q")) {
                 throw new OperacionCancelada("Se canceló " + queSeCancela + ". No se guardó nada.");
@@ -153,9 +153,32 @@ public final class Lector {
             } catch (DatoInvalidoException e) {
                 mostrarError(e.getMessage(), intento);
             }
+            if (intento == INTENTOS) {
+                exigirSeguir(etiqueta);
+                intento = 0;
+            }
         }
-        throw new OperacionCancelada("Se canceló " + queSeCancela + ": demasiados intentos en «"
-                + etiqueta + "».");
+    }
+
+    /**
+     * Agotados los intentos de un campo, pregunta si seguir en lugar de descartar lo cargado
+     * (SPEC §3). Enter o "s" sigue con otros 3 intentos.
+     *
+     * @param etiqueta el campo
+     * @throws OperacionCancelada si respondió que no
+     */
+    public void exigirSeguir(String etiqueta) throws OperacionCancelada {
+        while (true) {
+            String respuesta = Textos.clave(linea("¿Seguir con «" + etiqueta + "»? (s/n)"));
+            if (respuesta.isEmpty() || respuesta.equals("s") || respuesta.equals("si")) {
+                return;
+            }
+            if (respuesta.equals("n") || respuesta.equals("no") || respuesta.equals(":q")) {
+                throw new OperacionCancelada("Se canceló " + queSeCancela
+                        + ": demasiados intentos en «" + etiqueta + "».");
+            }
+            terminal.error("Respondé s para seguir con «" + etiqueta + "» o n para cancelar.");
+        }
     }
 
     private void mostrarError(String mensaje, int intento) {
@@ -213,7 +236,7 @@ public final class Lector {
             try {
                 n = Integer.parseInt(texto);
             } catch (NumberFormatException e) {
-                n = -1;
+                n = porNombre(etiqueta, texto, opciones, mostrar);
             }
             if (n < 1 || n > opciones.size()) {
                 throw new DatoInvalidoException(etiqueta, texto, "Elegí un número entre 1 y "
@@ -228,6 +251,32 @@ public final class Lector {
             throw new OperacionCancelada("Se canceló " + queSeCancela + ". No se guardó nada.");
         }
         return opciones.get(elegido - 1);
+    }
+
+    /**
+     * Elige una opción por su nombre o su comienzo ("auto" → Automóvil), SPEC §3.
+     *
+     * @return el número de la opción (desde 1)
+     * @throws DatoInvalidoException si no coincide ninguna, o coinciden varias
+     */
+    private static <T> int porNombre(String etiqueta, String texto, List<T> opciones,
+            Function<T, String> mostrar) throws DatoInvalidoException {
+        List<String> nombres = opciones.stream().map(mostrar).toList();
+        List<Integer> encontradas = Textos.coincidencias(texto, nombres);
+        if (encontradas.size() == 1) {
+            return encontradas.get(0) + 1;
+        }
+        if (encontradas.isEmpty()) {
+            throw new DatoInvalidoException(etiqueta, texto, "\"" + texto + "\" no es ninguna"
+                    + " de las opciones. Escribí el número (1 a " + opciones.size()
+                    + ") o el nombre, o 0 para volver.");
+        }
+        List<String> posibles = encontradas.stream().map(nombres::get).toList();
+        String lista = posibles.size() == 2 ? posibles.get(0) + " o " + posibles.get(1)
+                : String.join(", ", posibles.subList(0, posibles.size() - 1)) + " o "
+                        + posibles.get(posibles.size() - 1);
+        throw new DatoInvalidoException(etiqueta, texto, "«" + texto + "» puede ser " + lista
+                + ". Escribí más letras o el número.");
     }
 
     /**
