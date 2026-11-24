@@ -72,7 +72,15 @@ classDiagram
         -String paisOrigen
         -Set~TipoVehiculo~ tiposQueFabrica
         -Boolean activa
+        -List~Modelo~ modelos
         +fabrica(TipoVehiculo) boolean
+        +modelosDe(TipoVehiculo) List~Modelo~
+        +buscarModelo(String) Optional~Modelo~
+    }
+    class Modelo {
+        -String nombre
+        -TipoVehiculo tipo
+        +getClave() String
     }
     class Venta {
         -Integer numero
@@ -115,6 +123,7 @@ classDiagram
     Vehiculo <|-- Camioneta
     Vehiculo <|-- Motocicleta
     Vehiculo --> Marca
+    Marca *-- Modelo : catálogo
     Venta *-- Comprador
     Venta *-- DesglosePrecio
     Venta ..> Vehiculo : congela precio de
@@ -243,7 +252,7 @@ vehículo está mostrando.
   (precio, año, km) son `Comparator` armados con `Comparator.comparing(...).thenComparing(...)`.
 
 ### JavaBean y POJO
-Las entidades (`Vehiculo` y subclases, `Marca`, `Venta`, `Usuario`, `Comprador`) son JavaBeans:
+Las entidades (`Vehiculo` y subclases, `Marca`, `Venta`, `Usuario`) son JavaBeans:
 - constructor público sin argumentos (lo usan la serialización y el importador CSV);
 - atributos `private` con getters y setters;
 - `Serializable`.
@@ -255,8 +264,12 @@ confirma y el negocio la acepta.
 
 Los setters **validan** y lanzan `DatoInvalidoException`. Así un objeto del modelo nunca queda
 en un estado inválido, venga el dato de la consola, del CSV o de una prueba. Los objetos de
-valor (`DesglosePrecio`, `Comprador`) son POJOs inmutables: todos los campos `final`, sin
-setters.
+valor (`DesglosePrecio`, `Comprador`, `Modelo`) son POJOs inmutables: todos los campos
+`final`, sin setters.
+
+`Marca` guarda su **catálogo de modelos** (`List<Modelo>`, CU-12): cada `Modelo` tiene nombre y
+tipo de vehículo. El vehículo sigue guardando el modelo como texto (el nombre tal como figura
+en el catálogo), así que agregar el catálogo no cambió `Vehiculo` ni el CSV.
 
 ### Wrappers
 - `Integer` para año, kilometraje, puertas, carga y cilindrada; `Boolean` para 4x4 y activa.
@@ -272,6 +285,7 @@ setters.
 |---|---|---|
 | `Vehiculo` | `codigo` | Es el id que asigna el sistema y no cambia nunca |
 | `Marca` | `nombre` normalizado (sin acentos, minúsculas) | Así "Toyota" y "TOYOTA" son la misma marca y el duplicado se detecta solo |
+| `Modelo` | nombre compacto (sin acentos, mayúsculas ni espacios) | "Gol Trend" y "goltrend" son el mismo modelo dentro de la marca. Ordena por nombre (`Comparable`) |
 | `Venta` | `numero` | Correlativo único |
 | `Usuario` | `usuario` | Nombre de usuario único |
 

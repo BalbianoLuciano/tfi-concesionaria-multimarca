@@ -69,13 +69,15 @@ se tomó la opción recomendada.
 | README e imágenes (2026-11-24) | Capturas reales de la consola (por pseudo-terminal) convertidas a SVG, más diagramas de capas, precio y persistencia en `docs/img/`. Copias PNG en `docs/img/png/` para las notas del release, donde un SVG relativo no se ve |
 | Elegir un vehículo (2026-11-24) | Selector común en `Pantalla.elegirVehiculo`: búsqueda por partes y tabla numerada, en lugar de pedir el código. Sin autocompletado con Tab: exigiría la terminal en modo crudo, fuera del JDK (SPEC §5) |
 | Tolerancia al error humano (2026-11-24) | Listas por número o nombre (`Textos.coincidencias`), números con unidad, patentes con puntos, sugerencia de marca parecida, y al agotar los intentos de un campo se pregunta si seguir en vez de descartar el formulario (SPEC §3). El login conserva su límite de 3 |
+| Catálogo de modelos (2026-11-24) | Cada `Marca` tiene su catálogo de `Modelo` (nombre y tipo). El modelo se elige de la lista, nunca se escribe libre; el negocio lo vuelve a controlar en alta, modificación e importación. Búsqueda por comienzo y, si no hay, por clave fonética (`Textos.fonetica`: k/q→c, z→s, v→b, y→i, sin h ni dobles) o hasta 2 letras de diferencia: "korollà" → "¿Quisiste decir Corolla?". Solo el administrador agrega modelos (también desde el alta). Esquema 2: la migración arma el catálogo con los vehículos existentes. El vehículo guarda el modelo como texto, así el CSV no cambió |
+| Aire entre campos (2026-11-24) | `Terminal` recuerda qué imprimió último y deja un renglón en blanco antes de cada campo nuevo, sin duplicarlo ni separar un campo de su ayuda o su lista. La ayuda y los avisos se parten al ancho de la consola |
 | Interactividad | `Lector` recibe `interactivo` explícito: con entrada redirigida hace eco de lo leído y no usa `readPassword` |
 
 ## Estado actual
 
 - Implementación completa: los CU-01 a CU-17 funcionan en la consola, con el rediseño de
   SPEC §5 (esqueleto común, formularios por pasos, resumen por rol).
-- `./build.sh test`: 89 pruebas automáticas en verde. Plan manual PM-01 a PM-17 en SPEC §8.
+- `./build.sh test`: 95 pruebas automáticas en verde. Plan manual PM-01 a PM-18 en SPEC §8.
 - `./build.sh bench`: resultados reales en ARQUITECTURA §7 (Apple M4, JVM 27).
 - `./build.sh docs`: JavaDoc sin errores.
 - Releases en GitHub con el `.jar` y su SHA-256: `v1.0.0` (entrega inicial) y `v1.1.0`
